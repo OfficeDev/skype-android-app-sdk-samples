@@ -1,4 +1,4 @@
-package com.microsoft.office.sfb.sfbwellbaby.v2;
+package com.microsoft.office.sfb.sfbwellbaby.SkypeAPI;
 
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.Observable;

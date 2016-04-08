@@ -1,4 +1,4 @@
-package com.microsoft.office.sfb.sfbwellbaby.v2;
+package com.microsoft.office.sfb.sfbwellbaby.SkypeAPI;
 
 import android.content.Context;
 
