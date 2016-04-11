@@ -31,7 +31,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.Manifest.permission.CALL_PHONE;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.MODIFY_AUDIO_SETTINGS;
+import static android.Manifest.permission.READ_CALENDAR;
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_CONTACTS;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * A login screen that offers login via email/password.
@@ -114,11 +122,36 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                            requestPermissions(new String[]{
+                                    READ_CONTACTS,
+                                    READ_PHONE_STATE,
+                                    RECORD_AUDIO,
+                                    CALL_PHONE,
+                                    READ_CALENDAR,
+                                    WRITE_CONTACTS,
+                                    CAMERA,
+                                    MODIFY_AUDIO_SETTINGS,
+                                    WRITE_EXTERNAL_STORAGE
+                                    }, REQUEST_READ_CONTACTS);
                         }
                     });
         } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+            requestPermissions(new String[]{READ_CONTACTS,
+                    READ_PHONE_STATE,
+                    RECORD_AUDIO,
+                    CALL_PHONE,
+                    READ_CALENDAR,
+                    WRITE_CONTACTS,
+                    CAMERA,
+                    MODIFY_AUDIO_SETTINGS,
+                    WRITE_EXTERNAL_STORAGE}, REQUEST_READ_CONTACTS);
+
+            //requestPermissions(
+            // this,
+            // new String[]{
+            // android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            // Manifest.permission.ACCESS_COARSE_LOCATION},
+            // REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
         }
         return false;
     }

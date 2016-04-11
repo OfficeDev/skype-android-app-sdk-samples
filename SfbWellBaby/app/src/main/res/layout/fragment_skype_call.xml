@@ -19,11 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/previewLayoutId">
-        <TextureView
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/selfParticipantVideoView" />
 
         <Button
             android:layout_height="wrap_content"
@@ -32,22 +27,16 @@
             android:text="PAUSE"
             android:onClick="onPauseClick"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/switchCameraButtonId"
-            android:layout_toEndOf="@+id/switchCameraButtonId"
             android:layout_marginLeft="26dp"
             android:layout_marginStart="26dp" />
 
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/switchCameraButtonId"
-            android:text="BACK"
-            android:onClick="onCameraSwitch"
-            android:nestedScrollingEnabled="false"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="93dp"
-            android:layout_marginStart="93dp" />
+
     </RelativeLayout>
+    <TextureView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:id="@+id/selfParticipantVideoView"
+        android:layout_alignBottom="@+id/previewLayoutId"
+        android:layout_alignRight="@+id/previewLayoutId"/>
+
 </RelativeLayout>

@@ -16,7 +16,7 @@ import static com.microsoft.office.sfb.sfbwellbaby.R.id.toolbar;
 
 
 public class wellbabyreport extends AppCompatActivity implements SettingsDialog.OnFragmentInteractionListener {
-    Intent videoIntent = null;
+    Intent mSkypeCallIntent = null;
     @InjectView(toolbar)
     protected Toolbar mToolBar;
     android.support.v4.app.DialogFragment mSettingsFragment;
@@ -37,8 +37,14 @@ public class wellbabyreport extends AppCompatActivity implements SettingsDialog.
 
     @OnClick(R.id.fab)
     public void onClick() {
-        videoIntent = new Intent(this, SkypeCall.class);
-        startActivity(videoIntent);
+        try {
+            mSkypeCallIntent = new Intent(this, SkypeCall.class);
+            startActivity(mSkypeCallIntent);
+        } catch(RuntimeException e){
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
@@ -62,7 +68,7 @@ public class wellbabyreport extends AppCompatActivity implements SettingsDialog.
 
                     ft.addToBackStack(null);
 
-                    mSettingsFragment = SettingsDialog.newInstance("https://meet.lync.com/<yourDomain>/<yourAlias>/<YourInstance>");
+                    mSettingsFragment = SettingsDialog.newInstance(getString(R.string.defaultMeetingURL));
                     mSettingsFragment.show(getSupportFragmentManager(), "settings");
 
                     return true;

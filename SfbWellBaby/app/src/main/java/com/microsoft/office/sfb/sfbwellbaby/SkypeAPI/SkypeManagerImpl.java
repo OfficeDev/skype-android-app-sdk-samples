@@ -26,7 +26,7 @@ public class SkypeManagerImpl implements SkypeManager {
      * @return a new or existing instance of SkypeManager2
      */
     public static synchronized SkypeManagerImpl getInstance(Context context) {
-        if (null != sSkypeManager) { // initialize a new instance of singleton
+        if (null == sSkypeManager) { // initialize a new instance of singleton
             sSkypeManager = new SkypeManagerImpl(
                     Application.getInstance(context)
             );
