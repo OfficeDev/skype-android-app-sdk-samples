@@ -21,6 +21,7 @@ public class SkypeCall extends AppCompatActivity implements SkypeManager.SkypeCo
 
     SkypeManagerImpl mSkypeManagerImpl;
     Conversation mAnonymousMeeting;
+
     ConversationPropertyChangeListener conversationPropertyChangeListener = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,16 @@ public class SkypeCall extends AppCompatActivity implements SkypeManager.SkypeCo
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
+        //Get the singleton instance of the skype manager
         mSkypeManagerImpl = SkypeManagerImpl.getInstance(this);
+
+        //tip up a conversation property changed listener
         conversationPropertyChangeListener = new ConversationPropertyChangeListener(
                 this,
                 mAnonymousMeeting);
+
+        //Join the conversation
         mSkypeManagerImpl.joinConversation(
                 meetingURI,
                 getString(R.string.fatherName),
@@ -56,6 +63,11 @@ public class SkypeCall extends AppCompatActivity implements SkypeManager.SkypeCo
     @Override
     public void onSkypeConversationJoinSuccess(Conversation conversation) {
         mAnonymousMeeting = conversation;
+        if (mAnonymousMeeting.getState() == Conversation.State.ESTABLISHED){
+ // create the video fragment and listen for fragment events
+            SkypeCallFragment callFragment = SkypeCallFragment.newInstance(
+                    mAnonymousMeeting,mSkypeManagerImpl.getSkypeApplication().getDevicesManager());
+        }
     }
 
     @Override
