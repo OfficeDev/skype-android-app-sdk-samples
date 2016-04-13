@@ -5,6 +5,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLSurfaceView;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.microsoft.media.MMVRSurfaceView;
 import com.microsoft.office.sfb.appsdk.Application;
@@ -23,14 +24,14 @@ import java.util.ArrayList;
  */
 public class SkypeManagerImpl implements SkypeManager {
 
-    private static Conversation mConversation = null;
     private static DevicesManager mDevicesManager;
-    private VideoService mVideoService;
     private static SkypeConversationJoinCallback mSkypeConversationJoinCallback;
     private static SkypeConversationCanLeaveCallback mSkypeConversationCanLeaveCallback;
+    private static SkypeVideoReady mSkypeVideoReady;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewTextureView;
     private SurfaceTexture mPreviewSurfaceTexture;
+    private Conversation mConversation;
 
     //
     // statics
@@ -46,13 +47,15 @@ public class SkypeManagerImpl implements SkypeManager {
     public static synchronized SkypeManagerImpl getInstance(
             Context context,
             SkypeConversationJoinCallback skypeConversationJoinCallback,
-            SkypeConversationCanLeaveCallback skypeConversationCanLeaveCallback) {
+            SkypeConversationCanLeaveCallback skypeConversationCanLeaveCallback,
+            SkypeVideoReady skypeVideoReady) {
         if (null == sSkypeManager) { // initialize a new instance of singleton
             sSkypeManager = new SkypeManagerImpl(
                     Application.getInstance(context)
             );
             mSkypeConversationCanLeaveCallback = skypeConversationCanLeaveCallback;
             mSkypeConversationJoinCallback = skypeConversationJoinCallback;
+            mSkypeVideoReady = skypeVideoReady;
 
         }
         return sSkypeManager;
@@ -82,7 +85,6 @@ public class SkypeManagerImpl implements SkypeManager {
      * Joins a meeting anonymously and streams incoming video from the meeting
      * @param meetingURI
      * @param displayName
-     * @param participantVideoLayout
      * @param videoPreview
      * @throws SFBException
      */
@@ -90,16 +92,20 @@ public class SkypeManagerImpl implements SkypeManager {
     public void joinConversation(
             URI meetingURI,
             String displayName,
-            View participantVideoLayout,
             TextureView videoPreview) throws SFBException {
 
-        Conversation meeting = null;
         setDisplayName(displayName); // set our name
+        mPreviewTextureView = videoPreview;
+        mPreviewTextureView.setSurfaceTextureListener(
+                new VideoPreviewSurfaceTextureListener(this));
         try {
 
-            ConversationPropertyChangeListener conversationPropertyChangeListener = new ConversationPropertyChangeListener();
-            meeting = getConversation(meetingURI);
-            meeting.addOnPropertyChangedCallback(
+            ConversationPropertyChangeListener conversationPropertyChangeListener =
+                    new ConversationPropertyChangeListener();
+
+            //Get the meeting at the URI and join it
+            mConversation = getConversation(meetingURI);
+            mConversation.addOnPropertyChangedCallback(
                     conversationPropertyChangeListener
             );
 
@@ -111,42 +117,36 @@ public class SkypeManagerImpl implements SkypeManager {
 
 
         mDevicesManager = mSkypeApplication.getDevicesManager();
-        //get video service, add callback for video,
-        //associate surfaces to video service
 
-        mParticipantVideoSurfaceView = new MMVRSurfaceView(participantVideoLayout.getContext());
-        mParticipantVideoSurfaceView.setCallback(new VideoStreamSurfaceListener(this));
-        mParticipantVideoSurfaceView.setAutoFitMode(MMVRSurfaceView.MMVRAutoFitMode_SmartCrop);
-        mPreviewTextureView = videoPreview;
     }
 
     @Override
     public void prepareOutgoingVideo() {
-        mVideoService = mConversation.getVideoService();
-        mVideoService.addOnPropertyChangedCallback(this.onPropertyChangedCallback);
+        mConversation.getVideoService().addOnPropertyChangedCallback(this.onPropertyChangedCallback);
+//        mPreviewTextureView.setSurfaceTextureListener(
+//                new VideoPreviewSurfaceTextureListener(this));
 
-        if (mVideoService.canSetActiveCamera()){
             ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
             for(Camera camera: cameras) {
                 if (camera.getType() == Camera.CameraType.FRONTFACING){
                     try {
-                        mVideoService.setActiveCamera(camera);
+                        mConversation.getVideoService().setActiveCamera(camera);
                     } catch (SFBException e) {
                         e.printStackTrace();
                     }
                     break;
                 }
             }
-        }
-        mPreviewTextureView.setSurfaceTextureListener(new VideoPreviewSurfaceTextureListener(this));
+
     }
 
     @Override
     public void startOutgoingVideo() {
+
         try {
-            mVideoService.displayPreview(mPreviewSurfaceTexture);
-            if (mVideoService.canStart())
-                mVideoService.start();
+            mConversation.getVideoService().displayPreview(mPreviewSurfaceTexture);
+            if (mConversation.getVideoService().canStart())
+                mConversation.getVideoService().start();
         } catch (SFBException e) {
             e.printStackTrace();
         }
@@ -154,46 +154,54 @@ public class SkypeManagerImpl implements SkypeManager {
 
     @Override
     public void stopOutgoingVideo() {
-        boolean videoPaused = mVideoService.getPaused();
+        boolean videoPaused = mConversation.getVideoService().getPaused();
         try {
-            mVideoService.setPaused(!videoPaused);
+            mConversation.getVideoService().setPaused(!videoPaused);
 //            this.updateState();
         } catch (SFBException e) {
             e.printStackTrace();
         }
     }
 
-    VideoService.OnPropertyChangedCallback onPropertyChangedCallback = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            switch(propertyId) {
-                case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
-                case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
-                    // updateState();
-                    break;
-                default:
-            }
-        }
-    };
+    @Override
+    public void startIncomingVideo(
+            View participantVideoLayout) {
+        //get video service, add callback for video,
+        //associate surfaces to video service
+
+        mParticipantVideoSurfaceView = new MMVRSurfaceView(
+                participantVideoLayout.getContext());
+        mParticipantVideoSurfaceView.setCallback(
+                new VideoStreamSurfaceListener(this));
+        mParticipantVideoSurfaceView.setAutoFitMode(
+                MMVRSurfaceView.MMVRAutoFitMode_SmartCrop);
+
+        ((RelativeLayout)participantVideoLayout).addView(
+                mParticipantVideoSurfaceView);
+    }
+
+
     /**
      * Setup the Video preview.
      * @param texture
      */
     public void SurfaceTextureCreatedCallback(SurfaceTexture texture) {
         try {
+
+            mSkypeVideoReady.onSkypeOutgoingVideoReady();
             // Display the preview
-            mVideoService.displayPreview(texture);
+            mConversation.getVideoService().displayPreview(texture);
 
             // Check state of video service.
             // If not started, start it.
-            if (mVideoService.canStart()) {
-                mVideoService.start();
+            if (mConversation.getVideoService().canStart()) {
+                mConversation.getVideoService().start();
             } else {
                 // On joining the meeting the Video service is started by default.
                 // Since the view is created later the video service is paused.
                 // Resume the service.
-                if (mVideoService.canSetPaused()) {
-                    mVideoService.setPaused(false);
+                if (mConversation.getVideoService().canSetPaused()) {
+                    mConversation.getVideoService().setPaused(false);
                 }
             }
         } catch (SFBException e) {
@@ -211,9 +219,14 @@ public class SkypeManagerImpl implements SkypeManager {
      * @throws SFBException
      */
     private Conversation getConversation(URI meetingUri) throws SFBException {
-        return mSkypeApplication
-                .getConversationsManager()
-                .getOrCreateConversationMeetingByUri(meetingUri);
+        Conversation conversation = null;
+        if (mSkypeApplication.getConversationsManager()
+                .canGetOrCreateConversationMeetingByUri()){
+            conversation = mSkypeApplication
+                    .getConversationsManager()
+                    .getOrCreateConversationMeetingByUri(meetingUri);
+        }
+        return conversation;
     }
 
     /**
@@ -222,16 +235,23 @@ public class SkypeManagerImpl implements SkypeManager {
      */
     private void setDisplayName(String userDisplayName) {
         // FIXME why do I set my name over here, so that it shows up in a Conversation?
-        // strange....
+        // Set here because there is a single user for each client endpoint and that user
+        // may start multiple conversations. Each conversation would have the same displayname
         mSkypeApplication
                 .getConfigurationManager()
                 .setDisplayName(userDisplayName);
     }
 
+
+    private VideoService insureVideoService(){
+
+        return mConversation.getVideoService();
+    }
     /**
      * Callback implementation for listening for conversation property changes.
      */
-    class ConversationPropertyChangeListener extends Observable.OnPropertyChangedCallback {
+    class ConversationPropertyChangeListener extends
+            Observable.OnPropertyChangedCallback {
 
 
         ConversationPropertyChangeListener(){}
@@ -246,11 +266,14 @@ public class SkypeManagerImpl implements SkypeManager {
             Conversation conversation = (Conversation)sender;
             if (propertyId == Conversation.STATE_PROPERTY_ID) {
                 if (conversation.getState() == Conversation.State.ESTABLISHED){
-                    //            // pass to callback
-                mSkypeConversationJoinCallback
-                    .onSkypeConversationJoinSuccess(
+
+                    mConversation.getVideoService().addOnPropertyChangedCallback(
+                            onPropertyChangedCallback);
+
+                    mSkypeConversationJoinCallback
+                        .onSkypeConversationJoinSuccess(
                             (Conversation)sender
-                    );
+                        );
                 }
             }
             if (propertyId == Conversation.CAN_LEAVE_PROPERTY_ID){
@@ -262,8 +285,36 @@ public class SkypeManagerImpl implements SkypeManager {
 
 
     }
+
+    VideoService.OnPropertyChangedCallback onPropertyChangedCallback =
+            new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable sender, int propertyId) {
+            switch(propertyId) {
+                case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
+                case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
+//                    if (mVideoService.canSetActiveCamera()){
+                        ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
+                        for(Camera camera: cameras) {
+                            if (camera.getType() == Camera.CameraType.FRONTFACING){
+                                try {
+                                    mConversation.getVideoService().setActiveCamera(camera);
+                                } catch (SFBException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        }
+//                    }
+
+            break;
+                default:
+            }
+        }
+    };
     // Listener class for TextureSurface
-    private class VideoPreviewSurfaceTextureListener implements  TextureView.SurfaceTextureListener {
+    private class VideoPreviewSurfaceTextureListener implements
+            TextureView.SurfaceTextureListener {
 
         private SkypeManagerImpl mSkypeManagerImpl = null;
         public VideoPreviewSurfaceTextureListener(SkypeManagerImpl videoImplementation) {
@@ -271,13 +322,19 @@ public class SkypeManagerImpl implements SkypeManager {
         }
 
         @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        public void onSurfaceTextureAvailable(
+                SurfaceTexture surface,
+                int width,
+                int height) {
             mPreviewSurfaceTexture = surface;
             mSkypeManagerImpl.SurfaceTextureCreatedCallback(surface);
         }
 
         @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) { }
+        public void onSurfaceTextureSizeChanged(
+                SurfaceTexture surface,
+                int width,
+                int height) { }
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
@@ -294,8 +351,8 @@ public class SkypeManagerImpl implements SkypeManager {
     private class VideoStreamSurfaceListener implements MMVRSurfaceView.MMVRCallback {
 
         private SkypeManagerImpl mSkypeManagerImpl = null;
-        public VideoStreamSurfaceListener(SkypeManagerImpl videoFragment) {
-            this.mSkypeManagerImpl = videoFragment;
+        public VideoStreamSurfaceListener(SkypeManagerImpl skypeManager) {
+            this.mSkypeManagerImpl = skypeManager;
         }
 
         @Override
@@ -307,11 +364,16 @@ public class SkypeManagerImpl implements SkypeManager {
         public void onFrameRendered(MMVRSurfaceView mmvrSurfaceView) {}
 
         @Override
-        public void onRenderSizeChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1) {}
+        public void onRenderSizeChanged(
+                MMVRSurfaceView mmvrSurfaceView,
+                int i,
+                int i1) {}
 
         @Override
-        public void onSmartCropInfoChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1, int i2,
-                                           int i3, int i4) {}
+        public void onSmartCropInfoChanged(
+                MMVRSurfaceView mmvrSurfaceView,
+                int i, int i1, int i2,
+                int i3, int i4) {}
     }
 
     /**
@@ -320,11 +382,14 @@ public class SkypeManagerImpl implements SkypeManager {
      */
     public void VideoStreamSurfaceCreatedCallback(MMVRSurfaceView mmvrSurfaceView) {
         mParticipantVideoSurfaceView = mmvrSurfaceView;
-        mParticipantVideoSurfaceView.setAutoFitMode(MMVRSurfaceView.MMVRAutoFitMode_Crop);
-        mParticipantVideoSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        mParticipantVideoSurfaceView.setAutoFitMode(
+                MMVRSurfaceView.MMVRAutoFitMode_Crop);
+        mParticipantVideoSurfaceView.setRenderMode(
+                GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         mParticipantVideoSurfaceView.requestRender();
         try {
-            mVideoService.displayParticipantVideo(mParticipantVideoSurfaceView);
+            mConversation.getVideoService().displayParticipantVideo(
+                    mParticipantVideoSurfaceView);
         } catch (SFBException e) {
             e.printStackTrace();
         }

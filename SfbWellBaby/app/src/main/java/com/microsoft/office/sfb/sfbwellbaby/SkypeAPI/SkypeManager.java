@@ -54,14 +54,12 @@ public interface SkypeManager {
      * streams on provided surface views
      * @param meetingURI
      * @param displayName
-     * @param participantVideoLayout
      * @param videoPreview
      * @throws  SFBException
      */
     void joinConversation(
             URI meetingURI,
             String displayName,
-            View participantVideoLayout,
             TextureView videoPreview
     )throws SFBException;
 
@@ -69,6 +67,8 @@ public interface SkypeManager {
 
     void startOutgoingVideo();
     void stopOutgoingVideo();
+    void startIncomingVideo(
+            View participantVideoLayout);
 
 
 

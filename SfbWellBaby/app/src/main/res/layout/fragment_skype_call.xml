@@ -7,18 +7,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.microsoft.office.sfb.sfbwellbaby.SkypeCallFragment"
-    tools:showIn="@layout/activity_skype_call">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="match_parent"
         android:id="@+id/participantVideoLayoutId"
         android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/previewLayoutId">
+        android:id="@+id/previewLayoutId"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <Button
             android:layout_height="wrap_content"
