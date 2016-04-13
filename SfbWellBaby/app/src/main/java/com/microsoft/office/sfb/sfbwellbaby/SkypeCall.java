@@ -54,7 +54,7 @@ public class SkypeCall extends AppCompatActivity implements SkypeManager.SkypeCo
         mSkypeManagerImpl.joinConversation(
                 meetingURI,
                 getString(R.string.fatherName),
-                conversationPropertyChangeListener ,this
+                conversationPropertyChangeListener
                 );
 
 
@@ -66,7 +66,9 @@ public class SkypeCall extends AppCompatActivity implements SkypeManager.SkypeCo
         if (mAnonymousMeeting.getState() == Conversation.State.ESTABLISHED){
  // create the video fragment and listen for fragment events
             SkypeCallFragment callFragment = SkypeCallFragment.newInstance(
-                    mAnonymousMeeting,mSkypeManagerImpl.getSkypeApplication().getDevicesManager());
+                    mAnonymousMeeting,mSkypeManagerImpl
+                            .getSkypeApplication()
+                            .getDevicesManager());
         }
     }
 

@@ -1,7 +1,9 @@
 package com.microsoft.office.sfb.sfbwellbaby.SkypeAPI;
 
+import android.view.TextureView;
+
+import com.microsoft.media.MMVRSurfaceView;
 import com.microsoft.office.sfb.appsdk.Conversation;
-import com.microsoft.office.sfb.appsdk.Observable;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
 import java.net.URI;
@@ -32,58 +34,44 @@ public interface SkypeManager {
     }
 
     /**
-     * Create or join a new (or existing) Conversation)
-     *
-     * @param meetingUri      the URI of the Conversation to create/join
-     * @param userDisplayName the displayName of the joining participant
-     * @return the newly created / joined Conversation
-     * @throws SFBException if the meeting could not be created or joined
+     * Observer to watch for when a participant can leave the meeting
      */
-    Conversation joinConversation(
-            URI meetingUri,
-            String userDisplayName
-    ) throws SFBException;
+    interface SkypeConversationCanLeaveCallback {
+
+        /**
+         * Called when the CAN_LEAVE_PROPERTY_ID value changes
+         */
+        void onSkypeConversationCanLeave(boolean canLeave);
+    }
+
+    interface SkypeVideoReady {
+        void onSkypeIncomingVideoReady();
+        void onSkypeOutgoingVideoReady();
+    }
 
     /**
-     * Create or join a new (or existing) Conversation)
-     *
-     * @param meetingUri             the URI of the Conversation to create/join
-     * @param userDisplayName        the displayName of the joining participant
-     * @param propertyChangeListener property change listener for this Conversation
-     * @return the newly created / joined Conversation
-     * @throws SFBException
-     */
-    Conversation joinConversation(
-            URI meetingUri,
-            String userDisplayName,
-            Observable.OnPropertyChangedCallback propertyChangeListener
-    ) throws SFBException;
-
-    /**
-     * Create or join a new (or existing) Conversation)
-     *
-     * @param meetingUri                      the URI of the Conversation to create/join
-     * @param userDisplayName                 the displayName of the joining participant
-     * @param skypeConversationJoinedCallback listener for join events
+     * Joins a meeting with provided meeting URI and shows video
+     * streams on provided surface views
+     * @param meetingURI
+     * @param displayName
+     * @param videoView
+     * @param videoPreview
+     * @throws  SFBException
      */
     void joinConversation(
-            URI meetingUri,
-            String userDisplayName,
-            SkypeConversationJoinCallback skypeConversationJoinedCallback
-    );
+            URI meetingURI,
+            String displayName,
+            MMVRSurfaceView videoView,
+            TextureView videoPreview
+    )throws SFBException;
 
-    /**
-     * Create or join a new (or existing) Conversation)
-     *
-     * @param meetingUri                      the URI of the Conversation to create/join
-     * @param userDisplayName                 the displayName of the joining participant
-     * @param propertyChangeListener          property change listener for this Conversation
-     * @param skypeConversationJoinedCallback listener for join events
-     */
-    void joinConversation(
-            URI meetingUri,
-            String userDisplayName,
-            Observable.OnPropertyChangedCallback propertyChangeListener,
-            SkypeConversationJoinCallback skypeConversationJoinedCallback
-    );
+    void prepareOutgoingVideo();
+
+    void startOutgoingVideo();
+    void stopOutgoingVideo();
+
+
+
+
+
 }
