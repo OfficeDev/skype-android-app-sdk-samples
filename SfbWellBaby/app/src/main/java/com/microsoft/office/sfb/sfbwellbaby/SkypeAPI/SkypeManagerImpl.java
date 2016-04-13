@@ -26,7 +26,6 @@ public class SkypeManagerImpl implements SkypeManager {
 
     private static DevicesManager mDevicesManager;
     private static SkypeConversationJoinCallback mSkypeConversationJoinCallback;
-    private static SkypeConversationCanLeaveCallback mSkypeConversationCanLeaveCallback;
     private static SkypeVideoReady mSkypeVideoReady;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewTextureView;
@@ -47,13 +46,12 @@ public class SkypeManagerImpl implements SkypeManager {
     public static synchronized SkypeManagerImpl getInstance(
             Context context,
             SkypeConversationJoinCallback skypeConversationJoinCallback,
-            SkypeConversationCanLeaveCallback skypeConversationCanLeaveCallback,
+
             SkypeVideoReady skypeVideoReady) {
         if (null == sSkypeManager) { // initialize a new instance of singleton
             sSkypeManager = new SkypeManagerImpl(
                     Application.getInstance(context)
             );
-            mSkypeConversationCanLeaveCallback = skypeConversationCanLeaveCallback;
             mSkypeConversationJoinCallback = skypeConversationJoinCallback;
             mSkypeVideoReady = skypeVideoReady;
 
@@ -276,11 +274,7 @@ public class SkypeManagerImpl implements SkypeManager {
                         );
                 }
             }
-            if (propertyId == Conversation.CAN_LEAVE_PROPERTY_ID){
-                mSkypeConversationCanLeaveCallback
-                        .onSkypeConversationCanLeave(
-                                conversation.canLeave());
-            }
+
         }
 
 

@@ -33,16 +33,6 @@ public interface SkypeManager {
         void onSkypeConversationJoinFailure(SFBException ex);
     }
 
-    /**
-     * Observer to watch for when a participant can leave the meeting
-     */
-    interface SkypeConversationCanLeaveCallback {
-
-        /**
-         * Called when the CAN_LEAVE_PROPERTY_ID value changes
-         */
-        void onSkypeConversationCanLeave(boolean canLeave);
-    }
 
     interface SkypeVideoReady {
         void onSkypeIncomingVideoReady();

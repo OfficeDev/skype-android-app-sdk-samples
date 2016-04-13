@@ -14,7 +14,7 @@ import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManagerImpl;
 import butterknife.ButterKnife;
 
 public class SkypeCall extends AppCompatActivity implements SkypeManager.SkypeConversationJoinCallback,
-SkypeManager.SkypeConversationCanLeaveCallback,
+
 SkypeManager.SkypeVideoReady{
 
     SkypeManagerImpl mSkypeManagerImpl;
@@ -36,7 +36,7 @@ SkypeManager.SkypeVideoReady{
         //Get the singleton instance of the skype manager
         mSkypeManagerImpl = SkypeManagerImpl.getInstance(
                 getApplicationContext(),
-                this,this,this);
+                this,this);
 
         mCallFragment = SkypeCallFragment.newInstance(mSkypeManagerImpl);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()
@@ -67,11 +67,6 @@ SkypeManager.SkypeVideoReady{
 
     }
 
-    @Override
-    public void onSkypeConversationCanLeave(boolean canLeave) {
-        // enable button to let caller leave
-
-    }
 
 
     @Override
