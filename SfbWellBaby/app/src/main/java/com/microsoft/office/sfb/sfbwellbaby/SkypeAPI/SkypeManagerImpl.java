@@ -2,7 +2,9 @@ package com.microsoft.office.sfb.sfbwellbaby.SkypeAPI;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
+import android.opengl.GLSurfaceView;
 import android.view.TextureView;
+import android.view.View;
 
 import com.microsoft.media.MMVRSurfaceView;
 import com.microsoft.office.sfb.appsdk.Application;
@@ -28,7 +30,7 @@ public class SkypeManagerImpl implements SkypeManager {
     private static SkypeConversationCanLeaveCallback mSkypeConversationCanLeaveCallback;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewTextureView;
-    Camera frontCamera = null;
+    private SurfaceTexture mPreviewSurfaceTexture;
 
     //
     // statics
@@ -76,19 +78,23 @@ public class SkypeManagerImpl implements SkypeManager {
     }
 
 
+    /**
+     * Joins a meeting anonymously and streams incoming video from the meeting
+     * @param meetingURI
+     * @param displayName
+     * @param participantVideoLayout
+     * @param videoPreview
+     * @throws SFBException
+     */
     @Override
     public void joinConversation(
             URI meetingURI,
             String displayName,
-            MMVRSurfaceView videoView,
+            View participantVideoLayout,
             TextureView videoPreview) throws SFBException {
 
-        mParticipantVideoSurfaceView = videoView;
-        mPreviewTextureView = videoPreview;
         Conversation meeting = null;
         setDisplayName(displayName); // set our name
-
-
         try {
 
             ConversationPropertyChangeListener conversationPropertyChangeListener = new ConversationPropertyChangeListener();
@@ -108,7 +114,10 @@ public class SkypeManagerImpl implements SkypeManager {
         //get video service, add callback for video,
         //associate surfaces to video service
 
-
+        mParticipantVideoSurfaceView = new MMVRSurfaceView(participantVideoLayout.getContext());
+        mParticipantVideoSurfaceView.setCallback(new VideoStreamSurfaceListener(this));
+        mParticipantVideoSurfaceView.setAutoFitMode(MMVRSurfaceView.MMVRAutoFitMode_SmartCrop);
+        mPreviewTextureView = videoPreview;
     }
 
     @Override
@@ -127,7 +136,6 @@ public class SkypeManagerImpl implements SkypeManager {
                     }
                     break;
                 }
-
             }
         }
         mPreviewTextureView.setSurfaceTextureListener(new VideoPreviewSurfaceTextureListener(this));
@@ -135,12 +143,24 @@ public class SkypeManagerImpl implements SkypeManager {
 
     @Override
     public void startOutgoingVideo() {
-
+        try {
+            mVideoService.displayPreview(mPreviewSurfaceTexture);
+            if (mVideoService.canStart())
+                mVideoService.start();
+        } catch (SFBException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void stopOutgoingVideo() {
-
+        boolean videoPaused = mVideoService.getPaused();
+        try {
+            mVideoService.setPaused(!videoPaused);
+//            this.updateState();
+        } catch (SFBException e) {
+            e.printStackTrace();
+        }
     }
 
     VideoService.OnPropertyChangedCallback onPropertyChangedCallback = new Observable.OnPropertyChangedCallback() {
@@ -184,12 +204,22 @@ public class SkypeManagerImpl implements SkypeManager {
     // private methods
     //
 
+    /**
+     * Gets or creates a new meeting at the specified URI
+     * @param meetingUri
+     * @return
+     * @throws SFBException
+     */
     private Conversation getConversation(URI meetingUri) throws SFBException {
         return mSkypeApplication
                 .getConversationsManager()
                 .getOrCreateConversationMeetingByUri(meetingUri);
     }
 
+    /**
+     * Sets the displayed name of the local anonymous user who is joining the meet
+     * @param userDisplayName
+     */
     private void setDisplayName(String userDisplayName) {
         // FIXME why do I set my name over here, so that it shows up in a Conversation?
         // strange....
@@ -197,6 +227,7 @@ public class SkypeManagerImpl implements SkypeManager {
                 .getConfigurationManager()
                 .setDisplayName(userDisplayName);
     }
+
     /**
      * Callback implementation for listening for conversation property changes.
      */
@@ -234,14 +265,15 @@ public class SkypeManagerImpl implements SkypeManager {
     // Listener class for TextureSurface
     private class VideoPreviewSurfaceTextureListener implements  TextureView.SurfaceTextureListener {
 
-        private SkypeManagerImpl videoFragment = null;
+        private SkypeManagerImpl mSkypeManagerImpl = null;
         public VideoPreviewSurfaceTextureListener(SkypeManagerImpl videoImplementation) {
-            videoFragment = videoFragment;
+            mSkypeManagerImpl = videoImplementation;
         }
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            videoFragment.SurfaceTextureCreatedCallback(surface);
+            mPreviewSurfaceTexture = surface;
+            mSkypeManagerImpl.SurfaceTextureCreatedCallback(surface);
         }
 
         @Override
@@ -257,4 +289,52 @@ public class SkypeManagerImpl implements SkypeManager {
 
 
     };
+
+    // Listener class for incoming video MMVRSurfaceView.
+    private class VideoStreamSurfaceListener implements MMVRSurfaceView.MMVRCallback {
+
+        private SkypeManagerImpl mSkypeManagerImpl = null;
+        public VideoStreamSurfaceListener(SkypeManagerImpl videoFragment) {
+            this.mSkypeManagerImpl = videoFragment;
+        }
+
+        @Override
+        public void onSurfaceCreated(MMVRSurfaceView mmvrSurfaceView) {
+            VideoStreamSurfaceCreatedCallback(mmvrSurfaceView);
+        }
+
+        @Override
+        public void onFrameRendered(MMVRSurfaceView mmvrSurfaceView) {}
+
+        @Override
+        public void onRenderSizeChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1) {}
+
+        @Override
+        public void onSmartCropInfoChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1, int i2,
+                                           int i3, int i4) {}
+    }
+
+    /**
+     * Setup the default incoming video channel preview.
+     * @param mmvrSurfaceView
+     */
+    public void VideoStreamSurfaceCreatedCallback(MMVRSurfaceView mmvrSurfaceView) {
+        mParticipantVideoSurfaceView = mmvrSurfaceView;
+        mParticipantVideoSurfaceView.setAutoFitMode(MMVRSurfaceView.MMVRAutoFitMode_Crop);
+        mParticipantVideoSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        mParticipantVideoSurfaceView.requestRender();
+        try {
+            mVideoService.displayParticipantVideo(mParticipantVideoSurfaceView);
+        } catch (SFBException e) {
+            e.printStackTrace();
+        }
+//        this.getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                updateState();
+//            }
+//        });
+
+    }
+
 }
