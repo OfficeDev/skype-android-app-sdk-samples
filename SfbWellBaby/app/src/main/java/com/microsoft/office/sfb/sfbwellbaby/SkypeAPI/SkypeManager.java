@@ -44,13 +44,11 @@ public interface SkypeManager {
      * streams on provided surface views
      * @param meetingURI
      * @param displayName
-     * @param videoPreview
      * @throws  SFBException
      */
     void joinConversation(
             URI meetingURI,
-            String displayName,
-            TextureView videoPreview
+            String displayName
     )throws SFBException;
 
     void setCallView(View callView);

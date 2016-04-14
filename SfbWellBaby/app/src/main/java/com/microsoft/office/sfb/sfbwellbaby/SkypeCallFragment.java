@@ -11,19 +11,15 @@ import android.widget.Button;
 
 import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManagerImpl;
 
-import butterknife.InjectView;
-import butterknife.OnClick;
-
-import static com.microsoft.office.sfb.sfbwellbaby.R.id.pauseVideoButton;
-
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class SkypeCallFragment extends Fragment {
 
-    @InjectView(pauseVideoButton)
+//    @InjectView(pauseVideoButton)
     public Button mPauseButton;
+    public Button mEndCallButton;
 
     private SkypeManagerImpl mSkypeManagerImpl = null;
     private OnFragmentInteractionListener mListener;
@@ -53,7 +49,23 @@ public class SkypeCallFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
-        mListener.onFragmentInteraction(mRootView, "inflated");
+        mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
+
+        
+        mPauseButton = (Button)mRootView.findViewById(R.id.pauseVideoButton);
+        mPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSkypeManagerImpl.stopOutgoingVideo();
+            }
+        });
+        mEndCallButton = (Button)mRootView.findViewById(R.id.endCallButton);
+        mEndCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.leaveCall));
+            }
+        });
         return mRootView;
     }
 
@@ -69,11 +81,11 @@ public class SkypeCallFragment extends Fragment {
         }
     }
 
-    @OnClick(pauseVideoButton)
-    public void onClickVideoPause(Button button) {
-
-        mSkypeManagerImpl.stopOutgoingVideo();
-    }
+//    @OnClick(pauseVideoButton)
+//    public void onClickVideoPause(Button button) {
+//
+//        mSkypeManagerImpl.stopOutgoingVideo();
+//    }
 
     /**
      * This interface must be implemented by activities that contain this

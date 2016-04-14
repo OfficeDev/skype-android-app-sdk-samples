@@ -83,14 +83,12 @@ public class SkypeManagerImpl implements SkypeManager {
      * Joins a meeting anonymously and streams incoming video from the meeting
      * @param meetingURI
      * @param displayName
-     * @param videoPreview
      * @throws SFBException
      */
     @Override
     public void joinConversation(
             URI meetingURI,
-            String displayName,
-            TextureView videoPreview) throws SFBException {
+            String displayName) throws SFBException {
 
         setDisplayName(displayName); // set our name
 
@@ -292,12 +290,15 @@ public class SkypeManagerImpl implements SkypeManager {
 
     VideoService.OnPropertyChangedCallback onPropertyChangedCallback =
             new Observable.OnPropertyChangedCallback() {
+
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
+            if (mConversation == null)
+                return;
             switch(propertyId) {
                 case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
                 case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
-//                    if (mVideoService.canSetActiveCamera()){
+                    if (mConversation.getVideoService().canSetActiveCamera()){
                         ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
                         for(Camera camera: cameras) {
                             if (camera.getType() == Camera.CameraType.FRONTFACING){
@@ -309,7 +310,7 @@ public class SkypeManagerImpl implements SkypeManager {
                                 break;
                             }
                         }
-//                    }
+                    }
 
             break;
                 default:
