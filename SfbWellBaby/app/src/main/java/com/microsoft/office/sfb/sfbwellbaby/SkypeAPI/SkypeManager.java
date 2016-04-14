@@ -53,6 +53,7 @@ public interface SkypeManager {
             TextureView videoPreview
     )throws SFBException;
 
+    void setCallView(View callView);
     void prepareOutgoingVideo();
 
     void startOutgoingVideo();

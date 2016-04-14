@@ -93,9 +93,7 @@ public class SkypeManagerImpl implements SkypeManager {
             TextureView videoPreview) throws SFBException {
 
         setDisplayName(displayName); // set our name
-        mPreviewTextureView = videoPreview;
-        mPreviewTextureView.setSurfaceTextureListener(
-                new VideoPreviewSurfaceTextureListener(this));
+
         try {
 
             ConversationPropertyChangeListener conversationPropertyChangeListener =
@@ -118,11 +116,21 @@ public class SkypeManagerImpl implements SkypeManager {
 
     }
 
+    /**
+     * Sets the TextureView for the outgoing video preview and
+     * then sets a surface texture listener for the TextView
+     * @param callView The TextView object from the call fragment
+     */
+    @Override
+    public void setCallView(View callView) {
+        mPreviewTextureView = (TextureView) callView;
+        mPreviewTextureView.setSurfaceTextureListener(
+                new VideoPreviewSurfaceTextureListener(this));
+    }
+
     @Override
     public void prepareOutgoingVideo() {
         mConversation.getVideoService().addOnPropertyChangedCallback(this.onPropertyChangedCallback);
-//        mPreviewTextureView.setSurfaceTextureListener(
-//                new VideoPreviewSurfaceTextureListener(this));
 
             ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
             for(Camera camera: cameras) {

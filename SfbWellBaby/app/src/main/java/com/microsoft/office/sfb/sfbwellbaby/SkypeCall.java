@@ -1,6 +1,7 @@
 package com.microsoft.office.sfb.sfbwellbaby;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -20,11 +21,13 @@ import butterknife.ButterKnife;
 
 public class SkypeCall extends AppCompatActivity
         implements SkypeManager.SkypeConversationJoinCallback, SkypeManager.SkypeVideoReady,
-        SkypeCallFragment.OnFragmentInteractionListener{
+        SkypeCallFragment.OnFragmentInteractionListener,
+        WaitForConnect.OnFragmentInteractionListener{
 
     SkypeManagerImpl mSkypeManagerImpl;
     Conversation mAnonymousMeeting;
     SkypeCallFragment mCallFragment = null;
+    WaitForConnect mWaitForConnect = null;
 
 
     ConversationPropertyChangeListener conversationPropertyChangeListener = null;
@@ -47,10 +50,20 @@ public class SkypeCall extends AppCompatActivity
 
 
 
-        mCallFragment = SkypeCallFragment.newInstance(mSkypeManagerImpl);
+
+     //   mCallFragment = SkypeCallFragment.newInstance(mSkypeManagerImpl);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container,mCallFragment, "video");
+        mWaitForConnect = WaitForConnect.newInstance("","");
+        fragmentTransaction.add(
+                R.id.fragment_container,
+                mWaitForConnect,
+                "wait");
+
+//        fragmentTransaction.add(
+//                R.id.fragment_container,
+//                mCallFragment,
+//                "video");
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -58,6 +71,19 @@ public class SkypeCall extends AppCompatActivity
 
     @Override
     public void onSkypeConversationJoinSuccess(Conversation conversation) {
+
+        mCallFragment = SkypeCallFragment.newInstance(mSkypeManagerImpl);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+                .beginTransaction();
+
+        fragmentTransaction.remove(mWaitForConnect);
+        fragmentTransaction.add(
+                R.id.fragment_container,
+                mCallFragment,
+                "video");
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
         mAnonymousMeeting = conversation;
         if (mAnonymousMeeting.getState() == Conversation.State.ESTABLISHED){
             View fragmentView = mCallFragment.getView();
@@ -81,9 +107,8 @@ public class SkypeCall extends AppCompatActivity
      * Connect to an existing Skype for Business meeting with the URI from
      * shared preferences. Normally the URI is supplied to the mobile device
      * via some mechanism outside the scope of this sample.
-     * @param callView The fragment that hosts the incoming and outgoing video
      */
-    private void startConversation(View callView){
+    private void startConversation(){
         SharedPreferences settings = getSharedPreferences(getString(R.string.meetingURIKey), 0);
         String meetingURIString = settings.getString(getString(R.string.meetingURIKey), "");
         URI meetingURI = null;
@@ -97,9 +122,7 @@ public class SkypeCall extends AppCompatActivity
                     meetingURI,
                     getString(R.string.fatherName),
 
-                    (TextureView) callView
-                            .findViewById(
-                                    R.id.selfParticipantVideoView));
+                    null);
         } catch (SFBException e) {
             e.printStackTrace();
         }
@@ -119,9 +142,17 @@ public class SkypeCall extends AppCompatActivity
         mSkypeManagerImpl.startOutgoingVideo();
     }
 
+    /**
+     * Invoked from call fragment when inflated. Provides the TextureView for preview to the
+     * SkypeManagerImpl
+     * @param callView
+     * @param newMeetingURI
+     */
     @Override
     public void onFragmentInteraction(View callView, String newMeetingURI) {
-        startConversation(callView);
+        mSkypeManagerImpl.setCallView((TextureView) callView
+                .findViewById(
+                        R.id.selfParticipantVideoView));
     }
     @Override
     protected void onStop() {
@@ -135,5 +166,11 @@ public class SkypeCall extends AppCompatActivity
             } catch (SFBException e) {
                 e.printStackTrace();
             }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        startConversation();
+
     }
 }
