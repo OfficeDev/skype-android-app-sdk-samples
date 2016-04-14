@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/conversationsToolbarId">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/audioButtonId"
+        android:text="End Call"
+        android:onClick="onAudioButtonClicked"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/speakerButtonId"
+        android:text="Speaker On"
+        android:onClick="onSpeakerButtonClicked"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/audioButtonId" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/videoButtonId"
+        android:text="Video"
+        android:onClick="onVideoButtonClicked"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/speakerButtonId"
+        android:layout_toEndOf="@+id/speakerButtonId" />
+
+</RelativeLayout>
