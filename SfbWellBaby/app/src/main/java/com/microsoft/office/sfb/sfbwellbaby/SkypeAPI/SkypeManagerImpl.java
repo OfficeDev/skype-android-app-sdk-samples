@@ -108,6 +108,8 @@ public class SkypeManagerImpl implements SkypeManager {
         } catch (SFBException e) {
             mSkypeConversationJoinCallback
                     .onSkypeConversationJoinFailure(e);
+        } catch (Exception ex){
+            ex.printStackTrace();
         }
 
 

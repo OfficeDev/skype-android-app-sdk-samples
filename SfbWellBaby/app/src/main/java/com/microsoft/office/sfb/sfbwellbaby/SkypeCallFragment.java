@@ -23,7 +23,7 @@ import static com.microsoft.office.sfb.sfbwellbaby.R.id.pauseVideoButton;
 public class SkypeCallFragment extends Fragment {
 
     @InjectView(pauseVideoButton)
-    protected Button mPauseButton;
+    public Button mPauseButton;
 
     private SkypeManagerImpl mSkypeManagerImpl = null;
     private OnFragmentInteractionListener mListener;
