@@ -35,7 +35,7 @@ public interface SkypeManager {
 
     interface SkypeVideoReady {
         void onSkypeIncomingVideoReady();
-        void onSkypeOutgoingVideoReady();
+        void onSkypeOutgoingVideoReady(boolean paused);
     }
 
     /**
@@ -48,8 +48,10 @@ public interface SkypeManager {
     void joinConversation(
             URI meetingURI,
             String displayName
+
     )throws SFBException;
 
+    void setCallVideoReadyListener(SkypeVideoReady listener);
     void setCallView(View callView);
     void prepareOutgoingVideo();
 

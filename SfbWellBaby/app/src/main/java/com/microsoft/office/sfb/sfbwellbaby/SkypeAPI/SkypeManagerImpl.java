@@ -31,6 +31,7 @@ public class SkypeManagerImpl implements SkypeManager {
     private TextureView mPreviewTextureView;
     private SurfaceTexture mPreviewSurfaceTexture;
     private Conversation mConversation;
+    private SkypeManager.SkypeVideoReady mVideoFragment;
 
     //
     // statics
@@ -88,7 +89,8 @@ public class SkypeManagerImpl implements SkypeManager {
     @Override
     public void joinConversation(
             URI meetingURI,
-            String displayName) throws SFBException {
+            String displayName
+            ) throws SFBException {
 
         setDisplayName(displayName); // set our name
 
@@ -116,6 +118,14 @@ public class SkypeManagerImpl implements SkypeManager {
 
     }
 
+
+
+    @Override
+    public void setCallVideoReadyListener(SkypeVideoReady listener) {
+        mVideoFragment = listener;
+
+    }
+
     /**
      * Sets the TextureView for the outgoing video preview and
      * then sets a surface texture listener for the TextView
@@ -132,6 +142,16 @@ public class SkypeManagerImpl implements SkypeManager {
     public void prepareOutgoingVideo() {
         mConversation.getVideoService().addOnPropertyChangedCallback(this.onPropertyChangedCallback);
 
+
+
+    }
+
+    @Override
+    public void startOutgoingVideo() {
+
+        try {
+            mConversation.getVideoService().displayPreview(mPreviewSurfaceTexture);
+
             ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
             for(Camera camera: cameras) {
                 if (camera.getType() == Camera.CameraType.FRONTFACING){
@@ -143,16 +163,8 @@ public class SkypeManagerImpl implements SkypeManager {
                     break;
                 }
             }
-
-    }
-
-    @Override
-    public void startOutgoingVideo() {
-
-        try {
-            mConversation.getVideoService().displayPreview(mPreviewSurfaceTexture);
-            if (mConversation.getVideoService().canStart())
-                mConversation.getVideoService().start();
+            mConversation.getVideoService().start();
+            mVideoFragment.onSkypeOutgoingVideoReady(true);
         } catch (SFBException e) {
             e.printStackTrace();
         }
@@ -162,8 +174,11 @@ public class SkypeManagerImpl implements SkypeManager {
     public void stopOutgoingVideo() {
         boolean videoPaused = mConversation.getVideoService().getPaused();
         try {
-            mConversation.getVideoService().setPaused(!videoPaused);
-//            this.updateState();
+            if (mConversation.getVideoService().canSetPaused()){
+                mConversation.getVideoService().setPaused(!videoPaused);
+            }
+            //Give the current pause state of the video service to the listener
+            mVideoFragment.onSkypeOutgoingVideoReady(false);
         } catch (SFBException e) {
             e.printStackTrace();
         }
@@ -194,7 +209,7 @@ public class SkypeManagerImpl implements SkypeManager {
     public void SurfaceTextureCreatedCallback(SurfaceTexture texture) {
         try {
 
-            mSkypeVideoReady.onSkypeOutgoingVideoReady();
+
             // Display the preview
             mConversation.getVideoService().displayPreview(texture);
 
@@ -249,10 +264,7 @@ public class SkypeManagerImpl implements SkypeManager {
     }
 
 
-    private VideoService insureVideoService(){
 
-        return mConversation.getVideoService();
-    }
     /**
      * Callback implementation for listening for conversation property changes.
      */
@@ -299,6 +311,7 @@ public class SkypeManagerImpl implements SkypeManager {
                 case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
                 case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
                     if (mConversation.getVideoService().canSetActiveCamera()){
+                        mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
                         ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
                         for(Camera camera: cameras) {
                             if (camera.getType() == Camera.CameraType.FRONTFACING){
@@ -310,6 +323,8 @@ public class SkypeManagerImpl implements SkypeManager {
                                 break;
                             }
                         }
+
+
                     }
 
             break;
@@ -398,12 +413,7 @@ public class SkypeManagerImpl implements SkypeManager {
         } catch (SFBException e) {
             e.printStackTrace();
         }
-//        this.getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                updateState();
-//            }
-//        });
+
 
     }
 
