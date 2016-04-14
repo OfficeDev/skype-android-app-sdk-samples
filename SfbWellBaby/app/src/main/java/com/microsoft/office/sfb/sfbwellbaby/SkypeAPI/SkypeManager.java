@@ -1,6 +1,5 @@
 package com.microsoft.office.sfb.sfbwellbaby.SkypeAPI;
 
-import android.view.TextureView;
 import android.view.View;
 
 import com.microsoft.office.sfb.appsdk.Conversation;
@@ -44,15 +43,14 @@ public interface SkypeManager {
      * streams on provided surface views
      * @param meetingURI
      * @param displayName
-     * @param videoPreview
      * @throws  SFBException
      */
     void joinConversation(
             URI meetingURI,
-            String displayName,
-            TextureView videoPreview
+            String displayName
     )throws SFBException;
 
+    void setCallView(View callView);
     void prepareOutgoingVideo();
 
     void startOutgoingVideo();

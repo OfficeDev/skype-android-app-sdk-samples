@@ -1,7 +1,10 @@
 package com.microsoft.office.sfb.sfbwellbaby;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,13 +21,27 @@ import java.net.URISyntaxException;
 
 import butterknife.ButterKnife;
 
+
+/**
+ * SkypeCall activity hosts two fragments. The first fragment shows a progress indicator and is loaded
+ * immediately after this activity is inflated. When the WaitForConnect fragment reports that it is
+ * inflated, SkypeCall initiates the meeting join via SkypeManagerImpl.java. When SkypeManagerImpl
+ * reports that the meeting is joined, SkypeCall removes the WaitForConnect fragment and replaces
+ * it with the SkypeCallFragment. The SkypeCallFragment hosts the incoming video stream and a preview
+ * of the outgoing stream.
+ * SkypeCall finds the containing views in the SkypeCallFragment and provides those container views to
+ * SkypeManagerImpl. SkypeManagerImpl sends the two video streams to the UI via those containers.
+ */
 public class SkypeCall extends AppCompatActivity
         implements SkypeManager.SkypeConversationJoinCallback, SkypeManager.SkypeVideoReady,
-        SkypeCallFragment.OnFragmentInteractionListener{
+        SkypeCallFragment.OnFragmentInteractionListener,
+        WaitForConnect.OnFragmentInteractionListener{
 
     SkypeManagerImpl mSkypeManagerImpl;
     Conversation mAnonymousMeeting;
     SkypeCallFragment mCallFragment = null;
+    WaitForConnect mWaitForConnect = null;
+    FragmentManager mFragmentManager = null;
 
 
     ConversationPropertyChangeListener conversationPropertyChangeListener = null;
@@ -32,6 +49,7 @@ public class SkypeCall extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mFragmentManager = getSupportFragmentManager();
         //Get the singleton instance of the skype manager
         mSkypeManagerImpl = SkypeManagerImpl.getInstance(
                 getApplicationContext(),
@@ -45,28 +63,91 @@ public class SkypeCall extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-        mCallFragment = SkypeCallFragment.newInstance(mSkypeManagerImpl);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-                .beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container,mCallFragment, "video");
+        //Load the WaitForConnect fragment
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        mWaitForConnect = WaitForConnect.newInstance("","");
+        fragmentTransaction.add(
+                R.id.fragment_container,
+                mWaitForConnect,
+                "wait");
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
+    /**
+     * The WaitForConnect fragment interaction callback. This is invoked
+     * when the WaitForConnect fragment is inflated.
+     * @param uri
+     */
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+        //Start to join the meeting
+        startToJoinMeeting();
+    }
+
+    /**
+     * Invoked by SkypeManagerImpl when the meeting is joined.
+     * @param conversation the newly joined / created Conversation
+     * When joined, close the WaitForConnect fragment and add the
+     * SkypeCallFragment
+     */
     @Override
     public void onSkypeConversationJoinSuccess(Conversation conversation) {
-        mAnonymousMeeting = conversation;
-        if (mAnonymousMeeting.getState() == Conversation.State.ESTABLISHED){
-            View fragmentView = mCallFragment.getView();
-            mSkypeManagerImpl.startIncomingVideo(
-                    fragmentView
-                            .findViewById(
-                                    R.id.participantVideoLayoutId));
-            mSkypeManagerImpl.prepareOutgoingVideo();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
+        try{
+            mCallFragment = SkypeCallFragment.newInstance(mSkypeManagerImpl);
+
+            fragmentTransaction.remove(mWaitForConnect);
+            fragmentTransaction.add(
+                    R.id.fragment_container,
+                    mCallFragment,
+                    "video");
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commitAllowingStateLoss();
+            mAnonymousMeeting = conversation;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Invoked from SkypeCallFragment when inflated. Provides the TextureView for preview to the
+     * SkypeManagerImpl
+     * @param callView
+     * @param newMeetingURI
+     */
+    @Override
+    public void onFragmentInteraction(View callView, String newMeetingURI) {
+        try{
+            if (newMeetingURI.contentEquals(getString(R.string.callFragmentInflated))){
+                //Get the containers for preview video and incoming video
+                @SuppressLint("WrongViewCast")
+                TextureView textureView = (TextureView) callView.findViewById(R.id.selfParticipantVideoView);
+                View participantVideoContainer = callView.findViewById(R.id.participantVideoLayoutId);
+
+                //Set the preview video container
+                mSkypeManagerImpl.setCallView(textureView);
+
+                //Set the incoming video container and start the video
+                mSkypeManagerImpl.startIncomingVideo(participantVideoContainer);
+
+                //Prepare the video preview
+                mSkypeManagerImpl.prepareOutgoingVideo();
+            }
+            if (newMeetingURI.contentEquals(getString(R.string.leaveCall))){
+                mFragmentManager.popBackStack(
+                        "video",
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                leaveSkypeCall();
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 
@@ -81,9 +162,8 @@ public class SkypeCall extends AppCompatActivity
      * Connect to an existing Skype for Business meeting with the URI from
      * shared preferences. Normally the URI is supplied to the mobile device
      * via some mechanism outside the scope of this sample.
-     * @param callView The fragment that hosts the incoming and outgoing video
      */
-    private void startConversation(View callView){
+    private void startToJoinMeeting(){
         SharedPreferences settings = getSharedPreferences(getString(R.string.meetingURIKey), 0);
         String meetingURIString = settings.getString(getString(R.string.meetingURIKey), "");
         URI meetingURI = null;
@@ -95,11 +175,7 @@ public class SkypeCall extends AppCompatActivity
         try {
             mSkypeManagerImpl.joinConversation(
                     meetingURI,
-                    getString(R.string.fatherName),
-
-                    (TextureView) callView
-                            .findViewById(
-                                    R.id.selfParticipantVideoView));
+                    getString(R.string.fatherName));
         } catch (SFBException e) {
             e.printStackTrace();
         }
@@ -120,13 +196,12 @@ public class SkypeCall extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction(View callView, String newMeetingURI) {
-        startConversation(callView);
-    }
-    @Override
     protected void onStop() {
         super.onStop();
+        leaveSkypeCall();
+    }
 
+    private void leaveSkypeCall(){
         //If there is an active meeting and the user can leave then
         //leave the meeting before closing this activity
         if (mAnonymousMeeting != null && mAnonymousMeeting.canLeave())
@@ -134,6 +209,11 @@ public class SkypeCall extends AppCompatActivity
                 mAnonymousMeeting.leave();
             } catch (SFBException e) {
                 e.printStackTrace();
-            }
+        }
+
+        finish();
+
     }
+
+
 }

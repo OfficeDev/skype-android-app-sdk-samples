@@ -26,4 +26,6 @@
     <string name="meetingURIKey">meetingURI</string>
     <string name="defaultMeetingURL"><![CDATA[https://meet.lync.com/<yourDomain>/<yourAlias>/<YourInstance>]]></string>
     <string name="fatherName">David Trudeau</string>
+    <string name="leaveCall">leaveCall</string>
+    <string name="callFragmentInflated">inflated</string>
 </resources>
