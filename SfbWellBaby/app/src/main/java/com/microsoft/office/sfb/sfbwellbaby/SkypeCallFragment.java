@@ -1,64 +1,92 @@
 package com.microsoft.office.sfb.sfbwellbaby;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.microsoft.office.sfb.appsdk.Conversation;
-import com.microsoft.office.sfb.appsdk.DevicesManager;
-import com.microsoft.office.sfb.appsdk.Observable;
-import com.microsoft.office.sfb.appsdk.VideoService;
+import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManagerImpl;
+
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+import static com.microsoft.office.sfb.sfbwellbaby.R.id.pauseVideoButton;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class SkypeCallFragment extends Fragment {
 
-    private static Conversation mConversation = null;
-    private static DevicesManager mDevicesManager;
-    private VideoService mVideoService;
+    @InjectView(pauseVideoButton)
+    protected Button mPauseButton;
+
+    private SkypeManagerImpl mSkypeManagerImpl = null;
+    private OnFragmentInteractionListener mListener;
+    View mRootView;
 
 
-    public SkypeCallFragment(){}
+    public SkypeCallFragment() {
+    }
 
     @SuppressLint("ValidFragment")
-    public SkypeCallFragment(Conversation mAnonymousMeeting, DevicesManager devicesManager) {
+    public SkypeCallFragment(SkypeManagerImpl skypeManager) {
+        mSkypeManagerImpl = skypeManager;
     }
+
     /**
      * Create the Video fragment.
      *
-     * @param conv Conversation
-     * @param dManager DevicesManager.
      * @return A new instance of fragment VideoFragment.
      */
-    public static SkypeCallFragment newInstance(Conversation conv, DevicesManager dManager) {
-        SkypeCallFragment fragment = new SkypeCallFragment(conv, dManager);
-        mConversation = conv;
-        mDevicesManager = dManager;
+    public static SkypeCallFragment newInstance(SkypeManagerImpl skypeManager) {
+        SkypeCallFragment fragment = new SkypeCallFragment(skypeManager);
+
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_skype_call, container, false);
-
-        mVideoService = mConversation.getVideoService();
-        mVideoService.addOnPropertyChangedCallback(this.onPropertyChangedCallback);
-        return rootView;
+        mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
+        mListener.onFragmentInteraction(mRootView, "inflated");
+        return mRootView;
     }
-    VideoService.OnPropertyChangedCallback onPropertyChangedCallback = new Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(Observable sender, int propertyId) {
-            switch(propertyId) {
-                case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
-                case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
-                    // updateState();
-                    break;
-                default:
-            }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
-    };
+    }
+
+    @OnClick(pauseVideoButton)
+    public void onClickVideoPause(Button button) {
+
+        mSkypeManagerImpl.stopOutgoingVideo();
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(View rootView, String newMeetingURI);
+    }
+
 }
