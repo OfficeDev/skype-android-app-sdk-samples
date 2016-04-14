@@ -1,6 +1,5 @@
 package com.microsoft.office.sfb.sfbwellbaby.SkypeAPI;
 
-import android.view.TextureView;
 import android.view.View;
 
 import com.microsoft.office.sfb.appsdk.Conversation;
