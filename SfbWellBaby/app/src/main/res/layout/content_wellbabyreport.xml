@@ -10,25 +10,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="44dp"
-            android:id="@+id/babyPicture"
-            android:src="@drawable/baby"
-            android:maxHeight="20dp"
-            android:maxWidth="20dp"
-            android:visibility="visible"
-            android:scaleType="fitStart"
-            android:minHeight="20dp"
-            android:minWidth="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:layout_below="@+id/babyPicture"
-            android:text="@string/large_text" />
+            android:layout_below="@+id/textView2"
+            android:text="@string/large_text"
+            android:id="@+id/textView4" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,11 +24,11 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Jonathan Trudeau (9 mos)"
             android:id="@+id/textView"
-            android:layout_alignTop="@+id/babyPicture"
-            android:layout_toRightOf="@+id/babyPicture"
-            android:layout_toEndOf="@+id/babyPicture"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginLeft="21dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/textView4"
+            android:layout_alignStart="@+id/textView4"
+            android:layout_marginStart="21dp" />
 
         <TextView
             android:layout_width="wrap_content"
