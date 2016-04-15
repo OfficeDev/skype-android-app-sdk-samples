@@ -9,29 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManagerImpl;
+import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManager;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SkypeCallFragment extends Fragment {
+public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVideoReady{
 
-//    @InjectView(pauseVideoButton)
+    //    @InjectView(pauseVideoButton)
     public Button mPauseButton;
     public Button mEndCallButton;
-
-    private SkypeManagerImpl mSkypeManagerImpl = null;
     private OnFragmentInteractionListener mListener;
     View mRootView;
 
-
-    public SkypeCallFragment() {
-    }
-
     @SuppressLint("ValidFragment")
-    public SkypeCallFragment(SkypeManagerImpl skypeManager) {
-        mSkypeManagerImpl = skypeManager;
+    public SkypeCallFragment() {
     }
 
     /**
@@ -39,8 +32,8 @@ public class SkypeCallFragment extends Fragment {
      *
      * @return A new instance of fragment VideoFragment.
      */
-    public static SkypeCallFragment newInstance(SkypeManagerImpl skypeManager) {
-        SkypeCallFragment fragment = new SkypeCallFragment(skypeManager);
+    public static SkypeCallFragment newInstance() {
+        SkypeCallFragment fragment = new SkypeCallFragment();
 
         return fragment;
     }
@@ -50,20 +43,24 @@ public class SkypeCallFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
         mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
-
-        
-        mPauseButton = (Button)mRootView.findViewById(R.id.pauseVideoButton);
+        mPauseButton = (Button) mRootView.findViewById(R.id.pauseVideoButton);
         mPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSkypeManagerImpl.stopOutgoingVideo();
+                mListener.onFragmentInteraction(
+                        mRootView,
+                        getActivity().
+                                getString(R.string.pauseCall));
             }
         });
-        mEndCallButton = (Button)mRootView.findViewById(R.id.endCallButton);
+        mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.leaveCall));
+                mListener.onFragmentInteraction(
+                        mRootView,
+                        getActivity().
+                                getString(R.string.leaveCall));
             }
         });
         return mRootView;
@@ -81,24 +78,43 @@ public class SkypeCallFragment extends Fragment {
         }
     }
 
-//    @OnClick(pauseVideoButton)
-//    public void onClickVideoPause(Button button) {
-//
-//        mSkypeManagerImpl.stopOutgoingVideo();
-//    }
+    @Override
+    public void onSkypeIncomingVideoReady() {
+
+    }
+
+    @Override
+    public void onSkypeOutgoingVideoReady(final boolean paused) {
+        try {
+            this.getActivity().runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (paused == true)
+                        mPauseButton.setText("pause");
+                    else
+                        mPauseButton.setText("resume");
+                }
+            });
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Used to interact with parent activity
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(View rootView, String newMeetingURI);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().finish();
+        mListener = null;
     }
 
 }
