@@ -91,7 +91,7 @@ public class WaitForConnect extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mListener.onFragmentInteraction(getActivity().getString(R.string.waitStopped));
+       // mListener.onFragmentInteraction(getActivity().getString(R.string.waitStopped));
         mListener = null;
     }
     @Override

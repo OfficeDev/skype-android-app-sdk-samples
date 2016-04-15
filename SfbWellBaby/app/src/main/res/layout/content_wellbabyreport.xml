@@ -7,11 +7,66 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.microsoft.office.sfb.sfbwellbaby.wellbabyreport"
     tools:showIn="@layout/activity_wellbabyreport">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="44dp"
+            android:id="@+id/babyPicture"
+            android:src="@drawable/baby"
+            android:maxHeight="20dp"
+            android:maxWidth="20dp"
+            android:visibility="visible"
+            android:scaleType="fitStart"
+            android:minHeight="20dp"
+            android:minWidth="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_below="@+id/babyPicture"
+            android:text="@string/large_text" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Jonathan Trudeau (9 mos)"
+            android:id="@+id/textView"
+            android:layout_alignTop="@+id/babyPicture"
+            android:layout_toRightOf="@+id/babyPicture"
+            android:layout_toEndOf="@+id/babyPicture"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Next appointment: "
+            android:id="@+id/textView2"
+            android:layout_below="@+id/textView"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:layout_marginLeft="23dp"
+            android:layout_marginStart="23dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="4 days"
+            android:id="@+id/textView3"
+            android:layout_below="@+id/textView"
+            android:layout_toRightOf="@+id/textView2"
+            android:layout_toEndOf="@+id/textView2"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:textColor="#a00808" />
+
+    </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

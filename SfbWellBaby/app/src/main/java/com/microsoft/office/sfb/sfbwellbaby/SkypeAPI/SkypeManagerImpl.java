@@ -47,7 +47,6 @@ public class SkypeManagerImpl implements SkypeManager {
     public static synchronized SkypeManagerImpl getInstance(
             Context context,
             SkypeConversationJoinCallback skypeConversationJoinCallback,
-
             SkypeVideoReady skypeVideoReady) {
         if (null == sSkypeManager) { // initialize a new instance of singleton
             sSkypeManager = new SkypeManagerImpl(
@@ -140,10 +139,9 @@ public class SkypeManagerImpl implements SkypeManager {
 
     @Override
     public void prepareOutgoingVideo() {
-        mConversation.getVideoService().addOnPropertyChangedCallback(this.onPropertyChangedCallback);
-
-
-
+        mConversation
+                .getVideoService()
+                .addOnPropertyChangedCallback(this.onPropertyChangedCallback);
     }
 
     @Override
@@ -203,12 +201,19 @@ public class SkypeManagerImpl implements SkypeManager {
 
     @Override
     public void stopStartOutgoingAudio() {
-        if (mConversation.getAudioService().canSetMuted() == true){
+        if (mConversation
+                .getSelfParticipant()
+                .getParticipantAudio()
+                .canSetMuted() == true){
             try {
+                boolean isMuted = mConversation
+                        .getSelfParticipant()
+                        .getParticipantAudio()
+                        .isMuted();
                 mConversation
-                        .getAudioService()
-                        .setMuted(!mConversation.getAudioService()
-                                .isMuted());
+                        .getSelfParticipant()
+                        .getParticipantAudio()
+                        .setMuted(!isMuted);
             } catch (SFBException e) {
                 e.printStackTrace();
             }
@@ -330,7 +335,12 @@ public class SkypeManagerImpl implements SkypeManager {
                         for(Camera camera: cameras) {
                             if (camera.getType() == Camera.CameraType.FRONTFACING){
                                 try {
-                                    mConversation.getVideoService().setActiveCamera(camera);
+                                    mConversation
+                                            .getVideoService()
+                                            .setActiveCamera(camera);
+
+                                    //notify that camera is set
+                                    mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
                                 } catch (SFBException e) {
                                     e.printStackTrace();
                                 }
