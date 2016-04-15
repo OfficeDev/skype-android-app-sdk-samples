@@ -31,7 +31,7 @@ public class SkypeManagerImpl implements SkypeManager {
     private TextureView mPreviewTextureView;
     private SurfaceTexture mPreviewSurfaceTexture;
     private Conversation mConversation;
-    private SkypeManager.SkypeVideoReady mVideoFragment;
+    private SkypeManager.SkypeVideoReady mPauseListener;
 
     //
     // statics
@@ -122,7 +122,7 @@ public class SkypeManagerImpl implements SkypeManager {
 
     @Override
     public void setCallVideoReadyListener(SkypeVideoReady listener) {
-        mVideoFragment = listener;
+        mPauseListener = listener;
 
     }
 
@@ -164,7 +164,7 @@ public class SkypeManagerImpl implements SkypeManager {
                 }
             }
             mConversation.getVideoService().start();
-            mVideoFragment.onSkypeOutgoingVideoReady(true);
+            mPauseListener.onSkypeOutgoingVideoReady(true);
         } catch (SFBException e) {
             e.printStackTrace();
         }
@@ -178,7 +178,7 @@ public class SkypeManagerImpl implements SkypeManager {
                 mConversation.getVideoService().setPaused(!videoPaused);
             }
             //Give the current pause state of the video service to the listener
-            mVideoFragment.onSkypeOutgoingVideoReady(false);
+            mPauseListener.onSkypeOutgoingVideoReady(false);
         } catch (SFBException e) {
             e.printStackTrace();
         }

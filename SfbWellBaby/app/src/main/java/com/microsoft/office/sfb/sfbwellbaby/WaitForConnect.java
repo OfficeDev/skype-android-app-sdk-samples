@@ -90,6 +90,12 @@ public class WaitForConnect extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().finish();
+        mListener = null;
+    }
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;

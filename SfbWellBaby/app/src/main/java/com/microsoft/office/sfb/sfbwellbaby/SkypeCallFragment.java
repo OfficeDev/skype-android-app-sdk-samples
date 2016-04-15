@@ -91,9 +91,9 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
                 @Override
                 public void run() {
                     if (paused == true)
-                        mPauseButton.setText("start");
-                    else
                         mPauseButton.setText("pause");
+                    else
+                        mPauseButton.setText("resume");
                 }
             });
         } catch(Exception e) {
@@ -108,6 +108,13 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(View rootView, String newMeetingURI);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().finish();
+        mListener = null;
     }
 
 }
