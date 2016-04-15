@@ -71,10 +71,9 @@ public class WaitForConnect extends Fragment {
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction("button");
         }
     }
 
@@ -92,7 +91,7 @@ public class WaitForConnect extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-//        getActivity().finish();
+        mListener.onFragmentInteraction(getActivity().getString(R.string.waitStopped));
         mListener = null;
     }
     @Override
@@ -112,7 +111,6 @@ public class WaitForConnect extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String myAction);
     }
 }

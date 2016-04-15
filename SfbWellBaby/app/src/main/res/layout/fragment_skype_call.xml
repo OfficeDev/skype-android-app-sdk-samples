@@ -23,15 +23,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/pauseVideoButton"
-            android:text="PAUSE"
-            android:onClick="onPauseClick"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,8 +31,7 @@
             android:text="End call"
             android:onClick="onEndClick"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/pauseVideoButton"
-            android:layout_toEndOf="@+id/pauseVideoButton" />
+            />
 
 
     </RelativeLayout>

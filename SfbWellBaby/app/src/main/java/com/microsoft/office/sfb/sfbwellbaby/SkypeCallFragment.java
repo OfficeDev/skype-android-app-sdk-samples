@@ -18,7 +18,7 @@ import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManager;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVideoReady{
+public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVideoReady {
 
     //    @InjectView(pauseVideoButton)
     public Button mPauseButton;
@@ -46,16 +46,16 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
         mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
-        mPauseButton = (Button) mRootView.findViewById(R.id.pauseVideoButton);
-        mPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+     //  mPauseButton = (Button) mRootView.findViewById(R.id.pauseVideoButton);
+//        mPauseButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //                mListener.onFragmentInteraction(
 //                        mRootView,
 //                        getActivity().
 //                                getString(R.string.pauseCall));
-             }
-        });
+//            }
+//        });
         mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +99,7 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
                         mPauseButton.setText("resume");
                 }
             });
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -129,7 +129,7 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.muteAudioMenuItem:
 //                mListener.onFragmentInteraction(
 //                        mRootView,
