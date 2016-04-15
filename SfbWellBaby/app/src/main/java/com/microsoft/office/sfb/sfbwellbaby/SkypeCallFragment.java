@@ -50,20 +50,20 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
         mPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onFragmentInteraction(
-                        mRootView,
-                        getActivity().
-                                getString(R.string.pauseCall));
-            }
+//                mListener.onFragmentInteraction(
+//                        mRootView,
+//                        getActivity().
+//                                getString(R.string.pauseCall));
+             }
         });
         mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onFragmentInteraction(
-                        mRootView,
-                        getActivity().
-                                getString(R.string.leaveCall));
+//                mListener.onFragmentInteraction(
+//                        mRootView,
+//                        getActivity().
+//                                getString(R.string.leaveCall));
             }
         });
         return mRootView;
@@ -122,7 +122,8 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+//        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_skype_call, menu);
     }
 
     @Override
@@ -130,16 +131,16 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
         super.onOptionsItemSelected(item);
         switch (item.getItemId()){
             case R.id.muteAudioMenuItem:
-                mListener.onFragmentInteraction(
-                        mRootView,
-                        getActivity()
-                                .getString(R.string.muteAudio));
+//                mListener.onFragmentInteraction(
+//                        mRootView,
+//                        getActivity()
+//                                .getString(R.string.muteAudio));
                 break;
             case R.id.pauseVideoMenuItem:
-                mListener.onFragmentInteraction(
-                        mRootView,
-                        getActivity()
-                                .getString(R.string.pauseCall));
+//                mListener.onFragmentInteraction(
+//                        mRootView,
+//                        getActivity()
+//                                .getString(R.string.pauseCall));
                 break;
         }
 
