@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -117,4 +120,29 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
         mListener = null;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.muteAudioMenuItem:
+                mListener.onFragmentInteraction(
+                        mRootView,
+                        getActivity()
+                                .getString(R.string.muteAudio));
+                break;
+            case R.id.pauseVideoMenuItem:
+                mListener.onFragmentInteraction(
+                        mRootView,
+                        getActivity()
+                                .getString(R.string.pauseCall));
+                break;
+        }
+
+        return false;
+    }
 }

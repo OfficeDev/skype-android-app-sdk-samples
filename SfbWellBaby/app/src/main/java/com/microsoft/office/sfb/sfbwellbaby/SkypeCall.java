@@ -152,6 +152,9 @@ public class SkypeCall extends AppCompatActivity
             if (newMeetingURI.contentEquals(getString(R.string.pauseCall))) {
                 mSkypeManagerImpl.stopOutgoingVideo();
             }
+            if (newMeetingURI.contentEquals(getString(R.string.muteAudio))){
+                mSkypeManagerImpl.stopStartOutgoingAudio();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
