@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.microsoft.office.sfb.sfbwellbaby.SkypeCall">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/pauseVideoMenuItem"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="Pause video"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/muteAudioMenuItem"
+        android:orderInCategory="100"
+        android:title="Mute audio"
+        app:showAsAction="always" />
 </menu>

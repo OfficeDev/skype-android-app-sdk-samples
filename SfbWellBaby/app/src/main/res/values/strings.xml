@@ -29,4 +29,5 @@
     <string name="leaveCall">leaveCall</string>
     <string name="callFragmentInflated">inflated</string>
     <string name="pauseCall">pauseCall</string>
+    <string name="muteAudio">muteAudio</string>
 </resources>

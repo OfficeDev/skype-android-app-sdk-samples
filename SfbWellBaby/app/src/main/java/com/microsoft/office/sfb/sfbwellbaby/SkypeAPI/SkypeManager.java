@@ -60,6 +60,9 @@ public interface SkypeManager {
     void startIncomingVideo(
             View participantVideoLayout);
 
+     void stopStartOutgoingAudio();
+
+
 
 
 

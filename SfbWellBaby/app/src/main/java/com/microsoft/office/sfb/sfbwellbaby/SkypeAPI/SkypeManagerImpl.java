@@ -201,6 +201,20 @@ public class SkypeManagerImpl implements SkypeManager {
                 mParticipantVideoSurfaceView);
     }
 
+    @Override
+    public void stopStartOutgoingAudio() {
+        if (mConversation.getAudioService().canSetMuted() == true){
+            try {
+                mConversation
+                        .getAudioService()
+                        .setMuted(!mConversation.getAudioService()
+                                .isMuted());
+            } catch (SFBException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     /**
      * Setup the Video preview.

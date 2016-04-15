@@ -92,7 +92,7 @@ public class WaitForConnect extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().finish();
+//        getActivity().finish();
         mListener = null;
     }
     @Override

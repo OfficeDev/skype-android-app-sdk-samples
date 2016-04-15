@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 
@@ -152,6 +154,9 @@ public class SkypeCall extends AppCompatActivity
             if (newMeetingURI.contentEquals(getString(R.string.pauseCall))) {
                 mSkypeManagerImpl.stopOutgoingVideo();
             }
+            if (newMeetingURI.contentEquals(getString(R.string.muteAudio))){
+                mSkypeManagerImpl.stopStartOutgoingAudio();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -217,5 +222,26 @@ public class SkypeCall extends AppCompatActivity
             }
 
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_skype_call, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.muteAudioMenuItem:
+                mSkypeManagerImpl.stopStartOutgoingAudio();
+                break;
+            case R.id.pauseVideoMenuItem:
+                mSkypeManagerImpl.stopOutgoingVideo();
+                break;
+        }
+
+        return false;
     }
 }
