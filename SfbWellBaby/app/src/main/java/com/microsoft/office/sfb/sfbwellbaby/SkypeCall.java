@@ -86,13 +86,14 @@ public class SkypeCall extends AppCompatActivity
     @Override
     public void onFragmentInteraction(String waitAction) {
         if (waitAction != null){
-            if (!waitAction.contentEquals(getString(R.string.waitStopped))){
-                startToJoinMeeting();
-            }
-            else{
+            if (waitAction.contentEquals(getString(R.string.waitStopped))){
                 finish();
             }
         }
+        else{
+            startToJoinMeeting();
+        }
+
     }
 
     /**
