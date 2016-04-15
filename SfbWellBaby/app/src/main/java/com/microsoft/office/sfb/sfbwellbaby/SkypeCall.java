@@ -2,7 +2,6 @@ package com.microsoft.office.sfb.sfbwellbaby;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -82,11 +81,18 @@ public class SkypeCall extends AppCompatActivity
      * The WaitForConnect fragment interaction callback. This is invoked
      * when the WaitForConnect fragment is inflated.
      *
-     * @param uri
+     * @param waitAction The stop action of the WaitForConnect fragment
      */
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        startToJoinMeeting();
+    public void onFragmentInteraction(String waitAction) {
+        if (waitAction != null){
+            if (!waitAction.contentEquals(getString(R.string.waitStopped))){
+                startToJoinMeeting();
+            }
+            else{
+                finish();
+            }
+        }
     }
 
     /**

@@ -30,4 +30,5 @@
     <string name="callFragmentInflated">inflated</string>
     <string name="pauseCall">pauseCall</string>
     <string name="muteAudio">muteAudio</string>
+    <string name="waitStopped">waitStopped</string>
 </resources>
