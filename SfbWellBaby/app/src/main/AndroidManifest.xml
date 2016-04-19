@@ -59,6 +59,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".SkypeCall"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_skype_call"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

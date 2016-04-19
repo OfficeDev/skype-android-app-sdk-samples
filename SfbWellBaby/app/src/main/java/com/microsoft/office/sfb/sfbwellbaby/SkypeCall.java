@@ -159,7 +159,7 @@ public class SkypeCall extends AppCompatActivity
                 leaveSkypeCall();
             }
             if (newMeetingURI.contentEquals(getString(R.string.pauseCall))) {
-                mSkypeManagerImpl.stopOutgoingVideo();
+                mSkypeManagerImpl.stopStartOutgoingVideo();
             }
             if (newMeetingURI.contentEquals(getString(R.string.muteAudio))){
                 mSkypeManagerImpl.stopStartOutgoingAudio();
@@ -245,7 +245,7 @@ public class SkypeCall extends AppCompatActivity
                 mSkypeManagerImpl.stopStartOutgoingAudio();
                 break;
             case R.id.pauseVideoMenuItem:
-                mSkypeManagerImpl.stopOutgoingVideo();
+                mSkypeManagerImpl.stopStartOutgoingVideo();
                 break;
         }
 

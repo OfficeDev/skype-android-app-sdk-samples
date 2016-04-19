@@ -56,7 +56,7 @@ public interface SkypeManager {
     void prepareOutgoingVideo();
 
     void startOutgoingVideo();
-    void stopOutgoingVideo();
+    void stopStartOutgoingVideo();
     void startIncomingVideo(
             View participantVideoLayout);
 

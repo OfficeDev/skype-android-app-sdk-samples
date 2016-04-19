@@ -47,7 +47,6 @@ public class SkypeManagerImpl implements SkypeManager {
     public static synchronized SkypeManagerImpl getInstance(
             Context context,
             SkypeConversationJoinCallback skypeConversationJoinCallback,
-
             SkypeVideoReady skypeVideoReady) {
         if (null == sSkypeManager) { // initialize a new instance of singleton
             sSkypeManager = new SkypeManagerImpl(
@@ -140,10 +139,9 @@ public class SkypeManagerImpl implements SkypeManager {
 
     @Override
     public void prepareOutgoingVideo() {
-        mConversation.getVideoService().addOnPropertyChangedCallback(this.onPropertyChangedCallback);
-
-
-
+        mConversation
+                .getVideoService()
+                .addOnPropertyChangedCallback(this.onPropertyChangedCallback);
     }
 
     @Override
@@ -164,6 +162,9 @@ public class SkypeManagerImpl implements SkypeManager {
                 }
             }
             mConversation.getVideoService().start();
+           if (mConversation.getVideoService().canSetPaused())
+               mConversation.getVideoService().setPaused(false);
+
             mPauseListener.onSkypeOutgoingVideoReady(true);
         } catch (SFBException e) {
             e.printStackTrace();
@@ -171,7 +172,7 @@ public class SkypeManagerImpl implements SkypeManager {
     }
 
     @Override
-    public void stopOutgoingVideo() {
+    public void stopStartOutgoingVideo() {
         boolean videoPaused = mConversation.getVideoService().getPaused();
         try {
             if (mConversation.getVideoService().canSetPaused()){
@@ -203,12 +204,19 @@ public class SkypeManagerImpl implements SkypeManager {
 
     @Override
     public void stopStartOutgoingAudio() {
-        if (mConversation.getAudioService().canSetMuted() == true){
+        if (mConversation
+                .getSelfParticipant()
+                .getParticipantAudio()
+                .canSetMuted() == true){
             try {
+                boolean isMuted = mConversation
+                        .getSelfParticipant()
+                        .getParticipantAudio()
+                        .isMuted();
                 mConversation
-                        .getAudioService()
-                        .setMuted(!mConversation.getAudioService()
-                                .isMuted());
+                        .getSelfParticipant()
+                        .getParticipantAudio()
+                        .setMuted(!isMuted);
             } catch (SFBException e) {
                 e.printStackTrace();
             }
@@ -323,6 +331,28 @@ public class SkypeManagerImpl implements SkypeManager {
                 return;
             switch(propertyId) {
                 case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
+                    if (mConversation.getVideoService().canSetActiveCamera()){
+                        mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
+                        ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
+                        for(Camera camera: cameras) {
+                            if (camera.getType() == Camera.CameraType.FRONTFACING){
+                                try {
+                                    mConversation
+                                            .getVideoService()
+                                            .setActiveCamera(camera);
+
+
+                                    //notify that camera is set
+                                    mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
+                                } catch (SFBException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        }
+
+
+                    }
                 case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
                     if (mConversation.getVideoService().canSetActiveCamera()){
                         mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
@@ -330,7 +360,14 @@ public class SkypeManagerImpl implements SkypeManager {
                         for(Camera camera: cameras) {
                             if (camera.getType() == Camera.CameraType.FRONTFACING){
                                 try {
-                                    mConversation.getVideoService().setActiveCamera(camera);
+                                    mConversation
+                                            .getVideoService()
+                                            .setActiveCamera(camera);
+                                    mConversation
+                                            .getVideoService()
+                                            .setPaused(false);
+                                    //notify that camera is set
+                                   // mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
                                 } catch (SFBException e) {
                                     e.printStackTrace();
                                 }
