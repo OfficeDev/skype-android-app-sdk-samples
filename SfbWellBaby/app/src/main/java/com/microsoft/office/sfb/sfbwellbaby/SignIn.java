@@ -77,6 +77,7 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
+        this.setTitle("Contoso Health Services");
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

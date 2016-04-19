@@ -162,6 +162,9 @@ public class SkypeManagerImpl implements SkypeManager {
                 }
             }
             mConversation.getVideoService().start();
+           if (mConversation.getVideoService().canSetPaused())
+               mConversation.getVideoService().setPaused(false);
+
             mPauseListener.onSkypeOutgoingVideoReady(true);
         } catch (SFBException e) {
             e.printStackTrace();
@@ -169,7 +172,7 @@ public class SkypeManagerImpl implements SkypeManager {
     }
 
     @Override
-    public void stopOutgoingVideo() {
+    public void stopStartOutgoingVideo() {
         boolean videoPaused = mConversation.getVideoService().getPaused();
         try {
             if (mConversation.getVideoService().canSetPaused()){
@@ -328,7 +331,6 @@ public class SkypeManagerImpl implements SkypeManager {
                 return;
             switch(propertyId) {
                 case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
-                case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
                     if (mConversation.getVideoService().canSetActiveCamera()){
                         mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
                         ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
@@ -339,8 +341,33 @@ public class SkypeManagerImpl implements SkypeManager {
                                             .getVideoService()
                                             .setActiveCamera(camera);
 
+
                                     //notify that camera is set
                                     mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
+                                } catch (SFBException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        }
+
+
+                    }
+                case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
+                    if (mConversation.getVideoService().canSetActiveCamera()){
+                        mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
+                        ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
+                        for(Camera camera: cameras) {
+                            if (camera.getType() == Camera.CameraType.FRONTFACING){
+                                try {
+                                    mConversation
+                                            .getVideoService()
+                                            .setActiveCamera(camera);
+                                    mConversation
+                                            .getVideoService()
+                                            .setPaused(false);
+                                    //notify that camera is set
+                                   // mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
                                 } catch (SFBException e) {
                                     e.printStackTrace();
                                 }

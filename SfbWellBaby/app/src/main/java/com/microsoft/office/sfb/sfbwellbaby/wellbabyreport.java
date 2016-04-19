@@ -31,7 +31,7 @@ public class wellbabyreport extends AppCompatActivity implements SettingsDialog.
 
         setSupportActionBar(mToolBar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
 

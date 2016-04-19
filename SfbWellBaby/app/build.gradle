@@ -17,6 +17,8 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.google.zxing:android-core:3.2.1'
+
 }
 android {
     compileSdkVersion 23
