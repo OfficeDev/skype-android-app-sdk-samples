@@ -51,6 +51,8 @@ public interface SkypeManager {
 
     )throws SFBException;
 
+    void leaveConversation() throws SFBException;
+
     void setCallVideoReadyListener(SkypeVideoReady listener);
     void setCallView(View callView);
     void prepareOutgoingVideo();

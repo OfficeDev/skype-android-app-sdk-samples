@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.SFBException;
@@ -43,7 +44,9 @@ public class SkypeCall extends AppCompatActivity
     SkypeCallFragment mCallFragment = null;
     WaitForConnect mWaitForConnect = null;
     FragmentManager mFragmentManager = null;
+    private static final String VIDEO_FRAGMENT_STACK_STATE = "videoFragment";
 
+    private static final String WAIT_FRAGMENT_STACK_STATE = "waitFragment";
 
     ConversationPropertyChangeListener conversationPropertyChangeListener = null;
 
@@ -65,16 +68,36 @@ public class SkypeCall extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Load the WaitForConnect fragment
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        mWaitForConnect = WaitForConnect.newInstance("", "");
-        fragmentTransaction.add(
-                R.id.fragment_container,
-                mWaitForConnect,
-                "wait");
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
+//        //Load the WaitForConnect fragment
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        mWaitForConnect = WaitForConnect.newInstance("", "");
+//        fragmentTransaction.add(
+//                R.id.fragment_container,
+//                mWaitForConnect,
+//                "wait");
+//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        fragmentTransaction.addToBackStack(WAIT_FRAGMENT_STACK_STATE);
+//        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+                //Load the WaitForConnect fragment
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        mWaitForConnect = WaitForConnect.newInstance("", "");
+//        fragmentTransaction.add(
+//                R.id.fragment_container,
+//                mWaitForConnect,
+//                "wait");
+//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        fragmentTransaction.addToBackStack(WAIT_FRAGMENT_STACK_STATE);
+//        fragmentTransaction.commitAllowingStateLoss();
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        startToJoinMeeting();
+
     }
 
     /**
@@ -105,24 +128,30 @@ public class SkypeCall extends AppCompatActivity
      */
     @Override
     public void onSkypeConversationJoinSuccess(Conversation conversation) {
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
         try {
             mCallFragment = SkypeCallFragment.newInstance();
 
-            fragmentTransaction.remove(mWaitForConnect);
+          //  fragmentTransaction.remove(mWaitForConnect);
+//            getSupportFragmentManager().popBackStack(WAIT_FRAGMENT_STACK_STATE,
+//                    android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentTransaction.add(
                     R.id.fragment_container,
                     mCallFragment,
                     "video");
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.addToBackStack(VIDEO_FRAGMENT_STACK_STATE);
             fragmentTransaction.commitAllowingStateLoss();
             mAnonymousMeeting = conversation;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Invoked from SkypeCallFragment when inflated. Provides the TextureView for preview to the
@@ -154,7 +183,7 @@ public class SkypeCall extends AppCompatActivity
         }
             if (newMeetingURI.contentEquals(getString(R.string.leaveCall))) {
                 mFragmentManager.popBackStack(
-                        "video",
+                        VIDEO_FRAGMENT_STACK_STATE,
                         FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 leaveSkypeCall();
             }
@@ -223,7 +252,7 @@ public class SkypeCall extends AppCompatActivity
         //leave the meeting before closing this activity
         if (mAnonymousMeeting != null && mAnonymousMeeting.canLeave())
             try {
-                mAnonymousMeeting.leave();
+                mSkypeManagerImpl.leaveConversation();
             } catch (SFBException e) {
                 e.printStackTrace();
             }

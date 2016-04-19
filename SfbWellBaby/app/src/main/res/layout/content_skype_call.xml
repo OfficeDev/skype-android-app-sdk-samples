@@ -19,7 +19,14 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/fragment_container" />
 
-
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_above="@+id/fragment_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

@@ -38,8 +38,8 @@ public class wellbabyreport extends AppCompatActivity implements SettingsDialog.
     @OnClick(R.id.fab)
     public void onClick() {
         try {
-            mSkypeCallIntent = new Intent(this, SkypeCall.class);
-            startActivity(mSkypeCallIntent);
+            Intent callIntent = new Intent(this, SkypeCall.class);
+            startActivity(callIntent);
         } catch(RuntimeException e){
             e.printStackTrace();
         }

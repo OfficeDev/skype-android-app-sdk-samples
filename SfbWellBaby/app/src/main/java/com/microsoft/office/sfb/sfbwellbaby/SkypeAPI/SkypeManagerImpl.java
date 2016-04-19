@@ -32,6 +32,7 @@ public class SkypeManagerImpl implements SkypeManager {
     private SurfaceTexture mPreviewSurfaceTexture;
     private Conversation mConversation;
     private SkypeManager.SkypeVideoReady mPauseListener;
+    private ConversationPropertyChangeListener mConversationPropertyChangeListener;
 
     //
     // statics
@@ -95,13 +96,13 @@ public class SkypeManagerImpl implements SkypeManager {
 
         try {
 
-            ConversationPropertyChangeListener conversationPropertyChangeListener =
+            mConversationPropertyChangeListener =
                     new ConversationPropertyChangeListener();
 
             //Get the meeting at the URI and join it
             mConversation = getConversation(meetingURI);
             mConversation.addOnPropertyChangedCallback(
-                    conversationPropertyChangeListener
+                    mConversationPropertyChangeListener
             );
 
         } catch (SFBException e) {
@@ -117,6 +118,12 @@ public class SkypeManagerImpl implements SkypeManager {
 
     }
 
+    @Override
+    public void leaveConversation() throws SFBException {
+        mConversation.removeOnPropertyChangedCallback(mConversationPropertyChangeListener);
+        mConversation.getVideoService().removeOnPropertyChangedCallback(this.onPropertyChangedCallback);
+        mConversation.leave();
+    }
 
 
     @Override
