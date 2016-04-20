@@ -45,7 +45,7 @@ public interface SkypeManager {
      * @param displayName
      * @throws  SFBException
      */
-    void joinConversation(
+    Conversation joinConversation(
             URI meetingURI,
             String displayName
 

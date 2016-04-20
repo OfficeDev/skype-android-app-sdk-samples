@@ -3,6 +3,7 @@ package com.microsoft.office.sfb.sfbwellbaby;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,6 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
-        mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
 
         mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +57,11 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
         return mRootView;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
+
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

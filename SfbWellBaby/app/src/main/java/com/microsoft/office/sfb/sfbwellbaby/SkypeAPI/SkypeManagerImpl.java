@@ -87,7 +87,7 @@ public class SkypeManagerImpl implements SkypeManager {
      * @throws SFBException
      */
     @Override
-    public void joinConversation(
+    public Conversation joinConversation(
             URI meetingURI,
             String displayName
             ) throws SFBException {
@@ -116,6 +116,7 @@ public class SkypeManagerImpl implements SkypeManager {
 
         mDevicesManager = mSkypeApplication.getDevicesManager();
 
+        return mConversation;
     }
 
     @Override
