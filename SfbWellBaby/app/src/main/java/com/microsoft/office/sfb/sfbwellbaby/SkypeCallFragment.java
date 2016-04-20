@@ -18,7 +18,6 @@ import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManager;
  */
 public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVideoReady {
 
-    //    @InjectView(pauseVideoButton)
     public Button mPauseButton;
     public Button mEndCallButton;
     private OnFragmentInteractionListener mListener;
@@ -35,7 +34,6 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
      */
     public static SkypeCallFragment newInstance() {
         SkypeCallFragment fragment = new SkypeCallFragment();
-
         return fragment;
     }
 
@@ -43,7 +41,6 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
-
         mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,20 +51,19 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
                                 getString(R.string.leaveCall));
             }
         });
+        mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
         return mRootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
-
+        super.onViewCreated(view, savedInstanceState);
     }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -76,7 +72,6 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
 
     @Override
     public void onSkypeIncomingVideoReady() {
-
     }
 
     @Override
@@ -109,10 +104,22 @@ public class SkypeCallFragment extends Fragment implements SkypeManager.SkypeVid
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().finish();
-        mListener = null;
+        if (mListener != null) {
+            mListener.onFragmentInteraction(
+                    mRootView,
+                    getActivity().
+                            getString(R.string.leaveCall));
+            mListener = null;
+        }
     }
 
-
+    /**
+     * Called when the fragment is no longer attached to its activity.  This
+     * is called after {@link #onDestroy()}.
+     */
+    public void onDetach() {
+        super.onDetach();
+        //mCalled = true;
+    }
 
 }

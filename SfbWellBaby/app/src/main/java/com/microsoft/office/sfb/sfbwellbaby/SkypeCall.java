@@ -39,15 +39,11 @@ public class SkypeCall extends AppCompatActivity
         SkypeCallFragment.OnFragmentInteractionListener {
 
     SkypeManagerImpl mSkypeManagerImpl;
-    Conversation mAnonymousMeeting;
     SkypeCallFragment mCallFragment = null;
     FragmentManager mFragmentManager = null;
     private static final String VIDEO_FRAGMENT_STACK_STATE = "videoFragment";
     View mParticipantCallView;
     TextureView mPreviewCallView;
-
-
-    ConversationPropertyChangeListener conversationPropertyChangeListener = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,22 +60,16 @@ public class SkypeCall extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         startToJoinMeeting();
-
     }
-
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
-
-
     }
 
 
@@ -96,7 +86,7 @@ public class SkypeCall extends AppCompatActivity
         if (mParticipantCallView == null)
             return;
 
-        try{
+        try {
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -105,8 +95,6 @@ public class SkypeCall extends AppCompatActivity
                     if (progressBar != null) {
                         progressBar.setVisibility(View.GONE);
                     }
-
-                  // View participantVideoContainer = mParticipantCallView.findViewById(R.id.participantVideoLayoutId);
 
                     //Get the containers for preview video and incoming video
                     //Set the preview video container
@@ -120,30 +108,12 @@ public class SkypeCall extends AppCompatActivity
                     mSkypeManagerImpl.startOutgoingVideo();
                 }
             });
-        } catch(Exception e){
-            Log.e("SkypeCall", "exception on meeting started" );
+        } catch (Exception e) {
+            Log.e("SkypeCall", "exception on meeting started");
         }
-
-
-//        try {
-//            mCallFragment = SkypeCallFragment.newInstance();
-//
-//
-//            fragmentTransaction.add(
-//                    R.id.fragment_container,
-//                    mCallFragment,
-//                    "video");
-//            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//            fragmentTransaction.addToBackStack(VIDEO_FRAGMENT_STACK_STATE);
-//            fragmentTransaction.commitAllowingStateLoss();
-//            mAnonymousMeeting = conversation;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
-
-    private void loadCallFragment(){
+    private void loadCallFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         try {
             mCallFragment = SkypeCallFragment.newInstance();
@@ -159,6 +129,7 @@ public class SkypeCall extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
     /**
      * Invoked from SkypeCallFragment when inflated. Provides the TextureView for preview to the
      * SkypeManagerImpl
@@ -171,7 +142,6 @@ public class SkypeCall extends AppCompatActivity
         try {
             if (newMeetingURI.contentEquals(getString(R.string.callFragmentInflated))) {
                 mParticipantCallView = callView.findViewById(R.id.participantVideoLayoutId);
-
                 mPreviewCallView = (TextureView) callView.findViewById(R.id.selfParticipantVideoView);
                 mSkypeManagerImpl.setCallVideoReadyListener(mCallFragment);
                 return;
@@ -185,7 +155,7 @@ public class SkypeCall extends AppCompatActivity
             if (newMeetingURI.contentEquals(getString(R.string.pauseCall))) {
                 mSkypeManagerImpl.stopStartOutgoingVideo();
             }
-            if (newMeetingURI.contentEquals(getString(R.string.muteAudio))){
+            if (newMeetingURI.contentEquals(getString(R.string.muteAudio))) {
                 mSkypeManagerImpl.stopStartOutgoingAudio();
             }
         } catch (Exception ex) {
@@ -248,11 +218,10 @@ public class SkypeCall extends AppCompatActivity
         //If there is an active meeting and the user can leave then
         //leave the meeting before closing this activity
         try {
-                mSkypeManagerImpl.leaveConversation();
+            mSkypeManagerImpl.leaveConversation();
         } catch (SFBException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
-
         finish();
     }
 
@@ -262,10 +231,11 @@ public class SkypeCall extends AppCompatActivity
         getMenuInflater().inflate(R.menu.menu_skype_call, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.muteAudioMenuItem:
                 mSkypeManagerImpl.stopStartOutgoingAudio();
                 break;
