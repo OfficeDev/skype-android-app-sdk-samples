@@ -324,10 +324,7 @@ public class SkypeManagerImpl implements SkypeManager {
                         );
                 }
             }
-
         }
-
-
     }
 
     VideoService.OnPropertyChangedCallback onPropertyChangedCallback =
@@ -335,16 +332,17 @@ public class SkypeManagerImpl implements SkypeManager {
 
         @Override
         public void onPropertyChanged(Observable sender, int propertyId) {
-            if (mConversation == null)
-                return;
-            switch(propertyId) {
-                case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
-                    if (mConversation.getVideoService().canSetActiveCamera()){
-                        mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
-                        ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
-                        for(Camera camera: cameras) {
-                            if (camera.getType() == Camera.CameraType.FRONTFACING){
-                                try {
+            try {
+                if (mConversation == null)
+                    return;
+                switch(propertyId) {
+                    case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
+                        if (mConversation.getVideoService().canSetActiveCamera()){
+                            mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
+                            ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
+                            for(Camera camera: cameras) {
+                                if (camera.getType() == Camera.CameraType.FRONTFACING){
+
                                     mConversation
                                             .getVideoService()
                                             .setActiveCamera(camera);
@@ -352,22 +350,20 @@ public class SkypeManagerImpl implements SkypeManager {
 
                                     //notify that camera is set
                                     mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
-                                } catch (SFBException e) {
-                                    e.printStackTrace();
+
+                                    break;
                                 }
-                                break;
                             }
+
+
                         }
+                    case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
+                        if (mConversation.getVideoService().canSetActiveCamera()){
+                            mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
+                            ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
+                            for(Camera camera: cameras) {
+                                if (camera.getType() == Camera.CameraType.FRONTFACING){
 
-
-                    }
-                case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
-                    if (mConversation.getVideoService().canSetActiveCamera()){
-                        mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
-                        ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
-                        for(Camera camera: cameras) {
-                            if (camera.getType() == Camera.CameraType.FRONTFACING){
-                                try {
                                     mConversation
                                             .getVideoService()
                                             .setActiveCamera(camera);
@@ -376,18 +372,16 @@ public class SkypeManagerImpl implements SkypeManager {
                                             .setPaused(false);
                                     //notify that camera is set
                                    // mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
-                                } catch (SFBException e) {
-                                    e.printStackTrace();
+
+                                    break;
                                 }
-                                break;
                             }
                         }
-
-
-                    }
-
-            break;
-                default:
+                break;
+                    default:
+                }
+            } catch(SFBException e){
+                e.printStackTrace();
             }
         }
     };
