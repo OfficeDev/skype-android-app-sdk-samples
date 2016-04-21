@@ -77,8 +77,9 @@ public class SkypeCall extends AppCompatActivity
      * Invoked by SkypeManagerImpl when the meeting is joined.
      *
      * @param conversation the newly joined / created Conversation
-     *                     When joined, close the WaitForConnect fragment and add the
-     *                     SkypeCallFragment
+     *                     When joined, add the
+     *                     SkypeCallFragment, and provide the video views to the
+     *                     SkypeManagerImpl object
      */
     @Override
     public void onSkypeConversationJoinSuccess(Conversation conversation) {
