@@ -35,7 +35,7 @@
     <string name="mute_audio">Mute audio</string>
     <string name="companyName">Lamna Healthcare Company</string>
     <string name="lamna_healthcare">Lamna Healthcare</string>
-    <string name="meeting_url">https://meet.lync.microsoft/johnau/abcddied</string>
+    <string name="meeting_url">https://meet.lync.com/microsoft/johnau/abcddied</string>
     <string name="meeting_url_summary">Meeting URL</string>
 
 </resources>
