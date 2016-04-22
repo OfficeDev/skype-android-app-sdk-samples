@@ -1,6 +1,5 @@
 package com.microsoft.office.sfb.sfbwellbaby;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -175,11 +174,9 @@ public class SkypeCall extends AppCompatActivity
      * via some mechanism outside the scope of this sample.
      */
     private void startToJoinMeeting() {
-        SharedPreferences settings = getSharedPreferences(getString(R.string.meetingURIKey), 0);
-        String meetingURIString = settings.getString(getString(R.string.meetingURIKey), "");
         URI meetingURI = null;
         try {
-            meetingURI = new URI(meetingURIString);
+            meetingURI = new URI(getString(R.string.meeting_url));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -229,7 +226,6 @@ public class SkypeCall extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_skype_call, menu);
         return true;
     }
 

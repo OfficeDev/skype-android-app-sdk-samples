@@ -15,7 +15,7 @@ import butterknife.OnClick;
 import static com.microsoft.office.sfb.sfbwellbaby.R.id.toolbar;
 
 
-public class wellbabyreport extends AppCompatActivity implements SettingsDialog.OnFragmentInteractionListener {
+public class wellbabyreport extends AppCompatActivity   {
     Intent mSkypeCallIntent = null;
     @InjectView(toolbar)
     protected Toolbar mToolBar;
@@ -59,16 +59,6 @@ public class wellbabyreport extends AppCompatActivity implements SettingsDialog.
         try {
             switch (item.getItemId()) {
                 case R.id.action_settings:
-                    android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    android.app.Fragment prev = getFragmentManager().findFragmentByTag("settings");
-                    if (prev != null)
-                        ft.remove(prev);
-
-                    ft.addToBackStack(null);
-
-                    mSettingsFragment = SettingsDialog.newInstance(getString(R.string.defaultMeetingURL));
-                    mSettingsFragment.show(getSupportFragmentManager(), "settings");
-
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -84,10 +74,4 @@ public class wellbabyreport extends AppCompatActivity implements SettingsDialog.
 
     }
 
-    @Override
-    public void onFragmentInteraction(String newMeetingURI) {
-        if (mSettingsFragment.isVisible()) {
-            mSettingsFragment.dismiss();
-        }
-    }
 }
