@@ -2,10 +2,11 @@ apply plugin: 'com.android.application'
 dependencies {
     testCompile 'junit:junit:4.12'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile(name: "libucmp-release", ext: 'aar')
-    compile(name: "platform-release", ext: 'aar')
+    compile(name: "libucmp", ext: 'aar')
+    compile(name: "platform", ext: 'aar')
+    compile(name: "sfb-appsdk", ext: 'aar')
     compile(name: "library-release", ext: 'aar')
-    compile(name: "sfb-appsdk-release", ext: 'aar')
+
     // Dagger compiler for DI annotation support
     provided('com.squareup.dagger:dagger-compiler:1.2.2') {
         exclude group: 'com.google.guava'
@@ -17,7 +18,6 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:support-v4:23.2.1'
-    compile 'com.google.zxing:android-core:3.2.1'
 
 }
 android {
