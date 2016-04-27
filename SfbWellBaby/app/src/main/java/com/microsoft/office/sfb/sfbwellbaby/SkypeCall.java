@@ -15,7 +15,6 @@ import com.microsoft.office.sfb.appsdk.Application;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.Observable;
 import com.microsoft.office.sfb.appsdk.SFBException;
-import com.microsoft.office.sfb.sfbwellbaby.SkypeAPI.SkypeManagerImpl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,7 +35,6 @@ public class SkypeCall extends AppCompatActivity
         implements
         SkypeCallFragment.OnFragmentInteractionListener {
 
-    SkypeManagerImpl mSkypeManagerImpl;
     SkypeCallFragment mCallFragment = null;
     FragmentManager mFragmentManager = null;
     Application mApplication;
