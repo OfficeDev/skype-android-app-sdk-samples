@@ -32,6 +32,7 @@ android {
         targetSdkVersion 23
         versionCode 2
         versionName "2.1"
+        multiDexEnabled true
     }
     buildTypes {
 
@@ -54,6 +55,13 @@ android {
         exclude 'META-INF/BCKEY.DSA'
         exclude 'META-INF/BCKEY.SF'
     }
+
+    dexOptions {
+        preDexLibraries=false
+        jumboMode = true
+        javaMaxHeapSize "4g"
+    }
+
     productFlavors {
     }
 }
