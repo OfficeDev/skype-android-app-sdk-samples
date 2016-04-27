@@ -25,8 +25,9 @@
         android:id="@+id/progressBar"
         android:layout_above="@+id/fragment_container"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:visibility="invisible" />
+        android:indeterminate="true"
+        android:indeterminateTint="@color/abc_primary_text_material_dark"
+        />
 
 
 </RelativeLayout>

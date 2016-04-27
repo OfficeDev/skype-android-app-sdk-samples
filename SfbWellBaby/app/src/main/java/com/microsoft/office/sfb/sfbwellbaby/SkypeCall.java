@@ -53,6 +53,8 @@ public class SkypeCall extends AppCompatActivity
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+      //  progressBar.show();
+
         mConversation = startToJoinMeeting();
         mConversationPropertyChangeListener =
                 new ConversationPropertyChangeListener();
