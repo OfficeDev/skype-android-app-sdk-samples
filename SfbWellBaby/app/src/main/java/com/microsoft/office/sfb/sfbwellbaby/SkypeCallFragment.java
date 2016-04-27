@@ -28,7 +28,6 @@ import com.microsoft.office.sfb.appsdk.helpers.ConversationHelper;
 public class SkypeCallFragment extends Fragment
         implements ConversationHelper.ConversationCallback {
 
-    public Button mPauseButton;
     public Button mEndCallButton;
     public Button mMuteAudioButton;
     private OnFragmentInteractionListener mListener;
@@ -36,9 +35,7 @@ public class SkypeCallFragment extends Fragment
     private static DevicesManager mDevicesManager;
     private ConversationHelper mConversationHelper;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
-
     View mRootView;
-
 
     @SuppressLint("ValidFragment")
     public SkypeCallFragment() {
@@ -102,6 +99,11 @@ public class SkypeCallFragment extends Fragment
                 , getActivity()
                         .getString(
                                 R.string.callFragmentInflated));
+
+        //Initialize the conversation helper with the established conversation,
+        //the SfB App SDK devices manager, the outgoing video TextureView,
+        //The view container for the incoming video, and a conversation helper
+        //callback.
         mConversationHelper = new ConversationHelper(
                 mConversation,
                 mDevicesManager,
@@ -111,6 +113,8 @@ public class SkypeCallFragment extends Fragment
         Log.i(
                 "SkypeCallFragment",
                 "onViewCreated");
+
+        //Start up the incoming and outgoing video
         mConversationHelper.startOutgoingVideo();
         mConversationHelper.startIncomingVideo();
     }
@@ -152,10 +156,14 @@ public class SkypeCallFragment extends Fragment
      */
     public void onDetach() {
         super.onDetach();
-        //mCalled = true;
     }
 
 
+    /**
+     * Invoked when the state of the established conversation changes from
+     * ESTABLISHED to IDle. State change happens when the call ends.
+     * @param state
+     */
     @Override
     public void onConversationStateChanged(Conversation.State state) {
         Log.i(
@@ -220,6 +228,11 @@ public class SkypeCallFragment extends Fragment
         }
     }
 
+    /**
+     * Called when the video service on the established conversation can be
+     * started. Use the callback to start video.
+     * @param canStartVideoService
+     */
     @Override
     public void onCanStartVideoServiceChanged(boolean canStartVideoService) {
         Log.i(
@@ -233,12 +246,17 @@ public class SkypeCallFragment extends Fragment
         }
     }
 
+
+    /**
+     * Called when the video service pause state changes
+     * @param canSetPausedVideoService
+     */
     @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
 
         if (canSetPausedVideoService)
             mConversationHelper.ensureVideoIsStartedAndRunning();
-        }
+    }
 
     @Override
     public void onCanSetActiveCameraChanged(boolean canSetActiveCamera) {

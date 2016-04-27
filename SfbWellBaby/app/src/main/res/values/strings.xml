@@ -37,5 +37,7 @@
     <string name="lamna_healthcare">Lamna Healthcare</string>
     <string name="meeting_url">https://meet.lync.com/microsoft/johnau/D6RJ84B5</string>
     <string name="meeting_url_summary">Meeting URL</string>
+    <string name="baby_Name">Jonathan Trudeau</string>
+    <string name="signinTitle">Lamna Healthcare Company</string>
 
 </resources>

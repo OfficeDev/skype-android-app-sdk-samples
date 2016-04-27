@@ -71,7 +71,7 @@
                 <TextView
                     android:layout_width="381dp"
                     android:layout_height="wrap_content"
-                    android:text="Jonathan Trudeau"
+                    android:text="@string/baby_Name"
                     android:layout_gravity="left"
                     android:layout_marginLeft="10dp"
                     android:textStyle="bold"
