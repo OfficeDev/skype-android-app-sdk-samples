@@ -11,6 +11,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.microsoft.media.MMVRSurfaceView;
 import com.microsoft.office.sfb.appsdk.Conversation;
@@ -92,10 +93,11 @@ public class SkypeCallFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         TextureView previewVideoTextureView = (TextureView) mRootView.findViewById(
                 R.id.selfParticipantVideoView);
-        View participantVideoLayout = (View) mRootView.findViewById(
+        RelativeLayout participantVideoLayout = (RelativeLayout) mRootView.findViewById(
                 R.id.participantVideoLayoutId);
         mParticipantVideoSurfaceView = new MMVRSurfaceView(
                 participantVideoLayout.getContext());
+        participantVideoLayout.addView(this.mParticipantVideoSurfaceView);
         mListener.onFragmentInteraction(mRootView
                 , getActivity()
                         .getString(
