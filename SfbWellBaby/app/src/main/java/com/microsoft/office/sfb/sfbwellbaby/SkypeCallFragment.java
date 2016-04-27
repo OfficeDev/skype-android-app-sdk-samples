@@ -111,6 +111,8 @@ public class SkypeCallFragment extends Fragment
         Log.i(
                 "SkypeCallFragment",
                 "onViewCreated");
+        mConversationHelper.startOutgoingVideo();
+        mConversationHelper.startIncomingVideo();
     }
 
     @Override
@@ -173,11 +175,11 @@ public class SkypeCallFragment extends Fragment
     }
 
     @Override
-    public void onCanSendMessage(boolean b) {
+    public void onCanSendMessage(boolean canSendMessage) {
         Log.i(
                 "SkypeCallFragment",
                 "onCanSendMessage "
-                        + String.valueOf(b));
+                        + String.valueOf(canSendMessage));
     }
 
     @Override
@@ -195,18 +197,18 @@ public class SkypeCallFragment extends Fragment
     }
 
     @Override
-    public void onSelfAudioMuteChanged(final boolean b) {
+    public void onSelfAudioMuteChanged(final boolean isMuted) {
 
         Log.i(
                 "SkypeCallFragment",
                 "onSelfAudioMuteChanged "
-                        + String.valueOf(b));
+                        + String.valueOf(isMuted));
 
         try {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (b == true) {
+                    if (isMuted == true) {
                         mMuteAudioButton.setText("Unmute");
                     } else {
                         mMuteAudioButton.setText("Mute");
@@ -219,26 +221,26 @@ public class SkypeCallFragment extends Fragment
     }
 
     @Override
-    public void onCanStartVideoServiceChanged(boolean b) {
+    public void onCanStartVideoServiceChanged(boolean canStartVideoService) {
         Log.i(
                 "SkypeCallFragment",
                 "onCanStartVideoServiceChanged "
-                        + String.valueOf(b));
+                        + String.valueOf(canStartVideoService));
 
-        if (b == true) {
+        if (canStartVideoService == true) {
             mConversationHelper.startOutgoingVideo();
             mConversationHelper.startIncomingVideo();
         }
     }
 
     @Override
-    public void onCanSetActiveCameraChanged(boolean b) {
+    public void onCanSetActiveCameraChanged(boolean canSetActiveCamera) {
         Log.i(
                 "SkypeCallFragment",
                 "onCanSetActiveCameraChanged "
-                        + String.valueOf(b));
+                        + String.valueOf(canSetActiveCamera));
 
-        if (b == true) {
+        if (canSetActiveCamera == true) {
             mConversationHelper.changeActiveCamera();
         }
     }

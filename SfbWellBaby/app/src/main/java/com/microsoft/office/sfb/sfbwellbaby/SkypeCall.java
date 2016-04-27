@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -36,7 +35,6 @@ public class SkypeCall extends AppCompatActivity
         SkypeCallFragment.OnFragmentInteractionListener {
 
     SkypeCallFragment mCallFragment = null;
-    FragmentManager mFragmentManager = null;
     Application mApplication;
     private static final String VIDEO_FRAGMENT_STACK_STATE = "videoFragment";
     Conversation mConversation;
@@ -46,10 +44,6 @@ public class SkypeCall extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mFragmentManager = getSupportFragmentManager();
-
-
         setContentView(R.layout.activity_skype_call);
         ButterKnife.inject(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,7 +63,6 @@ public class SkypeCall extends AppCompatActivity
     protected void onPostResume() {
         super.onPostResume();
     }
-
 
     private void loadCallFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -102,16 +95,14 @@ public class SkypeCall extends AppCompatActivity
     public void onFragmentInteraction(View callView, String newMeetingURI) {
         try {
             if (newMeetingURI.contentEquals(getString(R.string.callFragmentInflated))) {
-
                 return;
             }
             if (newMeetingURI.contentEquals(getString(R.string.leaveCall))) {
-                mFragmentManager.popBackStack(
+                getSupportFragmentManager().popBackStack(
                         VIDEO_FRAGMENT_STACK_STATE,
                         FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                leaveSkypeCall();
+                finish();
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -148,13 +139,6 @@ public class SkypeCall extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        leaveSkypeCall();
-    }
-
-    private void leaveSkypeCall() {
-        //If there is an active meeting and the user can leave then
-        //leave the meeting before closing this activity
-
         finish();
     }
 
@@ -162,19 +146,6 @@ public class SkypeCall extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.muteAudioMenuItem:
-                break;
-            case R.id.pauseVideoMenuItem:
-                break;
-        }
-
-        return false;
     }
 
     /**
@@ -216,5 +187,4 @@ public class SkypeCall extends AppCompatActivity
             }
         }
     }
-
 }
