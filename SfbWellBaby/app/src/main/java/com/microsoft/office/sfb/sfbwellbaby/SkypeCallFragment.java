@@ -234,6 +234,13 @@ public class SkypeCallFragment extends Fragment
     }
 
     @Override
+    public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
+
+        if (canSetPausedVideoService)
+            mConversationHelper.ensureVideoIsStartedAndRunning();
+        }
+
+    @Override
     public void onCanSetActiveCameraChanged(boolean canSetActiveCamera) {
         Log.i(
                 "SkypeCallFragment",
