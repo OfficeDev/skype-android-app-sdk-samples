@@ -6,30 +6,28 @@ dependencies {
     compile(name: "platform", ext: 'aar')
     compile(name: "sfb-appsdk", ext: 'aar')
     compile(name: "TelemetryService", ext: 'aar')
-    compile(name: "ucmp-enums", ext:'aar')
+    compile(name: "ucmp-enums", ext: 'aar')
     compile(name: "TelemetryClient2", ext: 'aar')
     compile(name: "injector", ext: 'aar')
-
     // Dagger compiler for DI annotation support
     provided('com.squareup.dagger:dagger-compiler:1.2.2') {
         exclude group: 'com.google.guava'
     }
     //Retrofit
     // Butterknife
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:design:22.2.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:support-v4:23.2.1'
-
 }
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "com.microsoft.office.sfb.sfbwellbaby"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 2
         versionName "2.1"
         multiDexEnabled true

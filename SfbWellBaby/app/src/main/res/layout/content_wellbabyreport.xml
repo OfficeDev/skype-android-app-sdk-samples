@@ -53,7 +53,7 @@
             android:id="@+id/textView3"
             android:textStyle="bold"
             android:textColor="#a00808"
-            android:textSize="@dimen/design_tab_text_size_2line"
+            android:textSize="12sp"
             android:layout_above="@+id/textView"
             android:layout_toRightOf="@+id/textView2"
             android:layout_toEndOf="@+id/textView2"
