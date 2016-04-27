@@ -169,14 +169,14 @@ public class SkypeManagerImpl implements SkypeManager {
 
             ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
             for (Camera camera : cameras) {
-                if (camera.getType() == Camera.CameraType.FRONTFACING) {
-                    try {
-                        mConversation.getVideoService().setActiveCamera(camera);
-                    } catch (SFBException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                }
+//                if (camera.getType() == Camera.CameraType.FRONTFACING) {
+//                    try {
+//                        mConversation.getVideoService().setActiveCamera(camera);
+//                    } catch (SFBException e) {
+//                        e.printStackTrace();
+//                    }
+//                    break;
+//                }
             }
             if (mConversation.getVideoService().canStart())
                 mConversation.getVideoService().start();
@@ -284,12 +284,12 @@ public class SkypeManagerImpl implements SkypeManager {
      */
     private Conversation getConversation(URI meetingUri) throws SFBException {
         Conversation conversation = null;
-        if (mSkypeApplication.getConversationsManager()
-                .canGetOrCreateConversationMeetingByUri()) {
-            conversation = mSkypeApplication
-                    .getConversationsManager()
-                    .getOrCreateConversationMeetingByUri(meetingUri);
-        }
+//        if (mSkypeApplication.getConversationsManager()
+//                .canGetOrCreateConversationMeetingByUri()) {
+//            conversation = mSkypeApplication
+//                    .getConversationsManager()
+//                    .getOrCreateConversationMeetingByUri(meetingUri);
+//        }
         return conversation;
     }
 
@@ -301,9 +301,9 @@ public class SkypeManagerImpl implements SkypeManager {
     private void setDisplayName(String userDisplayName) {
         // Set here because there is a single user for each client endpoint and that user
         // may start multiple conversations. Each conversation would have the same displayname
-        mSkypeApplication
-                .getConfigurationManager()
-                .setDisplayName(userDisplayName);
+//        mSkypeApplication
+//                .getConfigurationManager()
+//                .setDisplayName(userDisplayName);
     }
 
 
@@ -353,15 +353,15 @@ public class SkypeManagerImpl implements SkypeManager {
                                     mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
                                     ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
                                     for (Camera camera : cameras) {
-                                        if (camera.getType() == Camera.CameraType.FRONTFACING) {
-
-                                            mConversation
-                                                    .getVideoService()
-                                                    .setActiveCamera(camera);
-                                            //notify that camera is set
-                                            mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
-                                            break;
-                                        }
+//                                        if (camera.getType() == Camera.CameraType.FRONTFACING) {
+//
+//                                            mConversation
+//                                                    .getVideoService()
+//                                                    .setActiveCamera(camera);
+//                                            //notify that camera is set
+//                                            mSkypeVideoReady.onSkypeOutgoingVideoReady(false);
+//                                            break;
+//                                        }
                                     }
 
 
@@ -371,23 +371,23 @@ public class SkypeManagerImpl implements SkypeManager {
                                     mSkypeVideoReady.onSkypeOutgoingVideoReady(true);
                                     ArrayList<Camera> cameras = (ArrayList<Camera>) mDevicesManager.getCameras();
                                     for (Camera camera : cameras) {
-                                        if (camera.getType() == Camera.CameraType.FRONTFACING) {
-
-                                            mConversation
-                                                    .getVideoService()
-                                                    .setActiveCamera(camera);
-                                            mConversation
-                                                    .getVideoService()
-                                                    .setPaused(false);
-                                            //notify that camera is set
-                                            break;
-                                        }
+//                                        if (camera.getType() == Camera.CameraType.FRONTFACING) {
+//
+//                                            mConversation
+//                                                    .getVideoService()
+//                                                    .setActiveCamera(camera);
+//                                            mConversation
+//                                                    .getVideoService()
+//                                                    .setPaused(false);
+//                                            //notify that camera is set
+//                                            break;
+//                                        }
                                     }
                                 }
                                 break;
                             default:
                         }
-                    } catch (SFBException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

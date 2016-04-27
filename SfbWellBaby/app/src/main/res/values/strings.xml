@@ -16,7 +16,7 @@
     <string name="title_activity_wellbabyreport">Jonathan Trudeau</string>
     <string name="large_text">"<i>Prepared for the Trudeau family\n\n</i><b>Little Jonathan is doing very well!!</b>\n\nJonathan visited with Mom and Dad for his 6-month well child check. The family has no concerns stating the patient has been doing well overall since the last visit taking in a well-balanced diet consisting of formula transitioning to whole milk, fruits, vegetables, proteins and grains.\nNo concerns with hearing or vision.\n<u>Growth and development:</u> Denver II normal passing all developmental milestones per age in areas of fine motor, gross motor, personal and social interaction as well as speech and language development.\nSee <b>Denver II</b> form in the chart.\n\n<b>PAST MEDICAL HISTORY:</b>\n<u>Allergies:</u> None.\n<u>Medications:</u> Tylenol this morning in preparation for vaccines and a multivitamin daily. and use of imagery guide visual treatments. These elements do far more than please the eye. \n\n<b>FAMILY SOCIAL HISTORY:</b>\nUnchanged since last checkup. \n\n<b>REVIEW OF SYSTEMS:</b>\nAs per HPI; otherwise negative.\n\n<b>OBJECTIVE:</b>\nWeight 24 pounds 1 ounce. Height 30 inches. Head circumference 46.5 cm. Temperature afebrile. \n<u>General:</u> A well-developed, well-nourished, cooperative, alert and interactive 1-year-old white female smiling, happy and drooling.\n<u>Chest:</u> Clear to auscultation bilaterally. No wheeze. No crackles. Good air exchange.\n<u>Cardiovascular:</u> Regular rate and rhythm. No murmur. Good pulses bilaterally.\n<u>Abdomen:</u> Soft, nontender. Nondistended. Positive bowel sounds. No mass. No organomegaly.\n<u>Genitourinary:</u> Tanner I female genitalia. Femoral pulses equal bilaterally. No rash.\n<u>Extremities:</u> Full range of motion. No cyanosis, clubbing or edema. Negative Ortolani and Barlow maneuver.\n<u>Back:</u> Straight. No scoliosis.\n<u>Integument:</u> Warm, dry and pink without lesions.\n<u>Neurological:</u> Alert. Good muscle tone and strength. Cranial nerves II through XII are grossly intact.\n\n<b>ASSESSMENT AND PLAN:</b>\n1. Well 3-month-old white male.\n2. Follow up for the 12-month well child check or as needed for acute care."
     </string>
-    <string name="action_settings">Meeting URI</string>
+    <string name="action_settings">Settings</string>
     <string name="title_activity_skype_call">Live Chat</string>
     <string name="live_chat_subtitle">Well-baby App</string>
     <string name="localParticipantName">Michael Trudeau</string>
@@ -35,7 +35,7 @@
     <string name="mute_audio">Mute audio</string>
     <string name="companyName">Lamna Healthcare Company</string>
     <string name="lamna_healthcare">Lamna Healthcare</string>
-    <string name="meeting_url">https://meet.lync.com/microsoft/johnau/abcddied</string>
+    <string name="meeting_url">https://meet.lync.com/microsoft/johnau/D6RJ84B5</string>
     <string name="meeting_url_summary">Meeting URL</string>
 
 </resources>
