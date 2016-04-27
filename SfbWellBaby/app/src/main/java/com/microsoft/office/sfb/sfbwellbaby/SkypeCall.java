@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -40,9 +39,8 @@ public class SkypeCall extends AppCompatActivity
     SkypeManagerImpl mSkypeManagerImpl;
     SkypeCallFragment mCallFragment = null;
     FragmentManager mFragmentManager = null;
+    Application mApplication;
     private static final String VIDEO_FRAGMENT_STACK_STATE = "videoFragment";
-    View mParticipantCallView;
-    TextureView mPreviewCallView;
     Conversation mConversation;
     private ConversationPropertyChangeListener mConversationPropertyChangeListener;
 
@@ -75,14 +73,12 @@ public class SkypeCall extends AppCompatActivity
     }
 
 
-
     private void loadCallFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         try {
             mCallFragment = SkypeCallFragment.newInstance(
                     mConversation,
-                    mSkypeManagerImpl
-                            .getSkypeApplication()
+                    mApplication
                             .getDevicesManager());
             fragmentTransaction.add(
                     R.id.fragment_container,
@@ -124,7 +120,6 @@ public class SkypeCall extends AppCompatActivity
     }
 
 
-
     /**
      * Connect to an existing Skype for Business meeting with the URI from
      * shared preferences. Normally the URI is supplied to the mobile device
@@ -140,18 +135,16 @@ public class SkypeCall extends AppCompatActivity
         }
         try {
 
-            Application application = Application.getInstance(this);
-            conversation = application
+            mApplication = Application.getInstance(this);
+            conversation = mApplication
                     .joinMeetingAnonymously(
                             getString(
-                                    R.string.fatherName),meetingURI);
+                                    R.string.fatherName), meetingURI);
         } catch (SFBException e) {
             e.printStackTrace();
         }
         return conversation;
     }
-
-
 
 
     @Override
@@ -185,6 +178,7 @@ public class SkypeCall extends AppCompatActivity
 
         return false;
     }
+
     /**
      * Callback implementation for listening for conversation property changes.
      */

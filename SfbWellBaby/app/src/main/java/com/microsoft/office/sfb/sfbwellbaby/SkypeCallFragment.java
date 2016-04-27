@@ -24,7 +24,8 @@ import com.microsoft.office.sfb.appsdk.helpers.ConversationHelper;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SkypeCallFragment extends Fragment implements ConversationHelper.ConversationCallback{
+public class SkypeCallFragment extends Fragment
+        implements ConversationHelper.ConversationCallback {
 
     public Button mPauseButton;
     public Button mEndCallButton;
@@ -36,7 +37,6 @@ public class SkypeCallFragment extends Fragment implements ConversationHelper.Co
     private MMVRSurfaceView mParticipantVideoSurfaceView;
 
     View mRootView;
-
 
 
     @SuppressLint("ValidFragment")
@@ -65,12 +65,12 @@ public class SkypeCallFragment extends Fragment implements ConversationHelper.Co
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if (mConversation.canLeave())
-                   try {
-                       mConversation.leave();
-                   } catch (SFBException e) {
-                       e.printStackTrace();
-                   }
+                if (mConversation.canLeave())
+                    try {
+                        mConversation.leave();
+                    } catch (SFBException e) {
+                        e.printStackTrace();
+                    }
             }
         });
 
@@ -81,25 +81,36 @@ public class SkypeCallFragment extends Fragment implements ConversationHelper.Co
                 mConversationHelper.toggleMute();
             }
         });
-
-        TextureView previewVideoTextureView = (TextureView) mRootView.findViewById(R.id.selfParticipantVideoView);
-        View participantVideoLayout = (View) mRootView.findViewById(R.id.participantVideoLayoutId);
-        mParticipantVideoSurfaceView = new MMVRSurfaceView(
-                participantVideoLayout.getContext());
-        mListener.onFragmentInteraction(mRootView, getActivity().getString(R.string.callFragmentInflated));
-        mConversationHelper = new ConversationHelper(
-                mConversation,
-                mDevicesManager,
-                previewVideoTextureView,
-                mParticipantVideoSurfaceView,
-                this);
+        Log.i(
+                "SkypeCallFragment",
+                "onCreateView ");
         return mRootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextureView previewVideoTextureView = (TextureView) mRootView.findViewById(
+                R.id.selfParticipantVideoView);
+        View participantVideoLayout = (View) mRootView.findViewById(
+                R.id.participantVideoLayoutId);
+        mParticipantVideoSurfaceView = new MMVRSurfaceView(
+                participantVideoLayout.getContext());
+        mListener.onFragmentInteraction(mRootView
+                , getActivity()
+                        .getString(
+                                R.string.callFragmentInflated));
+        mConversationHelper = new ConversationHelper(
+                mConversation,
+                mDevicesManager,
+                previewVideoTextureView,
+                mParticipantVideoSurfaceView,
+                this);
+        Log.i(
+                "SkypeCallFragment",
+                "onViewCreated");
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -143,8 +154,12 @@ public class SkypeCallFragment extends Fragment implements ConversationHelper.Co
 
     @Override
     public void onConversationStateChanged(Conversation.State state) {
+        Log.i(
+                "SkypeCallFragment",
+                "onConversationStateChanged "
+                        + String.valueOf(state));
 
-        if (state == Conversation.State.IDLE){
+        if (state == Conversation.State.IDLE) {
             if (mListener != null) {
                 mListener.onFragmentInteraction(
                         mRootView,
@@ -157,7 +172,10 @@ public class SkypeCallFragment extends Fragment implements ConversationHelper.Co
 
     @Override
     public void onCanSendMessage(boolean b) {
-
+        Log.i(
+                "SkypeCallFragment",
+                "onCanSendMessage "
+                        + String.valueOf(b));
     }
 
     @Override
@@ -168,18 +186,27 @@ public class SkypeCallFragment extends Fragment implements ConversationHelper.Co
     @Override
     public void onSelfAudioStateChanged(ParticipantService.State state) {
 
+        Log.i(
+                "SkypeCallFragment",
+                "onSelfAudioStateChanged "
+                        + String.valueOf(state));
     }
 
     @Override
     public void onSelfAudioMuteChanged(final boolean b) {
+
+        Log.i(
+                "SkypeCallFragment",
+                "onSelfAudioMuteChanged "
+                        + String.valueOf(b));
+
         try {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (b == true){
+                    if (b == true) {
                         mMuteAudioButton.setText("Unmute");
-                    }
-                    else{
+                    } else {
                         mMuteAudioButton.setText("Mute");
                     }
                 }
@@ -191,18 +218,26 @@ public class SkypeCallFragment extends Fragment implements ConversationHelper.Co
 
     @Override
     public void onCanStartVideoServiceChanged(boolean b) {
-        if (b == true){
+        Log.i(
+                "SkypeCallFragment",
+                "onCanStartVideoServiceChanged "
+                        + String.valueOf(b));
+
+        if (b == true) {
             mConversationHelper.startOutgoingVideo();
             mConversationHelper.startIncomingVideo();
         }
-
     }
 
     @Override
     public void onCanSetActiveCameraChanged(boolean b) {
-        if (b == true ){
+        Log.i(
+                "SkypeCallFragment",
+                "onCanSetActiveCameraChanged "
+                        + String.valueOf(b));
+
+        if (b == true) {
             mConversationHelper.changeActiveCamera();
         }
-
     }
 }
