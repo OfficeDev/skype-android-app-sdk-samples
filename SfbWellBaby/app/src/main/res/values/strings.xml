@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Well-baby App</string>
+    <string name="app_name">Lamna Healthcare App</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Enter your email or user id</string>
