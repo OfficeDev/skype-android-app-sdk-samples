@@ -1,4 +1,4 @@
-package com.microsoft.office.sfb.sfbwellbaby;
+package com.microsoft.office.sfb.healthcare;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static com.microsoft.office.sfb.sfbwellbaby.R.id.toolbar;
+import static com.microsoft.office.sfb.healthcare.R.id.toolbar;
 
 
 public class wellbabyreport extends AppCompatActivity   {

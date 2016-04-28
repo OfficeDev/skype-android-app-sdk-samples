@@ -1,4 +1,4 @@
-package com.microsoft.office.sfb.sfbwellbaby;
+package com.microsoft.office.sfb.healthcare;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -55,9 +55,9 @@ public class SkypeCall extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
 
         mConversation = startToJoinMeeting();
-        mConversationPropertyChangeListener =
-                new ConversationPropertyChangeListener();
-        mConversation.addOnPropertyChangedCallback(mConversationPropertyChangeListener);
+//        mConversationPropertyChangeListener =
+//                new ConversationPropertyChangeListener();
+        mConversation.addOnPropertyChangedCallback(new ConversationPropertyChangeListener());
     }
 
     @Override
@@ -111,9 +111,8 @@ public class SkypeCall extends AppCompatActivity
 
 
     /**
-     * Connect to an existing Skype for Business meeting with the URI from
-     * shared preferences. Normally the URI is supplied to the mobile device
-     * via some mechanism outside the scope of this sample.
+     * Connect to an existing Skype for Business meeting with the URI you get
+     * from a server-side UCWA-based web service.
      */
     private Conversation startToJoinMeeting() {
         URI meetingURI = null;
@@ -129,7 +128,7 @@ public class SkypeCall extends AppCompatActivity
             conversation = mApplication
                     .joinMeetingAnonymously(
                             getString(
-                                    R.string.fatherName), meetingURI);
+                                    R.string.userDisplayName), meetingURI);
         } catch (SFBException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package com.microsoft.office.sfb.sfbwellbaby;
+package com.microsoft.office.sfb.healthcare;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -142,6 +142,8 @@ public class SkypeCallFragment extends Fragment
     public void onStop() {
         super.onStop();
         if (mListener != null) {
+
+            //TODO stop the call and then leave
             mListener.onFragmentInteraction(
                     mRootView,
                     getActivity().

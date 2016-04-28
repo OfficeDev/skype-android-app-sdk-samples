@@ -1,4 +1,4 @@
-package com.microsoft.office.sfb.sfbwellbaby;
+package com.microsoft.office.sfb.healthcare;
 
 import org.junit.Test;
 

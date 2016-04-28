@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="2"
     android:versionName="2.1"
-    package="com.microsoft.office.sfb.sfbwellbaby">
+    package="com.microsoft.office.sfb.healthcare">
     <uses-sdk
 
         android:targetSdkVersion="22" />
@@ -45,7 +45,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.microsoft.office.sfb.sfbwellbaby.SignIn"
+            android:name="com.microsoft.office.sfb.healthcare.SignIn"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -54,11 +54,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".wellbabyreport"
+            android:name="com.microsoft.office.sfb.healthcare.wellbabyreport"
             android:label="@string/title_activity_wellbabyreport"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".SkypeCall"
+            android:name="com.microsoft.office.sfb.healthcare.SkypeCall"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_skype_call"

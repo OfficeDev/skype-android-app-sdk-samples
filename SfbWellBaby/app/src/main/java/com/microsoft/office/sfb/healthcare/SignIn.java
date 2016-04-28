@@ -1,4 +1,4 @@
-package com.microsoft.office.sfb.sfbwellbaby;
+package com.microsoft.office.sfb.healthcare;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
