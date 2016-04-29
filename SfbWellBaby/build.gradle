@@ -24,7 +24,7 @@ buildscript {
         mavenCentral()
         maven {url 'https://oss.sonatype.org/content/repositories/snapshots/'}
         flatDir {
-            dirs "${SDKROOT}/appsdk/aar-libs"
+            dirs "${SDKROOT}/app/libs"
         }
 
     }

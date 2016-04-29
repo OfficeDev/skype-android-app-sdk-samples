@@ -19,7 +19,6 @@ import com.microsoft.office.sfb.appsdk.DevicesManager;
 import com.microsoft.office.sfb.appsdk.MessageActivityItem;
 import com.microsoft.office.sfb.appsdk.ParticipantService;
 import com.microsoft.office.sfb.appsdk.SFBException;
-import com.microsoft.office.sfb.appsdk.helpers.ConversationHelper;
 
 
 /**
