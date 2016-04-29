@@ -3,7 +3,7 @@
 Before you can run the Android samples in the [skype-android-app-sdk-samples](https://github.com/OfficeDev/skype-android-app-sdk-samples) repository, 
 you need to have two things:
 
-1. The **Skype for Business App SDK** libraries which you can download from [](). 
+1. The **Skype for Business App SDK** libraries which you can download from [Skype for Business App SDK download](http://aka.ms/sfbappsdkdownload_android).  
 2. The join meeting URL for an established **Skype for Business** meeting.
 
 
