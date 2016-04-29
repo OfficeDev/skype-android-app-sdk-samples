@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SfbDemo</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_conversations">ConversationsActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="join_meeting">JOIN MEETING</string>
+    <string name="leave_meeting">LEAVE MEETING</string>
+
+    <string name="participant_joined"> Joined</string>
+    <string name="participant_LEFT"> Left</string>
+
+    <string name="logo">Logo</string>
+</resources>

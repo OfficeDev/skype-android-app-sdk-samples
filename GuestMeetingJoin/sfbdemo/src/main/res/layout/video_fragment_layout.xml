@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/participantVideoLayoutId"
+        android:layout_alignParentTop="true" >
+        <com.microsoft.media.MMVRSurfaceView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mmvrSurfaceViewId"/>
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/previewLayoutId">
+    <TextureView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/selfParticipantVideoView" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:id="@+id/pauseVideoButton"
+            android:text="PAUSE"
+            android:onClick="onPauseClick"
+            android:layout_alignBottom="@+id/selfParticipantVideoView" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:id="@+id/switchCameraButtonId"
+            android:text="BACK"
+            android:onClick="onCameraSwitch" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

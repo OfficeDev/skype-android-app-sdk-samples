@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.microsoft.office.sfb.sfbdemo.RosterFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PARTICIPANTS"
+        android:id="@+id/participantsTextId"
+        android:layout_margin="5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/selfParticipantLayoutId"
+        android:layout_below="@+id/participantsTextId">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="50"
+        android:id="@+id/selfParticipantDisplayId"
+        android:text="Display Name"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="25"
+        android:text="Hold"
+        android:id="@+id/selfParticipantHoldId"
+        android:onClick="onSelfParticipantHoldButtonClicked"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/selfParticipantMuteId"
+        android:layout_toStartOf="@+id/selfParticipantMuteId" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="25"
+        android:id="@+id/selfParticipantMuteId"
+        android:text="Mute"
+        android:onClick="onSelfParticipantMuteButtonClicked"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/selfParticipantLayoutId"
+        android:id="@+id/remoteParticipantLayoutId">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remote Participants"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/participants_list_recycler"
+        android:layout_alignStart="@+id/participants_list_recycler" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/participants_list_recycler"
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
+
+    </RelativeLayout>
+</RelativeLayout>

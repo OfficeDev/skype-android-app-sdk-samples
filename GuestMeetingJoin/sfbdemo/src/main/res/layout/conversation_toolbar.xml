@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/conversationsToolbarId">
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="25"
+        android:id="@+id/audioButtonId"
+        android:text="EndCall"
+        android:onClick="onAudioButtonClicked"
+        android:layout_alignParentTop="true" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="25"
+        android:id="@+id/speakerButtonId"
+        android:text="Speaker On"
+        android:onClick="onSpeakerButtonClicked" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="20"
+        android:id="@+id/videoButtonId"
+        android:text="Video"
+        android:onClick="onVideoButtonClicked"
+        android:layout_alignParentTop="true" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="30"
+        android:id="@+id/participantsButtonId"
+        android:text="Participants"
+        android:onClick="onParticipantsButtonClicked"
+        android:layout_alignParentTop="true"
+        android:textSize="12dp" />
+
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:id="@+id/alertViewId" >
+    android:visibility=""="gone">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="75"
+        android:id="@+id/alertTextViewId"
+        android:text="Alert" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="25"
+        android:text="Dismiss"
+        android:id="@+id/dismissButtonId"
+        android:onClick="onDismissButtonClicked"/>
+
+</LinearLayout>
