@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context="com.microsoft.office.sfb.sfbdemo.MainActivity">
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/displayNameEditTextId"
+        android:text="John Doe"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:focusable="true"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/meetingUriEditTextId"
+        android:layout_below="@+id/displayNameEditTextId"
+        android:layout_marginTop="36dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:singleLine="true"
+        android:focusable="true"
+        android:imeOptions="actionDone"
+        android:hint="Meeting URI" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Meeting Join Status"
+        android:id="@+id/statusTextViewId"
+        android:layout_marginTop="52dp"
+        android:layout_below="@+id/joinMeetingButtonId"
+        android:layout_alignLeft="@+id/joinMeetingButtonId"
+        android:layout_alignStart="@+id/joinMeetingButtonId" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join Meeting"
+        android:id="@+id/joinMeetingButtonId"
+        android:layout_marginTop="33dp"
+        android:onClick="onJoinMeetingButtonClick"
+        android:layout_below="@+id/meetingUriEditTextId"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
