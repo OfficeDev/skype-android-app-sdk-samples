@@ -8,29 +8,7 @@ you need to have two things:
 
 
 ## Healthcare App Sample
-### Update the string resource file
-
-The [Healthcare app](https://github.com/OfficeDev/skype-android-app-sdk-samples/tree/master/HealthcareApp) sample requires
-that you update the strings.xml file found in:  _[your local repository]\\HealthcareApp\app\src\main\res\values\strings.xml_. Replace the 
-bracketed values in the following string.    ``` <string name="meeting_url">https://meet.lync.com/[yourdomain]/[youralias]/[somevalue]</string> ``` with 
-the join meeting URL of the meeting to join. 
-
->Note: The join meeting URL in the strings.xml file is only for use in development. If you use any code from the Healthcare App sample, you need to get 
-a meeting URL at runtime. Read [Get a Skype for Business meeting URL](GetMeetingURL.md) to learn about getting a meeting URL in a production app.
-
-### Copy the Skype for Business App SDK libraries into the project
-
-The samples already include local references to the **Skype for Business** libraries. After you clone the repository, you need to copy the libraries into
-the sample project folders at: _[your local repository]\HealthcareApp\app\libs_. 
-
-### Copy the ConversationHelper class into the project
-
-The Healthcare app sample uses the ConversationHelper.java file that is found in the _Helpers_ folder in the App SDK download package.
-
-### Run the sample
-
-The **Skype for Business App SDK** does not support Android Studio emulators. You need to run the sample on a armeabi-v7a mobile device. See [Platform Considerations](PlatformConsiderations.md) for 
-more information.
+The Healthcare App sample uses the ConversationHelper class from the SDK helpers classes to make anonymously joining a Skype for Business meeting a simple task. The sample declares a class that implements a helper callback and makes just a few calls into the helper to join a meeting and share video.   
 
 ## GuestMeetingJoin sample
 the [Guest Meeting Join sample](https://github.com/OfficeDev/skype-android-app-sdk-samples/tree/master/GuestMeetingJoin) uses the core **Skype for Business App SDK** API to
