@@ -7,12 +7,11 @@ you need to have two things:
 2. The join meeting URL for an established **Skype for Business** meeting.
 
 
-## Update the string resource file
+## Save a join meeting URL in the string resources XML file
 
-The [Healthcare app](https://github.com/OfficeDev/skype-android-app-sdk-samples/tree/master/HealthcareApp) sample requires
-that you update the strings.xml file found in:  _[your local repository]\\HealthcareApp\app\src\main\res\values\strings.xml_. Replace the 
+This sample sample requires that you update the strings.xml file found in:  _[your local repository]\\HealthcareApp\app\src\main\res\values\strings.xml_. Replace the 
 bracketed values in the following string.    ``` <string name="meeting_url">https://meet.lync.com/[yourdomain]/[youralias]/[somevalue]</string> ``` with 
-the join meeting URL of the meeting to join. 
+the join meeting URL of the meeting to join.  
 
 >Note: The join meeting URL in the strings.xml file is only for use in development. If you use any code from the Healthcare App sample, you need to get 
 a meeting URL at runtime. Read [Get a Skype for Business meeting URL](GetMeetingURL.md) to learn about getting a meeting URL in a production app.
