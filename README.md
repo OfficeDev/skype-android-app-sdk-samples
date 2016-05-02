@@ -8,7 +8,7 @@ you need to have two things:
 
 
 ## Healthcare App Sample
-The [Healthcare Apps ample](https://github.com/OfficeDev/skype-android-app-sdk-samples/tree/master/HealthcareApp) uses the ConversationHelper class from the SDK helpers classes to make anonymously joining a Skype for Business meeting a simple task. The sample declares a class that implements a helper callback and makes just a few calls into the helper to join a meeting and share video.   
+The [Healthcare Apps sample](https://github.com/OfficeDev/skype-android-app-sdk-samples/tree/master/HealthcareApp) uses the ConversationHelper class from the SDK helpers classes to make anonymously joining a Skype for Business meeting a simple task. The sample declares a class that implements a helper callback and makes just a few calls into the helper to join a meeting and share video.   
 
 ## GuestMeetingJoin sample
 the [Guest Meeting Join sample](https://github.com/OfficeDev/skype-android-app-sdk-samples/tree/master/GuestMeetingJoin) uses the core **Skype for Business App SDK** API to
