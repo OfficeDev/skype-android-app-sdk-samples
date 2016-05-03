@@ -35,7 +35,7 @@ The main activity of the Guest Meeting Join app collects the name you want to di
 text entry field collects the meeting URL of the meeting you want to join. Fill these fields in and then
 press the Join Meeting button. **Figure 1** shows the sign in screen.
 
-  ![The sign in activity](images/signin.png)
+  ![The sign in activity](images/signin.PNG)
   
   **Figure 1. Sign in activity**
 
@@ -45,7 +45,7 @@ updated on the activity. When the meeting is established, the ConversationsActiv
 The conversations activity hosts a single meeting. You can start and end conversation video, send chat messags, mute your audio,
 and view a list of participants in the meeting. To start meeting video, press the video button. 
 
-![The conversation activity](images/meeting.png)
+![The conversation activity](images/meeting.PNG)
 
 **Figure 2. Conversation activity**
 
