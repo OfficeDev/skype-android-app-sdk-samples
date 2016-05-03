@@ -26,7 +26,7 @@ you need to have two things:
 
 Connect your Android phone to the development computer by using a USB port. Press Shift-F10 to run the sample.  
 The **Skype for Business App SDK** does not support Android Studio emulators. You need to run the sample on a 
-**armeabi-v7a** mobile device. See [Platform Considerations](PlatformConsiderations.md) for 
+**armeabi-v7a** mobile device. See [Platform Considerations](https://msdn.microsoft.com/en-us/skype/appsdk/platformconsiderations) for 
 more information.
 
 ## The running sample
