@@ -16,7 +16,7 @@ you need to have two things:
  
 1. Clone the Guest Meeting Join sample into a local folder like _C:\android\skype-android-app-sdk-samples_.
 2. Copy the SDK libraries from the downloaded SDK into your project.
-  The SDK folder _SkypeForBusinessAppSDKAndroid-0.5.0.1 is found in the download location on your 
+  The SDK folder _SkypeForBusinessAppSDKAndroid-0.5.0.1_ is found in the download location on your 
   computer. The **Skype for Business App sdk** libraries are found in the _AppSDKAndroid_ folder. 
   Copy all of these libraries into the Guest Meeting sample project. The module _build.gradle_ 
   file already references the libraries at: _[your local repository]\GuestMeetingJoin\sfbdemo\libs_. 

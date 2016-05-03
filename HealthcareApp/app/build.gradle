@@ -25,7 +25,7 @@ android {
     compileSdkVersion 22
     buildToolsVersion '23.0.2'
     defaultConfig {
-        applicationId 'com.microsoft.office.sfb.healthcare'
+        applicationId 'com.microsoft.office.sfb.samples.healthcare'
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 2

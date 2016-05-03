@@ -55,8 +55,6 @@ public class SkypeCall extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
 
         mConversation = startToJoinMeeting();
-//        mConversationPropertyChangeListener =
-//                new ConversationPropertyChangeListener();
         mConversation.addOnPropertyChangedCallback(new ConversationPropertyChangeListener());
     }
 
