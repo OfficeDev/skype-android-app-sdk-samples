@@ -19,12 +19,13 @@ you need to have two things:
   The SDK folder _SkypeForBusinessAppSDKAndroid-0.5.0.1_ is found in the download location on your 
   computer. The **Skype for Business App sdk** libraries are found in the _AppSDKAndroid_ folder. 
   Copy all of these libraries into the Guest Meeting sample project. The module _build.gradle_ 
-  file already references the libraries at: _[your local repository]\GuestMeetingJoin\sfbdemo\libs_. 
+  file already references the libraries at: _[your local repository]\GuestMeetingJoin\sfbdemo\libs_. Be sure to copy the SDK
+  libraries specified. 
 
 
 ## Run the sample
 
-Connect your Android phone to the development computer by using a USB port. Press Shift-F10 to run the sample.  
+Connect your Android phone to the development computer using a USB port. Press Shift-F10 to run the sample.  
 The **Skype for Business App SDK** does not support Android Studio emulators. You need to run the sample on a 
 **armeabi-v7a** mobile device. See [Platform Considerations](https://msdn.microsoft.com/en-us/skype/appsdk/platformconsiderations) for 
 more information.
