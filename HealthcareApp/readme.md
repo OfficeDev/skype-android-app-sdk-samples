@@ -14,7 +14,7 @@ bracketed values in the following string.    ``` <string name="meeting_url">http
 the join meeting URL of the meeting to join.  
 
 >Note: The join meeting URL in the strings.xml file is only for use in development. If you use any code from the Healthcare App sample, you need to get 
-a meeting URL at runtime. Read [Get a Skype for Business meeting URL](GetMeetingURL.md) to learn about getting a meeting URL in a production app.
+a meeting URL at runtime. Read [Get a Skype for Business meeting URL](https://msdn.microsoft.com/en-us/skype/appsdk/getmeetingurl) to learn about getting a meeting URL in a production app.
 
 ## Copy the Skype for Business App SDK libraries into the project
 
@@ -35,7 +35,7 @@ Use your Skype for Business client to join the Skype for Business meeting whose 
 
 Attach your Android phone to your development computer and verify that USB debugging is turned on. In Android Studio, click the Run button to build the .apk, install it on your device, and launch the application.
 
->Note: The **Skype for Business App SDK** does not support Android Studio emulators. You need to run the sample on a armeabi-v7a mobile device. See [Platform Considerations](PlatformConsiderations.md) for 
+>Note: The **Skype for Business App SDK** does not support Android Studio emulators. You need to run the sample on a armeabi-v7a mobile device. See [Platform Considerations](https://msdn.microsoft.com/en-us/skype/appsdk/platformconsiderations) for 
 more information.
 
 ## The running sample
