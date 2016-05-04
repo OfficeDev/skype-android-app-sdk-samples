@@ -1,4 +1,5 @@
 # skype-android-app-sdk- Healthcare app sample
+[![Build Status](https://travis-ci.org/OfficeDev/skype-android-app-sdk-samples.svg?branch=master)](https://travis-ci.org/OfficeDev/skype-android-app-sdk-samples)
 
 Before you can run the Android samples in the [skype-android-app-sdk-samples](https://github.com/OfficeDev/skype-android-app-sdk-samples) repository, 
 you need to have two things:
