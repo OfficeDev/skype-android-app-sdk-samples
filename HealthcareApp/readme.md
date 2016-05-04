@@ -35,7 +35,7 @@ Use your Skype for Business client to join the Skype for Business meeting whose 
 
 Attach your Android phone to your development computer and verify that USB debugging is turned on. In Android Studio, click the Run button to build the .apk, install it on your device, and launch the application.
 
->Note: The **Skype for Business App SDK** does not support Android Studio emulators. You need to run the sample on a armeabi-v7a mobile device. See [Platform Considerations](PlatformConsiderations.md) for 
+>Note: The **Skype for Business App SDK** does not support Android Studio emulators. You need to run the sample on a armeabi-v7a mobile device. See [Platform Considerations](https://msdn.microsoft.com/en-us/skype/appsdk/platformconsiderations) for 
 more information.
 
 ## The running sample
