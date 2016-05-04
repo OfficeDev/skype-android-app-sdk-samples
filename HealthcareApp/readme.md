@@ -7,7 +7,6 @@ you need to have two things:
 1. The **Skype for Business App SDK** libraries which you can download from [Skype for Business App SDK download](http://aka.ms/sfbappsdkdownload_android). 
 2. The join meeting URL for an established **Skype for Business** meeting.
 
-
 ## Save a join meeting URL in the string resources XML file
 
 This sample sample requires that you update the strings.xml file found in:  _[your local repository]\\HealthcareApp\app\src\main\res\values\strings.xml_. Replace the 

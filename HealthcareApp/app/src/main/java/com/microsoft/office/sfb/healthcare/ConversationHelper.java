@@ -1,7 +1,5 @@
 package com.microsoft.office.sfb.healthcare;
 
-import java.net.URI;
-import java.util.List;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLSurfaceView;
 import android.view.TextureView;
@@ -9,6 +7,7 @@ import android.view.TextureView;
 import com.microsoft.media.MMVRSurfaceView;
 import com.microsoft.office.sfb.appsdk.Application;
 import com.microsoft.office.sfb.appsdk.AudioService;
+import com.microsoft.office.sfb.appsdk.Camera;
 import com.microsoft.office.sfb.appsdk.ChatService;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.ConversationActivityItem;
@@ -22,7 +21,9 @@ import com.microsoft.office.sfb.appsdk.ParticipantAudio;
 import com.microsoft.office.sfb.appsdk.ParticipantService;
 import com.microsoft.office.sfb.appsdk.SFBException;
 import com.microsoft.office.sfb.appsdk.VideoService;
-import com.microsoft.office.sfb.appsdk.Camera;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * This is a convenience class.  It simplifies interaction with the core Conversation interface
@@ -85,7 +86,7 @@ public class ConversationHelper {
         /**
          * This method is called when the state of {@link VideoService#CAN_SET_PAUSED_PROPERTY_ID}
          * changes.
-         * @param newSetCanPaused The new value retrieved by calling {@link VideoService#canSetPaused()}
+         * @param newCanSetPaused The new value retrieved by calling {@link VideoService#canSetPaused()}
          */
         void onCanSetPausedVideoServiceChanged(boolean newCanSetPaused);
 
