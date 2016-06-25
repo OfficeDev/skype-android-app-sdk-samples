@@ -220,7 +220,7 @@ public class VideoFragment extends Fragment{
     public void SurfaceTextureCreatedCallback(SurfaceTexture texture) {
         try {
             // Display the preview
-            videoService.displayPreview(texture);
+            videoService.showPreview(texture);
 
             // Check state of video service.
             // If not started, start it.
