@@ -10,7 +10,7 @@ you need to have two things:
 ## Save a join meeting URL in the string resources XML file
 
 This sample sample requires that you update the strings.xml file found in:  _[your local repository]\\HealthcareApp\app\src\main\res\values\strings.xml_. Replace the 
-bracketed values in the following string.    ``` <string name="meeting_url">https://meet.lync.com/[yourdomain]/[youralias]/[somevalue]</string> ``` with 
+bracketed values in the following string.    ``` <string name="meeting_url">https://meet.[yourdomain]/[youralias]/[somevalue]</string> ``` with 
 the join meeting URL of the meeting to join.  
 
 >Note: The join meeting URL in the strings.xml file is only for use in development. If you use any code from the Healthcare App sample, you need to get 
@@ -20,13 +20,6 @@ a meeting URL at runtime. Read [Get a Skype for Business meeting URL](https://ms
 
 The samples already include local references to the **Skype for Business** libraries. After you clone the repository, you need to copy the libraries into
 the sample project folders at:  _[your local repository]\skype-android-app-sdk-samples\HealthcareApp\app\libs_. 
-
-## Copy the ConversationHelper class into the project
-
-The Healthcare app sample uses the ConversationHelper.java file that is found in the _Helpers_ folder in the App SDK download package. Copy the ConversationHelper.java file into the _[your local repository]\skype-android-app-sdk-samples\HealthcareApp\app\src\main\java\com\microsoft\office\sfb\healthcare_ folder.
-
-## Replace the package statement in ConversationHelper.java
-The default package statement for the ConversationHelper.java must be replaced with: ```package com.microsoft.office.sfb.healthcare;```
 
 ## Start or join the Skype for Business meeting
 Use your Skype for Business client to join the Skype for Business meeting whose URL you are using in the sample strings.xml file. Once you have connected to the meeting, turn on your video camera so that a video stream is available to the sample. 
