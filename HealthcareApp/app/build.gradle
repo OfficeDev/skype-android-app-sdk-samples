@@ -4,7 +4,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile(name: "libucmp", ext: 'aar')
     compile(name: "platform", ext: 'aar')
-    compile(name: "SkypeForBusiness", ext: 'aar')
+    compile(name: "SkypeForBusiness-debug", ext: 'aar')
     compile(name: "TelemetryService", ext: 'aar')
     compile(name: "ucmp-enums", ext: 'aar')
     compile(name: "TelemetryClient2", ext: 'aar')
@@ -26,7 +26,7 @@ android {
     buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId 'com.microsoft.office.sfb.samples.healthcare'
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 22
         versionCode 2
         versionName "2.1"

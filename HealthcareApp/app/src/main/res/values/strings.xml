@@ -35,9 +35,13 @@
     <string name="mute_audio">Mute audio</string>
     <string name="companyName">Lamna Healthcare Company</string>
     <string name="lamna_healthcare">Lamna Healthcare</string>
-    <string name="meeting_url">https://meet.lync.com/microsoft/johnau/D6RJ84B5</string>
+    <string name="meeting_url">https://meet.lync.com/microsoft/johnau/DTR1NGR7</string>
     <string name="meeting_url_summary">Meeting URL</string>
     <string name="baby_Name">Jonathan Trudeau</string>
     <string name="signinTitle">Lamna Healthcare Company</string>
+    <string name="ucwaURL">ucwaURL</string>
+    <string name="webToken">myToken</string>
+    <string name="displayName">Alex Dunsmuir</string>
+    <string name="remoteEndpointURI">helpdesk@contoso.com</string>
 
 </resources>

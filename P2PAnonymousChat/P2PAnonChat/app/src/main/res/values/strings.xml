@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Anonymous Helpdesk client</string>
+    <string name="action_settings">Settings</string>
+    <string name="ucwa_url">sip:helpdesk@metio.onmicrosoft.com</string>
+    <string name="web_token">Token</string>
+    <string name="helpdesk_uri">UCWA URL</string>
+    <string name="your_name">Your name</string>
+    <string name="signinTitle">Lamna Healthcare Company</string>
+    <string name="prompt_email">Enter your email or user id</string>
+    <string name="prompt_password">Enter your password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ok">Ok</string>
+    <string name="ucwaURL">https://webpooldm20r02.infra.lync.com/ucwa/psanon/v1/applications</string>
+    <string name="ucwaTOKEN">psat=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1QTDdVZVZRUV9nb1lBbm1WdFFLQmVoOWp5YyJ9.eyJuYmYiOjE0NzE5NzkzODUsImV4cCI6MTQ3MjAwODE4NSwicnV1Ijoic2lwOkRNMjBSMDJtZWV0MTI5OUBub2FtbWVldGluZ3MubHluYy5jb20iLCJhc2kiOiJhYmNkIiwiYWV1Ijoic2lwOmRlZmF1bHRFbmRwb2ludEByZXNvdXJjZXMubHluYy5jb20ifQ.J8MRt5tUqoKbCSq16-jruQbNuP8EQgUX7SjBP5LsANLbMqVLx2baLKKDAm-Yy3vcNfMNevjn67YkXn3pKF7OOM2YSV4hupz9b6PnfABuqCaIgT_wuIAxt43bBOZdx0nZFwajGizfm9XCTdcTDUh5RKBof-z_JloUOo5Z9CvGeNtJfR9Lv3KPhB4tSuI7OvGT39LI3zFalSKQgCNR90znAGnJIh4EW1CnewIPB2Y6aAZxcXbqwX8LpVsgwycm-2lzSQq8wW4ldxcUgoUbVSKJQ_W5o0Jyd2q3oE8fbJsMGqEOv62wocDRGnChmfb5nCNTS_PjCj1J6SIG-BJ7ofDGHQ</string>
+    <string name="name">Name</string>
+    <string name="startConversationSnackText">Starting conversation</string>
+    <string name="fragmentCloseAction">closing</string>
+    <string name="fragmentInteractionOk">okPressed</string>
+    <string name="companyName">Contoso Helpdesk</string>
+
+</resources>

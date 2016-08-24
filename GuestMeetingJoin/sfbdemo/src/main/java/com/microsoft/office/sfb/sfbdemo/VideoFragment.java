@@ -1,28 +1,28 @@
 package com.microsoft.office.sfb.sfbdemo;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.microsoft.media.MMVRSurfaceView;
+import com.microsoft.office.sfb.appsdk.Camera;
 import com.microsoft.office.sfb.appsdk.Conversation;
+import com.microsoft.office.sfb.appsdk.DevicesManager;
 import com.microsoft.office.sfb.appsdk.Observable;
 import com.microsoft.office.sfb.appsdk.Participant;
 import com.microsoft.office.sfb.appsdk.SFBException;
 import com.microsoft.office.sfb.appsdk.VideoService;
-import com.microsoft.office.sfb.appsdk.DevicesManager;
-import com.microsoft.office.sfb.appsdk.Camera;
 
 import java.util.ArrayList;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 
 /**
  * The video fragment shows the local participant video preview and
@@ -220,7 +220,7 @@ public class VideoFragment extends Fragment{
     public void SurfaceTextureCreatedCallback(SurfaceTexture texture) {
         try {
             // Display the preview
-            videoService.displayPreview(texture);
+            videoService.showPreview(texture);
 
             // Check state of video service.
             // If not started, start it.
