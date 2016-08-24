@@ -23,7 +23,7 @@
         android:id="@+id/editText"
         android:layout_weight="0.08"
         android:text="Hello there!"
-        android:enabled="false" />
+        android:enabled="true" />
 
     <Button
         android:layout_width="213dp"
