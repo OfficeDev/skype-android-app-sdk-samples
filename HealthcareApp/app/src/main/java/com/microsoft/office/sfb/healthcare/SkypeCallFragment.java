@@ -34,6 +34,8 @@ public class SkypeCallFragment extends Fragment
     private static DevicesManager mDevicesManager;
     private ConversationHelper mConversationHelper;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
+    private TextureView mPreviewVideoTextureView;
+    private boolean mTryStartVideo = false;
     View mRootView;
 
     @SuppressLint("ValidFragment")
@@ -75,6 +77,9 @@ public class SkypeCallFragment extends Fragment
         mMuteAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mTryStartVideo == true){
+                    tryStartVideo();
+                }
                 mConversationHelper.toggleMute();
             }
         });
@@ -87,7 +92,7 @@ public class SkypeCallFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextureView previewVideoTextureView = (TextureView) mRootView.findViewById(
+        mPreviewVideoTextureView = (TextureView) mRootView.findViewById(
                 R.id.selfParticipantVideoView);
         RelativeLayout participantVideoLayout = (RelativeLayout) mRootView.findViewById(
                 R.id.participantVideoLayoutId);
@@ -98,26 +103,42 @@ public class SkypeCallFragment extends Fragment
                 , getActivity()
                         .getString(
                                 R.string.callFragmentInflated));
+        tryStartVideo();
 
-        //Initialize the conversation helper with the established conversation,
-        //the SfB App SDK devices manager, the outgoing video TextureView,
-        //The view container for the incoming video, and a conversation helper
-        //callback.
-        mConversationHelper = new ConversationHelper(
-                mConversation,
-                mDevicesManager,
-                previewVideoTextureView,
-                mParticipantVideoSurfaceView,
-                this);
-        Log.i(
-                "SkypeCallFragment",
-                "onViewCreated");
 
-        //Start up the incoming and outgoing video
-        mConversationHelper.startOutgoingVideo();
-        mConversationHelper.startIncomingVideo();
     }
 
+    private void tryStartVideo(){
+            //Initialize the conversation helper with the established conversation,
+            //the SfB App SDK devices manager, the outgoing video TextureView,
+            //The view container for the incoming video, and a conversation helper
+            //callback.
+        if (mConversationHelper == null){
+            mConversationHelper = new ConversationHelper(
+                    mConversation,
+                    mDevicesManager,
+                    mPreviewVideoTextureView,
+                    mParticipantVideoSurfaceView,
+                    this);
+            Log.i(
+                    "SkypeCallFragment",
+                    "onViewCreated");
+
+        }
+        if (mParticipantVideoSurfaceView.isActivated()){
+            mTryStartVideo = false;
+
+            //Start up the incoming and outgoing video
+            mConversationHelper.startOutgoingVideo();
+            mConversationHelper.startIncomingVideo();
+        } else {
+            mParticipantVideoSurfaceView.setActivated(true);
+            mPreviewVideoTextureView.setActivated(true);
+            mTryStartVideo = true;
+        }
+
+
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
