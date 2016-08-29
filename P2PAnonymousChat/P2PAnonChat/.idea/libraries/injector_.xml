@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="injector-">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/injector/jars/libs/javax.inject-1.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/injector/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/injector/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

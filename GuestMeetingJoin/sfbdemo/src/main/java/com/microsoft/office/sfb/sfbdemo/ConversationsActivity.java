@@ -18,6 +18,7 @@ import com.microsoft.office.sfb.appsdk.AlertObserver;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.DevicesManager;
 import com.microsoft.office.sfb.appsdk.SFBException;
+import com.microsoft.office.sfb.appsdk.Speaker;
 
 /**
  * The Conversations Activity uses two fragments to provide Conversation & Chat functionality.
@@ -43,7 +44,7 @@ public class ConversationsActivity extends AppCompatActivity implements ChatFrag
     private DevicesManager devicesManager = null;
 
     boolean callStarted = true;
-    DevicesManager.Endpoint endpoint = null;
+    Speaker.Endpoint endpoint = null;
 
     Button participantsButton = null;
     Button videoButton = null;
@@ -83,7 +84,7 @@ public class ConversationsActivity extends AppCompatActivity implements ChatFrag
             this.devicesManager = com.microsoft.office.sfb.appsdk.Application.getInstance(
                     this.getApplicationContext()).getDevicesManager();
 
-            this.endpoint = this.devicesManager.getActiveEndpoint();
+            this.endpoint = this.devicesManager.getSelectedSpeaker().getActiveEndpoint();
 
             // Create the chat fragment.
             this.chatFragment = ChatFragment.newInstance(this.currentConversation);
@@ -126,16 +127,16 @@ public class ConversationsActivity extends AppCompatActivity implements ChatFrag
     public void onSpeakerButtonClicked(android.view.View view) {
         switch(this.endpoint) {
             case LOUDSPEAKER:
-                this.devicesManager.setActiveEndpoint(DevicesManager.Endpoint.NONLOUDSPEAKER);
+                this.devicesManager.getSelectedSpeaker().setActiveEndpoint(Speaker.Endpoint.NONLOUDSPEAKER);
                 ((Button)view).setText("Speaker On");
                 break;
             case NONLOUDSPEAKER:
-                this.devicesManager.setActiveEndpoint(DevicesManager.Endpoint.LOUDSPEAKER);
+                this.devicesManager.getSelectedSpeaker().setActiveEndpoint(Speaker.Endpoint.LOUDSPEAKER);
                 ((Button)view).setText("Speaker Off");
                 break;
             default:
         }
-        this.endpoint = this.devicesManager.getActiveEndpoint();
+        this.endpoint = this.devicesManager.getSelectedSpeaker().getActiveEndpoint();
     }
 
     public void onAudioButtonClicked(android.view.View view) {

@@ -20,7 +20,6 @@ import com.microsoft.office.sfb.appsdk.Participant;
 import com.microsoft.office.sfb.appsdk.ParticipantAudio;
 import com.microsoft.office.sfb.appsdk.ParticipantService;
 import com.microsoft.office.sfb.appsdk.SFBException;
-import com.microsoft.office.sfb.appsdk.Speaker;
 import com.microsoft.office.sfb.appsdk.VideoService;
 
 import java.net.URI;
@@ -191,17 +190,16 @@ public class ConversationHelper {
      * Switch between Loudspeaker and Non-loudspeaker.
      */
     public void changeSpeakerEndpoint() {
-        Speaker.Endpoint endpoint = Speaker.Endpoint.LOUDSPEAKER;
-        Speaker currentSpeaker = this.devicesManager.getSelectedSpeaker();
-        switch(currentSpeaker.getActiveEndpoint()) {
+        DevicesManager.Endpoint endpoint = DevicesManager.Endpoint.LOUDSPEAKER;
+        switch(this.devicesManager.getActiveEndpoint()) {
             case LOUDSPEAKER:
-                endpoint = Speaker.Endpoint.NONLOUDSPEAKER;
+                endpoint = DevicesManager.Endpoint.NONLOUDSPEAKER;
                 break;
             case NONLOUDSPEAKER:
-                endpoint = Speaker.Endpoint.LOUDSPEAKER;
+                endpoint = DevicesManager.Endpoint.LOUDSPEAKER;
                 break;
         }
-        currentSpeaker.setActiveEndpoint(endpoint);
+        this.devicesManager.setActiveEndpoint(endpoint);
     }
 
     /**

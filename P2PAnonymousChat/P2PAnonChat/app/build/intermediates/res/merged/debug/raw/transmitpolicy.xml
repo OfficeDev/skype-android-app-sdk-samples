@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TransmitPolicy>
+<TransmitProfile value="REAL_TIME">
+    <TransmitCondition NetworkCost="METERED" PowerState="BATTERY">
+        <SchedulePeriod EventPriority="HIGH">8</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">16</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">64</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="METERED" PowerState="AC">
+        <SchedulePeriod EventPriority="HIGH">4</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">8</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">32</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="UNMETERED" PowerState="BATTERY">
+        <SchedulePeriod EventPriority="HIGH">2</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">4</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">16</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="UNMETERED" PowerState="AC">
+        <SchedulePeriod EventPriority="HIGH">1</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">2</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">8</SchedulePeriod>
+    </TransmitCondition>
+</TransmitProfile>
+
+<TransmitProfile value="NEAR_REAL_TIME">
+    <TransmitCondition NetworkCost="METERED" PowerState="BATTERY">
+        <SchedulePeriod EventPriority="HIGH">100</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">600</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">-1</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="METERED" PowerState="AC">
+        <SchedulePeriod EventPriority="HIGH">60</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">360</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">-1</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="UNMETERED" PowerState="BATTERY">
+        <SchedulePeriod EventPriority="HIGH">30</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">180</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">-1</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="UNMETERED" PowerState="AC">
+        <SchedulePeriod EventPriority="HIGH">15</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">90</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">180</SchedulePeriod>
+    </TransmitCondition>
+</TransmitProfile>
+
+<TransmitProfile value="BEST_EFFORT">
+    <TransmitCondition NetworkCost="METERED" PowerState="BATTERY">
+        <SchedulePeriod EventPriority="HIGH">300</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">900</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">-1</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="METERED" PowerState="AC">
+        <SchedulePeriod EventPriority="HIGH">240</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">480</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">-1</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="UNMETERED" PowerState="BATTERY">
+        <SchedulePeriod EventPriority="HIGH">120</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">360</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">-1</SchedulePeriod>
+    </TransmitCondition>
+    <TransmitCondition NetworkCost="UNMETERED" PowerState="AC">
+        <SchedulePeriod EventPriority="HIGH">60</SchedulePeriod>
+        <SchedulePeriod EventPriority="NORMAL">180</SchedulePeriod>
+        <SchedulePeriod EventPriority="LOW">300</SchedulePeriod>
+    </TransmitCondition>
+</TransmitProfile>
+
+</TransmitPolicy>
