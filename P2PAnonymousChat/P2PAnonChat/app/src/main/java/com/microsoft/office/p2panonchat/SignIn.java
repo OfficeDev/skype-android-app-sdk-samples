@@ -160,8 +160,8 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
 
-            Intent wellBabyIntent = new Intent(this, MainActivity.class);
-            startActivity(wellBabyIntent);
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+            startActivity(mainActivityIntent);
         }
     }
 

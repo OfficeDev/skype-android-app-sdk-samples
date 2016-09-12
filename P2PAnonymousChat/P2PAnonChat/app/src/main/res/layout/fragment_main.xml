@@ -58,5 +58,4 @@
         android:textSize="@dimen/notification_subtext_size" />
 
 
-
 </RelativeLayout>

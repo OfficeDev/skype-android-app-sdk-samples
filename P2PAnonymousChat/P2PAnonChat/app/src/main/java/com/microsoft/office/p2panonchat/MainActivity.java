@@ -1,26 +1,36 @@
 package com.microsoft.office.p2panonchat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import com.microsoft.office.p2panonchat.chat.chatContent;
 import com.microsoft.office.p2panonchat.conversationhelper.ConversationHelper;
 import com.microsoft.office.sfb.appsdk.Application;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.MessageActivityItem;
-import com.microsoft.office.sfb.appsdk.ParticipantService;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
 import java.net.URI;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -35,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements
         UcwaAuthStrings.OnFragmentInteractionListener,
         ChatFragment.OnFragmentInteractionListener,
         ItemFragment.OnListFragmentInteractionListener,
-        ConversationHelper.ConversationCallback {
+        ConversationHelper.ConversationChatCallback {
 
     UcwaAuthStrings mUcwaAuthStrings;
     ChatFragment mChatFragment;
@@ -45,6 +55,51 @@ public class MainActivity extends AppCompatActivity implements
     String mUCWAToken;
     Application mApplication;
     private ConversationHelper mConversationHelper;
+    protected Boolean mCanSendMessage = false;
+    private  String mSaaSToken;
+
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if (mConversationHelper != null) {
+            mConversationHelper.removeListeners();
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+
+        super.onSaveInstanceState(outState);
+
+        outState.putString(
+                getString(R.string.userNameStateKey),
+                String.valueOf(
+                        ((EditText)findViewById(R.id.userName))
+                                .getText()));
+    }
+
+    /**
+     * The bundle only stores primitive state objects. The App SDK
+     * Application object and its children are lost when the activity
+     * is hidden or the screen is rotated. You cannot restore any
+     * active conversation. Instead, start a new conversation with
+     * the same remote SIP endpoint.
+     * @param savedState
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedState){
+
+        ((EditText)findViewById(R.id.userName))
+                .setText(
+                        savedState.getString(
+                                getString(R.string.userNameStateKey)));
+
+    }
 
 
     @Override
@@ -52,10 +107,6 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        if (savedInstanceState != null) {
-            return;
-        }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -77,9 +128,9 @@ public class MainActivity extends AppCompatActivity implements
                     Log.e("Conversation get failed", "MainActivity");
                 }
                 //work around to test chat fragment
-                loadChatFragment();
             }
         });
+
     }
 
     @Override
@@ -138,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements
 
         } catch (Exception e) {
             e.printStackTrace();
+            Snackbar.make(this.getCurrentFocus(), e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
         }
     }
 
@@ -148,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements
                 .beginTransaction();
         try {
             mChatFragment = ChatFragment.newInstance(
-                    mActiveConversation.getChatService());
+                    mActiveConversation.getChatService(),
+                    mCanSendMessage);
 
 
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -160,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements
 
         } catch (Exception e) {
             e.printStackTrace();
+            Snackbar.make(this.getCurrentFocus(), e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
     }
 
@@ -167,42 +224,127 @@ public class MainActivity extends AppCompatActivity implements
      * Connect to an existing Skype for Business meeting with the URI you get
      * from a server-side UCWA-based web service.
      */
+    @SuppressLint("LongLogTag")
     private Conversation startToJoinConversation() {
         URI meetingURI = null;
         Conversation conversation = null;
+        try {
+            RESTUtility.SaasAPIInterface apiInterface = RESTUtility.getClient();
+            String strRequestBody = "body";
+            RequestBody requestBody = RequestBody.create(
+                    MediaType.parse("text/plain"),
+                    getString(R.string.getTokenRequestBody));
+
+            Call<SaaSResult> call = apiInterface.getAnonymousToken(requestBody);
+            call.enqueue(new Callback<SaaSResult>() {
+                @Override
+                public void onResponse(Call<SaaSResult> call, Response<SaaSResult> response) {
+                   Log.i("get token response", response.body().toString());
+                }
+
+                @Override
+                public void onFailure(Call<SaaSResult> call, Throwable t) {
+                    Log.i("failed token get", t.getLocalizedMessage().toString());
+                }
+            });
+        } catch (UnsupportedOperationException e) {
+            Log.e("unsupported operation",
+                    e.getLocalizedMessage());
+        } catch (Exception ex){
+            Log.e("Exception on get SaaS interface",
+                    ex.getLocalizedMessage());
+
+        }
 
         mUCWAUrl = getString(R.string.ucwaURL);
         mUCWAToken = getString(R.string.ucwaTOKEN);
         try {
 
-            mApplication = Application.getInstance(this);
-            mActiveConversation = mApplication.joinPeerToPeerAnonymously(
-                    mUCWAUrl,
-                    mUCWAToken,
-                    getString(R.string.your_name),
-                    getString(R.string.helpdesk_uri));
+            //Check for required dangerous permissions before getting the App SDK entry point
+            if (appHasPermissions()) {
+                String myName = String.valueOf(((EditText)findViewById(R.id.userName)).getText());
+                String helpDeskURI = getString(R.string.ucwa_url);
+                mApplication = Application.getInstance(getApplicationContext());
+                mActiveConversation = mApplication.joinPeerToPeerAnonymously(
+                        mUCWAUrl,
+                        mUCWAToken,
+                        myName,
+                        helpDeskURI);
+
+                //Construct a chat-only conversation helper
+                mConversationHelper = new ConversationHelper(
+                        mActiveConversation,
+                        this);
+
+            } else {
+                Snackbar.make(this.getCurrentFocus(), "Insufficient permissions", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+            }
 
         } catch (SFBException e) {
             e.printStackTrace();
+            Snackbar.make(this.getCurrentFocus(), e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }catch (RuntimeException se){
+            Snackbar.make(this.getCurrentFocus(), se.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            se.printStackTrace();
         }
         return mActiveConversation;
     }
 
-    @Override
-    public void onConversationStateChanged(Conversation.State newConversationState) {
-        Log.i("Conversation:", newConversationState.toString());
+    /**
+     * Check for required dangerous permissions.
+     * @return true if the user has granted (and not revoked) required permissions
+     */
+    private boolean appHasPermissions(){
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_PHONE_STATE)
+                == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CALL_PHONE)
+                == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public void onConversationStateChanged(final Conversation.State newConversationState) {
+        Log.i("Conv. state CHANGED:", newConversationState.toString());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+                Snackbar.make(fab.getRootView(), newConversationState.toString(), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+            }
+        });
         if (newConversationState == Conversation.State.ESTABLISHED) {
             //Initialize the conversation helper with the established conversation,
             //the SfB App SDK devices manager, the outgoing video TextureView,
             //The view container for the incoming video, and a conversation helper
             //callback.
-            mConversationHelper = new ConversationHelper(
-                    mActiveConversation,
-                    mApplication.getDevicesManager(),
-                    null,
-                    null,
-                    this);
+
 
             loadChatFragment();
         }
@@ -210,7 +352,17 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onCanSendMessage(boolean canSendMessage) {
-
+        mCanSendMessage = canSendMessage;
+        if (canSendMessage){
+            try {
+                mActiveConversation.getChatService().sendMessage("first message");
+            } catch (SFBException e) {
+                e.printStackTrace();
+            }
+        }
+        if (mChatFragment != null && mChatFragment.isVisible()){
+            mChatFragment.setSendButtonEnableState(canSendMessage);
+        }
     }
 
     @Override
@@ -218,30 +370,6 @@ public class MainActivity extends AppCompatActivity implements
         mChatFragment.updateChatHistory(newMessage.getText());
     }
 
-    @Override
-    public void onSelfAudioStateChanged(ParticipantService.State newState) {
-
-    }
-
-    @Override
-    public void onSelfAudioMuteChanged(boolean newMuteStatus) {
-
-    }
-
-    @Override
-    public void onCanStartVideoServiceChanged(boolean newCanStart) {
-
-    }
-
-    @Override
-    public void onCanSetPausedVideoServiceChanged(boolean newCanSetPaused) {
-
-    }
-
-    @Override
-    public void onCanSetActiveCameraChanged(boolean newCanSetActiveCamera) {
-
-    }
 
 
     /**
@@ -289,4 +417,8 @@ public class MainActivity extends AppCompatActivity implements
         showFloatingButton();
 
     }
+
+
+
+
 }

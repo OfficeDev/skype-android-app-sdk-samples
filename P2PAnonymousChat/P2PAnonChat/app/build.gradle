@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
     defaultConfig {
         applicationId "com.microsoft.office.p2panonchat"
-        minSdkVersion 17
+        minSdkVersion 18
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -19,10 +19,30 @@ android {
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
     productFlavors {
     }
+    packagingOptions {
+
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/maven/com.squareup.okhttp3/okhttp/pom.properties'
+        exclude 'META-INF/maven/com.squareup.okhttp3/okhttp/pom.xml'
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.xml'
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.properties'
+
+    }
 }
 
+
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
     compile(name: "libucmp", ext: 'aar')
     compile(name: "platform", ext: 'aar')
     compile(name: "SkypeForBusiness-debug", ext: 'aar')
@@ -36,4 +56,13 @@ dependencies {
     compile 'com.android.support:support-v4:24.1.1'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:recyclerview-v7:24.1.1'
+    // Dagger compiler for DI annotation support
+    provided('com.squareup.dagger:dagger-compiler:1.2.2') {
+        exclude group: 'com.google.guava'
+    }
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    provided('com.squareup.okhttp3:okhttp:3.4.1') {
+        exclude group: 'pom.properties'
+    }
+    compile group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.0.0-beta4'
 }

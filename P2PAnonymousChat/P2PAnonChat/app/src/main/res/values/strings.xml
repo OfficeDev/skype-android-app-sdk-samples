@@ -21,11 +21,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ok">Ok</string>
     <string name="ucwaURL">https://webpooldm20r02.infra.lync.com/ucwa/psanon/v1/applications</string>
-    <string name="ucwaTOKEN">psat=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1QTDdVZVZRUV9nb1lBbm1WdFFLQmVoOWp5YyJ9.eyJuYmYiOjE0NzE5NzkzODUsImV4cCI6MTQ3MjAwODE4NSwicnV1Ijoic2lwOkRNMjBSMDJtZWV0MTI5OUBub2FtbWVldGluZ3MubHluYy5jb20iLCJhc2kiOiJhYmNkIiwiYWV1Ijoic2lwOmRlZmF1bHRFbmRwb2ludEByZXNvdXJjZXMubHluYy5jb20ifQ.J8MRt5tUqoKbCSq16-jruQbNuP8EQgUX7SjBP5LsANLbMqVLx2baLKKDAm-Yy3vcNfMNevjn67YkXn3pKF7OOM2YSV4hupz9b6PnfABuqCaIgT_wuIAxt43bBOZdx0nZFwajGizfm9XCTdcTDUh5RKBof-z_JloUOo5Z9CvGeNtJfR9Lv3KPhB4tSuI7OvGT39LI3zFalSKQgCNR90znAGnJIh4EW1CnewIPB2Y6aAZxcXbqwX8LpVsgwycm-2lzSQq8wW4ldxcUgoUbVSKJQ_W5o0Jyd2q3oE8fbJsMGqEOv62wocDRGnChmfb5nCNTS_PjCj1J6SIG-BJ7ofDGHQ</string>
-    <string name="name">Name</string>
+    <string name="ucwaTOKEN">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1QTDdVZVZRUV9nb1lBbm1WdFFLQmVoOWp5YyJ9.eyJuYmYiOjE0NzMyNjMxMzIsImV4cCI6MTQ3MzI5MTkzMiwicnV1Ijoic2lwOkRNMjBSMDJtZWV0Mjk4NkBub2FtbWVldGluZ3MubHluYy5jb20iLCJhc2kiOiJ0ZXN0IiwiYWV1Ijoic2lwOm1ldGlvYmFua0BtZXRpby5vbm1pY3Jvc29mdC5jb20iLCJhbyI6Imh0dHA6Ly9zZGtzYW1wbGVzdWNhcC5henVyZXdlYnNpdGVzLm5ldCJ9.gFBhPhJpPqYd8CdUzOZVpNbBgUu_x5kKAVoxQEWq5w1tP6gb1XjIoaHd3o6uHGI80zvE4Sq023Y9pbkA1KeKJO4wrhsIdPOAO2jFaY6CKweIh6GekJFWkPJIKVoTeZHXhzZKxrn84Trr0PTRJ3HYNd9hVM9SmTLlaB_SeU8lTIiqKLFcsuzAqqwAeNaZdXnplVS3Ya1cQcWMPL8hmZQiPAur8SZGDSN72xKydZ781moO1tHlYggxf_vHNT59M9rGk8ZWSw2tY7C_wr1q0Ax7R9cXJF006FsbhY8gsr2Q-J9vVBN-TqI6OimhhbsliCtZOQCXyQltLE_pISgs733SYg</string>
+    <string name="name"></string>
     <string name="startConversationSnackText">Starting conversation</string>
     <string name="fragmentCloseAction">closing</string>
     <string name="fragmentInteractionOk">okPressed</string>
     <string name="companyName">Contoso Helpdesk</string>
+    <string name="userNameStateKey">userName</string>
+    <string name="tokenKey">SaaSToken</string>
+    <string name="getTokenRequestBody"><![CDATA[{ApplicationSessionId=test&AllowedOrigins=https://sdksamplesucap.azurewebsites.net/}]]></string>
 
 </resources>

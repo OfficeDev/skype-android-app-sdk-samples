@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         android:text="Send"
         android:id="@+id/sendButton"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:enabled="false" />
 
 
 </LinearLayout>

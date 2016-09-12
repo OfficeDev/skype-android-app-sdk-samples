@@ -34,14 +34,14 @@ import java.util.List;
  *    removing the need to write verbose observer code.
  * 2. Audio functionality to toggle mute and switch between loudspeaker and non-loudspeaker
  *    endpoints.
- * 3. Video functionality to start outgoing and incoming video and switch between cameras. 
+ * 3. Video functionality to start outgoing and incoming video and switch between cameras.
+ * 4. Chat functionality to start outgoing chat conversations and access chat history for
+ *    an active conversation.
  */
 public class ConversationHelper {
 
-    /**
-     * Callback interface for property and state change notifications.
-     */
-    public interface ConversationCallback {
+
+    public interface ConversationChatCallback {
         /**
          * This method is called when the state of the conversation changes.
          * E.g. On joining a meeting the conversation state changes from idle->establishing->established.
@@ -61,6 +61,18 @@ public class ConversationHelper {
          *                   {@link HistoryService#getConversationActivityItems() Activity Item Collection}
          */
         void onMessageReceived(MessageActivityItem newMessage);
+    }
+    /**
+     * Callback interface for property and state change notifications.
+     */
+    public interface ConversationCallback {
+
+        /**
+         * This method is called when the state of the conversation changes.
+         * E.g. On joining a meeting the conversation state changes from idle->establishing->established.
+         * @param newConversationState The new conversation state.
+         */
+        void onConversationStateChanged(Conversation.State newConversationState);
 
         /**
          * This method is called when the state of the self participant Audio state changes.
@@ -97,6 +109,18 @@ public class ConversationHelper {
          * @param newCanSetActiveCamera The new value retrieved by calling {@link VideoService#canSetActiveCamera()}
          */
         void onCanSetActiveCameraChanged(boolean newCanSetActiveCamera);
+        /**
+         * This method is called when the {@link ChatService#CAN_SEND_MESSAGE_PROPERTY_ID} changes.
+         * @param canSendMessage New value retrieved using {@link ChatService#canSendMessage()}
+         */
+        void onCanSendMessage(boolean canSendMessage);
+
+        /**
+         * This method is called when a new incoming IM ({@link MessageActivityItem}) is received.
+         * @param newMessage Incoming MessageActivityItem retrieved by listening to changes on the
+         *                   {@link HistoryService#getConversationActivityItems() Activity Item Collection}
+         */
+        void onMessageReceived(MessageActivityItem newMessage);
     }
 
     private Conversation conversation = null;
@@ -125,6 +149,8 @@ public class ConversationHelper {
     /**
      * Callback passed in by the caller.
      */
+    private ConversationChatCallback conversationChatCallback = null;
+
     private ConversationCallback conversationCallback = null;
 
     private ObservableList.OnListChangedCallback listChangedCallback = null;
@@ -135,13 +161,40 @@ public class ConversationHelper {
      */
     private ConversationCallbackHandler conversationCallbackHandler = null;
 
+
+    /**
+     * Chat-only constructor
+     * @param conversation
+     * @param conversationCallback
+     */
+    public ConversationHelper(Conversation conversation,
+                              ConversationChatCallback conversationCallback){
+        // Setup the callback and callback handler.
+        this.conversationChatCallback = conversationCallback;
+        this.conversationCallbackHandler = new ConversationCallbackHandler();
+        this.listChangedCallback = new MessageListCallbackHandler();
+
+        this.conversation = conversation;
+        this.conversation.addOnPropertyChangedCallback(this.conversationCallbackHandler);
+
+        // Get the chat service and register for property change notifications.
+        this.chatService = conversation.getChatService();
+        this.chatService.addOnPropertyChangedCallback(this.conversationCallbackHandler);
+
+        //should be called when conversation activity dies
+        this.chatService.removeOnPropertyChangedCallback(this.conversationCallbackHandler);
+        this.historyService = conversation.getHistoryService();
+        this.historyService.getConversationActivityItems().addOnListChangedCallback(this.listChangedCallback);
+
+
+    }
     /**
      * Constructor.
      * @param conversation Conversation created by calling {@link Application#joinMeetingAnonymously(String, URI)}
      * @param devicesManager DevicesManager instance {@link Application#getDevicesManager()}
      * @param textureView Self video preview view.
      * @param mmvrSurfaceView Remote participant video view.
-     * @param conversationCallback {@link ConversationCallback} object that should receive 
+     * @param conversationCallback {@link ConversationCallback} object that should receive
      *        callbacks from this conversation helper.
      */
     public ConversationHelper(Conversation conversation,
@@ -164,6 +217,10 @@ public class ConversationHelper {
         this.chatService = conversation.getChatService();
         this.chatService.addOnPropertyChangedCallback(this.conversationCallbackHandler);
 
+        //should be called when conversation activity dies
+        this.chatService.removeOnPropertyChangedCallback(this.conversationCallbackHandler);
+        this.historyService = conversation.getHistoryService();
+        this.historyService.getConversationActivityItems().addOnListChangedCallback(this.listChangedCallback);
         // Get the audio service and register for property change notifications.
         this.audioService = conversation.getAudioService();
         this.audioService.addOnPropertyChangedCallback(this.conversationCallbackHandler);
@@ -172,26 +229,49 @@ public class ConversationHelper {
         this.videoService = conversation.getVideoService();
         this.videoService.addOnPropertyChangedCallback(this.conversationCallbackHandler);
 
-        this.historyService = conversation.getHistoryService();
-        this.historyService.getConversationActivityItems().addOnListChangedCallback(this.listChangedCallback);
 
         this.selfParticipant = conversation.getSelfParticipant();
         this.selfParticipantAudio = this.selfParticipant.getParticipantAudio();
         this.selfParticipantAudio.addOnPropertyChangedCallback(this.conversationCallbackHandler);
+        this.videoPreviewView = textureView;
+        this.videoPreviewView.setSurfaceTextureListener(new VideoPreviewSurfaceTextureListener());
+        this.participantVideoView = mmvrSurfaceView;
+        this.participantVideoView.setCallback(new VideoStreamSurfaceListener());
+    }
 
-        if (textureView != null) {
-            this.videoPreviewView = textureView;
-            this.videoPreviewView.setSurfaceTextureListener(new VideoPreviewSurfaceTextureListener());
-            this.participantVideoView = mmvrSurfaceView;
-            this.participantVideoView.setCallback(new VideoStreamSurfaceListener());
+
+    /**
+     * Unregisters listeners when they are no longer needed.
+     */
+    public void removeListeners(){
+        this.conversation.removeOnPropertyChangedCallback(
+                this.conversationCallbackHandler);
+        this.chatService.removeOnPropertyChangedCallback(
+                this.conversationCallbackHandler);
+        if(this.audioService != null) {
+            this.audioService.removeOnPropertyChangedCallback(
+                    this.conversationCallbackHandler);
+            this.selfParticipantAudio.removeOnPropertyChangedCallback(
+                    this.conversationCallbackHandler);
         }
+        if (this.videoService != null){
+            this.videoService.removeOnPropertyChangedCallback(
+                    this.conversationCallbackHandler);
+
+        }
+        this.historyService.getConversationActivityItems()
+                .removeOnListChangedCallback(
+                        this.listChangedCallback);
 
     }
+
 
     /**
      * Switch between Loudspeaker and Non-loudspeaker.
      */
     public void changeSpeakerEndpoint() {
+        if (devicesManager == null)
+            return;
         DevicesManager.Endpoint endpoint = DevicesManager.Endpoint.LOUDSPEAKER;
         switch(this.devicesManager.getActiveEndpoint()) {
             case LOUDSPEAKER:
@@ -233,6 +313,8 @@ public class ConversationHelper {
      * Switch the camera by selecting from the list of available cameras.
      */
     public void changeActiveCamera() {
+        if (devicesManager == null)
+            return;
         try {
             Camera activeCamera = this.videoService.getActiveCamera();
             List<Camera> availableCameras = devicesManager.getCameras();
@@ -410,7 +492,13 @@ public class ConversationHelper {
                 switch(propertyId) {
                     case Conversation.STATE_PROPERTY_ID:
                         Conversation.State newState = conversation.getState();
-                        conversationCallback.onConversationStateChanged(newState);
+                        if (conversationCallback == null){
+                            conversationChatCallback.onConversationStateChanged(newState);
+                        } else {
+                            conversationCallback.onConversationStateChanged(newState);
+                        }
+
+
                         break;
                 }
             }
@@ -420,7 +508,13 @@ public class ConversationHelper {
                 switch (propertyId) {
                     case ChatService.CAN_SEND_MESSAGE_PROPERTY_ID:
                         boolean canSendMessage = chatService.canSendMessage();
-                        conversationCallback.onCanSendMessage(canSendMessage);
+                        if (conversationCallback == null){
+                            conversationChatCallback.onCanSendMessage(canSendMessage);
+
+                        } else {
+                            conversationCallback.onCanSendMessage(canSendMessage);
+                        }
+
                         break;
                 }
             }

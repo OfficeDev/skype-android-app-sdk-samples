@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,8 @@ public class ChatFragment extends Fragment
      * @return A new instance of fragment ChatFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(ChatService chatService) {
+    public static ChatFragment newInstance(ChatService chatService,
+                                           boolean sendMessageEnabled) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -129,6 +129,7 @@ public class ChatFragment extends Fragment
                     e.printStackTrace();
                 }
             }});
+        mSendButton.setEnabled(((MainActivity)getActivity()).mCanSendMessage);
 
         if (mChatService.canSendMessage() == true){
             mMessageSendEditText.setEnabled(true);
@@ -160,6 +161,17 @@ public class ChatFragment extends Fragment
         mItemFragment.addChatItem(chatItem);
     }
 
+
+    public void setSendButtonEnableState(final Boolean state){
+
+        mSendButton.setEnabled(state);
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSendButton.setActivated(state);
+//            }
+//        });
+    }
     /**
      * Called when this fragment is attached to the activity. MainActivity
      * (the listener) is notified when the fragment is attached.
