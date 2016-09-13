@@ -29,6 +29,6 @@
     <string name="companyName">Contoso Helpdesk</string>
     <string name="userNameStateKey">userName</string>
     <string name="tokenKey">SaaSToken</string>
-    <string name="getTokenRequestBody"><![CDATA[{ApplicationSessionId=test&AllowedOrigins=https://sdksamplesucap.azurewebsites.net/}]]></string>
+    <string name="getTokenRequestBody"><![CDATA[{ApplicationSessionId:test&AllowedOrigins:http%3A%2F%2Fsdksamplesucap.azurewebsites.net%2F}]]></string>
 
 </resources>

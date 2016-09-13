@@ -229,10 +229,10 @@ public class MainActivity extends AppCompatActivity implements
         URI meetingURI = null;
         Conversation conversation = null;
         try {
-            RESTUtility.SaasAPIInterface apiInterface = RESTUtility.getClient();
-            String strRequestBody = "body";
+            RESTUtility rESTUtility = new RESTUtility();
+            RESTUtility.SaasAPIInterface apiInterface = rESTUtility.getClient();
             RequestBody requestBody = RequestBody.create(
-                    MediaType.parse("text/plain"),
+                    MediaType.parse("text/plain, */*; q=0.01"),
                     getString(R.string.getTokenRequestBody));
 
             Call<SaaSResult> call = apiInterface.getAnonymousToken(requestBody);
