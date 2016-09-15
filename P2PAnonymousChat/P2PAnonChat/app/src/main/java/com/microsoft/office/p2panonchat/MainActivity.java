@@ -317,13 +317,9 @@ public class MainActivity extends AppCompatActivity implements
                 == PackageManager.PERMISSION_DENIED){
             return false;
         }
-        if (ContextCompat.checkSelfPermission(
+        return ContextCompat.checkSelfPermission(
                 this,
-                Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED){
-            return false;
-        }
-        return true;
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED;
     }
 
     @Override

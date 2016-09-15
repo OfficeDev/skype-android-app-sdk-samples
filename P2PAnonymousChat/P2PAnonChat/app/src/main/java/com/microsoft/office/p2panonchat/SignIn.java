@@ -100,10 +100,7 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
     }
 
     private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-            return true;
-        }
-        return false;
+        return Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP;
     }
 
     /**

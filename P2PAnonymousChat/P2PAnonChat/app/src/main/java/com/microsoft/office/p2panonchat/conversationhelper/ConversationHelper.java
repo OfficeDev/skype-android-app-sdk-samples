@@ -397,7 +397,7 @@ public class ConversationHelper {
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) { }
-    };
+    }
 
     /**
      * For displaying the remote participant video we need to tie the video stream to the MMVRSurfaceView

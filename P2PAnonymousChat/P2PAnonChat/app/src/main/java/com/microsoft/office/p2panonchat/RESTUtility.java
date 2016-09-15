@@ -4,12 +4,12 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+//import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import okio.BufferedSink;
 import retrofit2.Call;
@@ -32,7 +32,13 @@ public class RESTUtility {
         if (saaSAPIInterface == null) {
 
             try {
-                okhttp3.OkHttpClient okClient = new okhttp3.OkHttpClient.Builder().addInterceptor(new LoggingInterceptor()).build();
+//                HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+//                httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                okhttp3.OkHttpClient okClient = new okhttp3.OkHttpClient
+                        .Builder()
+                        .addInterceptor(new LoggingInterceptor())
+//                        .addInterceptor(httpLoggingInterceptor)
+                        .build();
 
                 Retrofit client = new Retrofit.Builder()
                         .baseUrl(baseUrl)
