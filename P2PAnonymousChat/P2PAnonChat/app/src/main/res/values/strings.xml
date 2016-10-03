@@ -29,6 +29,8 @@
     <string name="companyName">Contoso Helpdesk</string>
     <string name="userNameStateKey">userName</string>
     <string name="tokenKey">SaaSToken</string>
-    <string name="getTokenRequestBody"><![CDATA[{ApplicationSessionId:test&AllowedOrigins:http%3A%2F%2Fsdksamplesucap.azurewebsites.net%2F}]]></string>
-
+    <string name="getTokenRequestBody"><![CDATA[ApplicationSessionId=test&AllowedOrigins=https%3A%2F%2Fsdksamplesucap.azurewebsites.net%2F]]></string>
+    <string name="incomingMessageBridgeBody"><![CDATA[InviteTargetUri=sip%3Aliben%40metio.onmicrosoft.com&WelcomeMessage=Welcome!&IsStart=true&Subject=HelpDesk&InvitedTargetDisplayName=Agent]]></string>
+    <string name="cloudAppBaseurl">https://metiobank.cloudapp.net/GetAnonTokenJob/</string>
+    <string name="baseDicoveryUrl">https://noammeetings.resources.lync.com/platformService/discover</string>
 </resources>

@@ -12,6 +12,7 @@ buildscript {
     }
 }
 
+
 allprojects {
     repositories {
         jcenter()
@@ -19,6 +20,8 @@ allprojects {
             dirs "${SDKROOT}/app/libs"
         }
     }
+
+
 }
 
 task clean(type: Delete) {

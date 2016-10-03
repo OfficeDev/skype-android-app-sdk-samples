@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.microsoft.office.p2panonchat.chat.chatContent;
 import com.microsoft.office.p2panonchat.conversationhelper.ConversationHelper;
@@ -24,6 +25,14 @@ import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.MessageActivityItem;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 
 import okhttp3.MediaType;
@@ -52,12 +61,13 @@ public class MainActivity extends AppCompatActivity implements
     Conversation mActiveConversation;
     private static final String SETTINGS_FRAGMENT_STACK_STATE = "UcwaAuthStrings";
     String mUCWAUrl;
+    String mDiscoveryUri;
     String mUCWAToken;
     Application mApplication;
     private ConversationHelper mConversationHelper;
     protected Boolean mCanSendMessage = false;
     private  String mSaaSToken;
-
+    protected TextView mResponseBody;
 
     @Override
     protected void onStop(){
@@ -79,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
         outState.putString(
                 getString(R.string.userNameStateKey),
                 String.valueOf(
-                        ((EditText)findViewById(R.id.userName))
+                        ((EditText) findViewById(R.id.userName))
                                 .getText()));
     }
 
@@ -229,8 +239,8 @@ public class MainActivity extends AppCompatActivity implements
         URI meetingURI = null;
         Conversation conversation = null;
         try {
-            RESTUtility rESTUtility = new RESTUtility();
-            RESTUtility.SaasAPIInterface apiInterface = rESTUtility.getClient();
+            RESTUtility rESTUtility = new RESTUtility(this);
+            final RESTUtility.SaasAPIInterface apiInterface = rESTUtility.getSaaSClient();
             RequestBody requestBody = RequestBody.create(
                     MediaType.parse("text/plain, */*; q=0.01"),
                     getString(R.string.getTokenRequestBody));
@@ -239,7 +249,46 @@ public class MainActivity extends AppCompatActivity implements
             call.enqueue(new Callback<SaaSResult>() {
                 @Override
                 public void onResponse(Call<SaaSResult> call, Response<SaaSResult> response) {
-                   Log.i("get token response", response.body().toString());
+                    if (null != response.body()) {
+                        String body = null;
+                        SaaSResult saaSResult = null;
+                        try {
+                            saaSResult = response.body();
+                            mDiscoveryUri = saaSResult.DiscoverUri;
+                            mUCWAToken = saaSResult.Token;
+
+
+                            RequestBody bridgeRequest = RequestBody.create(
+                                    MediaType.parse("text/plain, */*; q=0.01"),
+                                    getString(R.string.incomingMessageBridgeBody));
+
+                            Call<BridgeResult> callforBridge = apiInterface.startIncomingMessageBridgeJob(bridgeRequest);
+                            callforBridge.enqueue(new Callback<BridgeResult>() {
+                                @Override
+                                public void onResponse(Call<BridgeResult> call, Response<BridgeResult> response) {
+                                    Log.i("Succeeded in starting chat bridge","");
+                                    JoinTheConversation();
+                                }
+
+                                @Override
+                                public void onFailure(Call<BridgeResult> call, Throwable t) {
+                                    Log.i("failed token get", t.getLocalizedMessage().toString());
+                                    JoinTheConversation();
+                                }
+                            });
+
+                            //Make next call to get UCWA URI
+
+                        } catch (Exception e) {
+                            if (null != body) {
+                                // body wasn't JSON
+                                mResponseBody.setText(body);
+                            } else {
+                                // set the stack trace as the response body
+                                displayThrowable(e);
+                            }
+                        }
+                    }
                 }
 
                 @Override
@@ -256,17 +305,26 @@ public class MainActivity extends AppCompatActivity implements
 
         }
 
-        mUCWAUrl = getString(R.string.ucwaURL);
-        mUCWAToken = getString(R.string.ucwaTOKEN);
+        return mActiveConversation;
+    }
+
+
+    /**
+     * Gets the App SDK Appplication entry point, attempts to join a peer to peer conversation
+     * in anonymous mode.
+     */
+    private void JoinTheConversation(){
         try {
 
             //Check for required dangerous permissions before getting the App SDK entry point
             if (appHasPermissions()) {
                 String myName = String.valueOf(((EditText)findViewById(R.id.userName)).getText());
                 String helpDeskURI = getString(R.string.ucwa_url);
+
+                //Throws ClassNotFound exception!!! a Multidex error
                 mApplication = Application.getInstance(getApplicationContext());
                 mActiveConversation = mApplication.joinPeerToPeerAnonymously(
-                        mUCWAUrl,
+                        mDiscoveryUri,
                         mUCWAToken,
                         myName,
                         helpDeskURI);
@@ -290,10 +348,12 @@ public class MainActivity extends AppCompatActivity implements
             Snackbar.make(this.getCurrentFocus(), se.getLocalizedMessage(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             se.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Snackbar.make(this.getCurrentFocus(), ex.getLocalizedMessage(),Snackbar.LENGTH_INDEFINITE);
         }
-        return mActiveConversation;
-    }
 
+    }
     /**
      * Check for required dangerous permissions.
      * @return true if the user has granted (and not revoked) required permissions
@@ -414,7 +474,13 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-
+    private void displayThrowable(Throwable t) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        String trace = sw.toString();
+        mResponseBody.setText(trace);
+    }
 
 
 }

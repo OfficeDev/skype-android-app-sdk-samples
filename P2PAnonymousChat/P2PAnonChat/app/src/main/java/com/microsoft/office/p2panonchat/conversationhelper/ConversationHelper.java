@@ -422,10 +422,10 @@ public class ConversationHelper {
 
         @Override
         public void onRenderSizeChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1) {}
-
-        @Override
-        public void onSmartCropInfoChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1, int i2,
-                                           int i3, int i4) {}
+//
+//        @Override
+//        public void onSmartCropInfoChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1, int i2,
+//                                           int i3, int i4) {}
     }
 
     /**
@@ -462,7 +462,7 @@ public class ConversationHelper {
         this.participantVideoView = mmvrSurfaceView;
         // Setup the video properties
         this.participantVideoView.setAutoFitMode(MMVRSurfaceView.MMVRAutoFitMode_Crop);
-        this.participantVideoView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+       // this.participantVideoView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         // Render the video
         this.participantVideoView.requestRender();
         try {

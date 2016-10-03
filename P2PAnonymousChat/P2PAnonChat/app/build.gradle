@@ -36,12 +36,15 @@ android {
         exclude 'META-INF/maven/com.squareup.okhttp3/okhttp/pom.xml'
         exclude 'META-INF/maven/com.squareup.okio/okio/pom.xml'
         exclude 'META-INF/maven/com.squareup.okio/okio/pom.properties'
+        pickFirst 'META-INF/maven/com.squareup.okhttp3/OkHttp'
+
 
     }
     dexOptions {
         preDexLibraries = false
         jumboMode = true
         javaMaxHeapSize "4g"
+        preDexLibraries = true
     }
     lintOptions {
         abortOnError false
@@ -56,14 +59,15 @@ dependencies {
     provided('com.squareup.dagger:dagger-compiler:1.2.2') {
         exclude group: 'com.google.guava'
     }
-    provided( group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.0.0-beta4') {
-        exclude group: 'com.squareup.okhttp3'
+
+    compile ('com.squareup.retrofit2:retrofit:2.0.0-beta4'){
+        exclude module: 'okhttp'
     }
-    provided('com.squareup.retrofit2:retrofit:2.0.0-beta4'){
-        exclude group: 'com.squareup.okhttp3'
+    compile (group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.0.0-beta4'){
+        exclude module: 'okhttp'
     }
     compile(name: "libucmp", ext: 'aar')
-    compile(name: "platform", ext: 'aar')
+    compile name: "platform", ext: 'aar'
     compile(name: "SkypeForBusiness-debug", ext: 'aar')
     compile(name: "TelemetryService", ext: 'aar')
     compile(name: "ucmp-enums", ext: 'aar')
@@ -75,10 +79,15 @@ dependencies {
     compile 'com.android.support:support-v4:24.1.1'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:recyclerview-v7:24.1.1'
+
     // Dagger compiler for DI annotation support
 
-    provided('com.squareup.okhttp3:logging-interceptor:3.1.2'){
 
+    compile('com.squareup.okhttp3:logging-interceptor:3.3.0') {
+        exclude module: 'okhttp'
     }
 
+
+    // Apache Commons
+    compile 'commons-io:commons-io:2.4'
 }
