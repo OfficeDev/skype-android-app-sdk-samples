@@ -33,4 +33,5 @@
     <string name="incomingMessageBridgeBody"><![CDATA[InviteTargetUri=sip%3Aliben%40metio.onmicrosoft.com&WelcomeMessage=Welcome!&IsStart=true&Subject=HelpDesk&InvitedTargetDisplayName=Agent]]></string>
     <string name="cloudAppBaseurl">https://metiobank.cloudapp.net/GetAnonTokenJob/</string>
     <string name="baseDicoveryUrl">https://noammeetings.resources.lync.com/platformService/discover</string>
+    <string name="firstChatString">May I have some assistance?</string>
 </resources>

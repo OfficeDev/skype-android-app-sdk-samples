@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
 package com.microsoft.office.p2panonchat;
 
 import android.Manifest;
@@ -25,12 +29,6 @@ import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.MessageActivityItem;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
@@ -66,11 +64,10 @@ public class MainActivity extends AppCompatActivity implements
     Application mApplication;
     private ConversationHelper mConversationHelper;
     protected Boolean mCanSendMessage = false;
-    private  String mSaaSToken;
     protected TextView mResponseBody;
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         if (mConversationHelper != null) {
             mConversationHelper.removeListeners();
@@ -78,11 +75,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
     }
+
     @Override
-    protected void onSaveInstanceState(Bundle outState){
+    protected void onSaveInstanceState(Bundle outState) {
 
         super.onSaveInstanceState(outState);
 
@@ -99,12 +97,13 @@ public class MainActivity extends AppCompatActivity implements
      * is hidden or the screen is rotated. You cannot restore any
      * active conversation. Instead, start a new conversation with
      * the same remote SIP endpoint.
+     *
      * @param savedState
      */
     @Override
-    protected void onRestoreInstanceState(Bundle savedState){
+    protected void onRestoreInstanceState(Bundle savedState) {
 
-        ((EditText)findViewById(R.id.userName))
+        ((EditText) findViewById(R.id.userName))
                 .setText(
                         savedState.getString(
                                 getString(R.string.userNameStateKey)));
@@ -197,7 +196,8 @@ public class MainActivity extends AppCompatActivity implements
             fragmentTransaction.replace(R.id.fragmentContainer, mUcwaAuthStrings);
             fragmentTransaction.commit();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             Snackbar.make(this.getCurrentFocus(), e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
@@ -223,7 +223,8 @@ public class MainActivity extends AppCompatActivity implements
             fragmentTransaction.replace(R.id.fragmentContainer, mChatFragment);
             fragmentTransaction.commit();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             Snackbar.make(this.getCurrentFocus(), e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
@@ -239,8 +240,14 @@ public class MainActivity extends AppCompatActivity implements
         URI meetingURI = null;
         Conversation conversation = null;
         try {
+
+            //Retrofit 2 object for making REST calls over https
             RESTUtility rESTUtility = new RESTUtility(this);
+
+            //Get the Middle Tier helpdesk app interface for making REST call
             final RESTUtility.SaasAPIInterface apiInterface = rESTUtility.getSaaSClient();
+
+            //Form the body of the REST call for getting an anonymous token
             RequestBody requestBody = RequestBody.create(
                     MediaType.parse("text/plain, */*; q=0.01"),
                     getString(R.string.getTokenRequestBody));
@@ -257,33 +264,15 @@ public class MainActivity extends AppCompatActivity implements
                             mDiscoveryUri = saaSResult.DiscoverUri;
                             mUCWAToken = saaSResult.Token;
 
+                            StartConversationBridge(apiInterface);
 
-                            RequestBody bridgeRequest = RequestBody.create(
-                                    MediaType.parse("text/plain, */*; q=0.01"),
-                                    getString(R.string.incomingMessageBridgeBody));
-
-                            Call<BridgeResult> callforBridge = apiInterface.startIncomingMessageBridgeJob(bridgeRequest);
-                            callforBridge.enqueue(new Callback<BridgeResult>() {
-                                @Override
-                                public void onResponse(Call<BridgeResult> call, Response<BridgeResult> response) {
-                                    Log.i("Succeeded in starting chat bridge","");
-                                    JoinTheConversation();
-                                }
-
-                                @Override
-                                public void onFailure(Call<BridgeResult> call, Throwable t) {
-                                    Log.i("failed token get", t.getLocalizedMessage().toString());
-                                    JoinTheConversation();
-                                }
-                            });
-
-                            //Make next call to get UCWA URI
-
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             if (null != body) {
                                 // body wasn't JSON
                                 mResponseBody.setText(body);
-                            } else {
+                            }
+                            else {
                                 // set the stack trace as the response body
                                 displayThrowable(e);
                             }
@@ -299,7 +288,8 @@ public class MainActivity extends AppCompatActivity implements
         } catch (UnsupportedOperationException e) {
             Log.e("unsupported operation",
                     e.getLocalizedMessage());
-        } catch (Exception ex){
+        }
+        catch (Exception ex) {
             Log.e("Exception on get SaaS interface",
                     ex.getLocalizedMessage());
 
@@ -309,16 +299,52 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    @SuppressLint("LongLogTag")
+    private void StartConversationBridge(RESTUtility.SaasAPIInterface apiInterface){
+        try{
+            RequestBody bridgeRequest = RequestBody.create(
+                    MediaType.parse("text/plain, */*; q=0.01"),
+                    getString(R.string.incomingMessageBridgeBody));
+
+            Call<BridgeResult> callforBridge = apiInterface.startIncomingMessageBridgeJob(
+                    bridgeRequest);
+            callforBridge.enqueue(new Callback<BridgeResult>() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onResponse(Call<BridgeResult> call, Response<BridgeResult> response) {
+                    Log.i("Succeeded in starting chat bridge", "");
+                    JoinTheConversation();
+                }
+
+                @Override
+                public void onFailure(Call<BridgeResult> call, Throwable t) {
+                    Log.i("failed token get", t.getLocalizedMessage().toString());
+                    JoinTheConversation();
+                }
+            });
+
+        } catch (UnsupportedOperationException e) {
+            Log.e("unsupported operation",
+                    e.getLocalizedMessage());
+        }
+        catch (Exception ex) {
+            Log.e("Exception on get SaaS interface",
+                    ex.getLocalizedMessage());
+
+        }
+
+    }
+
     /**
      * Gets the App SDK Appplication entry point, attempts to join a peer to peer conversation
      * in anonymous mode.
      */
-    private void JoinTheConversation(){
+    private void JoinTheConversation() {
         try {
 
             //Check for required dangerous permissions before getting the App SDK entry point
             if (appHasPermissions()) {
-                String myName = String.valueOf(((EditText)findViewById(R.id.userName)).getText());
+                String myName = String.valueOf(((EditText) findViewById(R.id.userName)).getText());
                 String helpDeskURI = getString(R.string.ucwa_url);
 
                 //Throws ClassNotFound exception!!! a Multidex error
@@ -334,47 +360,57 @@ public class MainActivity extends AppCompatActivity implements
                         mActiveConversation,
                         this);
 
-            } else {
-                Snackbar.make(this.getCurrentFocus(), "Insufficient permissions", Snackbar.LENGTH_LONG)
+            }
+            else {
+                Snackbar.make(this.getCurrentFocus(),
+                        "Insufficient permissions",
+                        Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
             }
 
-        } catch (SFBException e) {
+        }
+        catch (SFBException e) {
             e.printStackTrace();
             Snackbar.make(this.getCurrentFocus(), e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-        }catch (RuntimeException se){
+        }
+        catch (RuntimeException se) {
             Snackbar.make(this.getCurrentFocus(), se.getLocalizedMessage(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             se.printStackTrace();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
-            Snackbar.make(this.getCurrentFocus(), ex.getLocalizedMessage(),Snackbar.LENGTH_INDEFINITE);
+            Snackbar.make(this.getCurrentFocus(),
+                    ex.getLocalizedMessage(),
+                    Snackbar.LENGTH_INDEFINITE);
         }
 
     }
+
     /**
      * Check for required dangerous permissions.
+     *
      * @return true if the user has granted (and not revoked) required permissions
      */
-    private boolean appHasPermissions(){
+    private boolean appHasPermissions() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_PHONE_STATE)
-                == PackageManager.PERMISSION_DENIED){
+                == PackageManager.PERMISSION_DENIED) {
             return false;
         }
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CALL_PHONE)
-                == PackageManager.PERMISSION_DENIED){
+                == PackageManager.PERMISSION_DENIED) {
             return false;
         }
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_DENIED){
+                == PackageManager.PERMISSION_DENIED) {
             return false;
         }
         return ContextCompat.checkSelfPermission(
@@ -390,7 +426,9 @@ public class MainActivity extends AppCompatActivity implements
             public void run() {
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-                Snackbar.make(fab.getRootView(), newConversationState.toString(), Snackbar.LENGTH_LONG)
+                Snackbar.make(fab.getRootView(),
+                        newConversationState.toString(),
+                        Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
             }
@@ -409,14 +447,15 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onCanSendMessage(boolean canSendMessage) {
         mCanSendMessage = canSendMessage;
-        if (canSendMessage){
+        if (canSendMessage) {
             try {
                 mActiveConversation.getChatService().sendMessage("first message");
-            } catch (SFBException e) {
+            }
+            catch (SFBException e) {
                 e.printStackTrace();
             }
         }
-        if (mChatFragment != null && mChatFragment.isVisible()){
+        if (mChatFragment != null && mChatFragment.isVisible()) {
             mChatFragment.setSendButtonEnableState(canSendMessage);
         }
     }
@@ -425,7 +464,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onMessageReceived(MessageActivityItem newMessage) {
         mChatFragment.updateChatHistory(newMessage.getText());
     }
-
 
 
     /**
@@ -439,7 +477,8 @@ public class MainActivity extends AppCompatActivity implements
             if (mActiveConversation.canLeave()) {
                 try {
                     mActiveConversation.leave();
-                } catch (SFBException e) {
+                }
+                catch (SFBException e) {
                     e.printStackTrace();
                 }
             }

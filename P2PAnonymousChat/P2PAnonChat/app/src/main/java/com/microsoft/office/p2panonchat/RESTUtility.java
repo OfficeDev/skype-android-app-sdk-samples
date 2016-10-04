@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
 package com.microsoft.office.p2panonchat;
 
 import android.annotation.SuppressLint;
@@ -11,15 +15,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
-import okio.Buffer;
-import okio.BufferedSink;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -184,15 +185,8 @@ public class RESTUtility {
                         .build();
             }
 
-//            Log.d("OkHttp", String.format("Sending request %s on %s%s",
-//            request.url(),
-//                    request.body().contentType().toString(),
-//                    request.headers()));
 
             Response response = chain.proceed(request);
-
-//            Log.d("OkHttp", String.format("Received response for %s headers: %s body: %s",
-//                    response.request().url(),response.headers(),response.body().string()));
             return response;
         }
     }

@@ -76,7 +76,7 @@ public class ItemFragment extends Fragment {
             params.height=600;
             mRecyclerView.setLayoutParams(params);
         }
-        mListener.onListFragmentInteraction(new ChatItem("bla","bla"));
+        mListener.onListFragmentInteraction(new ChatItem("1",getString(R.string.firstChatString)));
         return view;
     }
 
