@@ -9,6 +9,7 @@ dependencies {
     compile(name: "ucmp-enums", ext: 'aar')
     compile(name: "TelemetryClient2", ext: 'aar')
     compile(name: "injector", ext: 'aar')
+    compile(name: "android-database-sqlcipher", ext: 'aar')
     // Dagger compiler for DI annotation support
     provided('com.squareup.dagger:dagger-compiler:1.2.2') {
         exclude group: 'com.google.guava'

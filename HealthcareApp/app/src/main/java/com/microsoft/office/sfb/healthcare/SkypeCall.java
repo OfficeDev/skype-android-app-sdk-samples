@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.microsoft.office.sfb.appsdk.AnonymousSession;
 import com.microsoft.office.sfb.appsdk.Application;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.Observable;
@@ -43,6 +44,7 @@ public class SkypeCall extends AppCompatActivity
     Application mApplication;
     private static final String VIDEO_FRAGMENT_STACK_STATE = "videoFragment";
     Conversation mConversation;
+    AnonymousSession anonymousSession = null;
     private ConversationPropertyChangeListener mConversationPropertyChangeListener;
 
 
@@ -128,10 +130,11 @@ public class SkypeCall extends AppCompatActivity
         try {
 
             mApplication = Application.getInstance(this);
-            conversation = mApplication
+            anonymousSession = mApplication
                     .joinMeetingAnonymously(
                             getString(
                                     R.string.userDisplayName), meetingURI);
+            conversation = anonymousSession.getConversation();
         } catch (SFBException e) {
             e.printStackTrace();
         }
