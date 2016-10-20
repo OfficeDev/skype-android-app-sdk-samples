@@ -129,6 +129,7 @@ public class VideoFragment extends Fragment{
     private class VideoStreamSurfaceListener implements MMVRSurfaceView.MMVRCallback {
 
         private VideoFragment videoFragment = null;
+
         public VideoStreamSurfaceListener(VideoFragment videoFragment) {
             this.videoFragment = videoFragment;
         }
@@ -139,14 +140,12 @@ public class VideoFragment extends Fragment{
         }
 
         @Override
-        public void onFrameRendered(MMVRSurfaceView mmvrSurfaceView) {}
+        public void onFrameRendered(MMVRSurfaceView mmvrSurfaceView) {
+        }
 
         @Override
-        public void onRenderSizeChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1) {}
-
-        @Override
-        public void onSmartCropInfoChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1, int i2,
-                                           int i3, int i4) {}
+        public void onRenderSizeChanged(MMVRSurfaceView mmvrSurfaceView, int i, int i1) {
+        }
     }
 
     VideoService.OnPropertyChangedCallback onPropertyChangedCallback = new Observable.OnPropertyChangedCallback() {
@@ -246,7 +245,6 @@ public class VideoFragment extends Fragment{
     public void VideoStreamSurfaceCreatedCallback(MMVRSurfaceView mmvrSurfaceView) {
         this.mmvrSurfaceView = mmvrSurfaceView;
         this.mmvrSurfaceView.setAutoFitMode(MMVRSurfaceView.MMVRAutoFitMode_Crop);
-        this.mmvrSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         this.mmvrSurfaceView.requestRender();
         try {
             this.videoService.displayParticipantVideo(this.mmvrSurfaceView);

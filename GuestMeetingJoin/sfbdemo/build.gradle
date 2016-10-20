@@ -63,6 +63,7 @@ dependencies {
     compile(name: "ucmp-enums", ext: 'aar')
     compile(name: "TelemetryClient2", ext: 'aar')
     compile(name: "TelemetryService", ext: 'aar')
+    compile(name: "android-database-sqlcipher", ext: 'aar')
 
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'

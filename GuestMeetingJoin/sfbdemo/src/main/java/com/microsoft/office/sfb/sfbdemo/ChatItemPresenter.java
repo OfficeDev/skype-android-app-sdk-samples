@@ -4,12 +4,14 @@
 
 package com.microsoft.office.sfb.sfbdemo;
 
+import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.ConversationActivityItem;
+import com.microsoft.office.sfb.appsdk.MessageActivityItem;
 import com.microsoft.office.sfb.appsdk.Observable;
 import com.microsoft.office.sfb.appsdk.Person;
 
@@ -93,11 +95,18 @@ public class ChatItemPresenter extends RecyclerView.ViewHolder{
             if (ConversationActivityItem.class.isInstance(sender)) {
                 ConversationActivityItem conversationActivityItem = (ConversationActivityItem) sender;
                 switch (propertyId) {
-                    case ConversationActivityItem.STATUS_CHANGED_PROPERTY_ID:
-                        this.chatItemPresenter.setStatus(conversationActivityItem.getStatus().toString());
-                        break;
                     case ConversationActivityItem.TIMESTAMP_CHANGED_PROPERTY_ID:
                         this.chatItemPresenter.setTimestamp(conversationActivityItem.getTimestamp().toString());
+                        break;
+                    default:
+                }
+            }
+
+            if (MessageActivityItem.class.isInstance(sender)) {
+                MessageActivityItem messageActivityItem = (MessageActivityItem) sender;
+                switch (propertyId) {
+                    case MessageActivityItem.STATUS_CHANGED_PROPERTY_ID:
+                        this.chatItemPresenter.setStatus(messageActivityItem.getStatus().toString());
                         break;
                     default:
                 }

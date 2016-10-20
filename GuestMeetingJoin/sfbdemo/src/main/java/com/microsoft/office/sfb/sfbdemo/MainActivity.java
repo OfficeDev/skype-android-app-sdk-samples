@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.microsoft.office.sfb.appsdk.AnonymousSession;
 import com.microsoft.office.sfb.appsdk.Application;
 import com.microsoft.office.sfb.appsdk.ConfigurationManager;
 import com.microsoft.office.sfb.appsdk.Conversation;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     DevicesManager devicesManager = null;
     ConversationPropertyChangeListener conversationPropertyChangeListener = null;
     Conversation anonymousConversation = null;
-
+    AnonymousSession anonymousSession = null;
     TextView conversationStateTextView = null;
     Button joinMeetingButton = null;
 
@@ -119,9 +120,10 @@ public class MainActivity extends AppCompatActivity {
                 // Set the default device to Speaker
                 //this.devicesManager.setActiveEndpoint(DevicesManager.Endpoint.LOUDSPEAKER);
 
-                this.anonymousConversation = this.application.joinMeetingAnonymously(
+                this.anonymousSession = this.application.joinMeetingAnonymously(
                         displayNameTextView.getText().toString(), meetingUri);
 
+                this.anonymousConversation = this.anonymousSession.getConversation();
                 SFBDemoApplication application = (SFBDemoApplication)getApplication();
                 application.setAnonymousConversation(this.anonymousConversation);
 
