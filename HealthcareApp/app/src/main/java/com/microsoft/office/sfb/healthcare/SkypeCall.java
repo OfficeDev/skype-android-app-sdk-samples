@@ -130,6 +130,7 @@ public class SkypeCall extends AppCompatActivity
         try {
 
             mApplication = Application.getInstance(this);
+            mApplication.getConfigurationManager().enablePreviewFeatures(true);
             anonymousSession = mApplication
                     .joinMeetingAnonymously(
                             getString(
