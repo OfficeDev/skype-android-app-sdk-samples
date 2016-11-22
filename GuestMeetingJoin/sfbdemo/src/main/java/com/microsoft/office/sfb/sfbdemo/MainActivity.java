@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         this.devicesManager = application.getDevicesManager();
         this.configurationManager = application.getConfigurationManager();
 
+        // This flag will enable certain features that are in preview mode.
+        // E.g. Audio / Video capability OnPrem topologies.
+        this.configurationManager.enablePreviewFeatures(true);
+
         // Note that the sample enable video over cellular network. This is not the default.
         this.configurationManager.setRequireWiFiForVideo(false);
 
