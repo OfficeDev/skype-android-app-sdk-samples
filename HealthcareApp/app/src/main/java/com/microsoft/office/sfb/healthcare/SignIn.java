@@ -149,7 +149,6 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
         }
 
 
-
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.

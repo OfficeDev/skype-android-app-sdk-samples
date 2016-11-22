@@ -64,9 +64,6 @@
                             android:layout_marginRight="10dp"
                             android:layout_gravity="right" />
                     </LinearLayout>
-
-
-
                 </LinearLayout>
                 <TextView
                     android:layout_width="381dp"

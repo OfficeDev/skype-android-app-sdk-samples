@@ -10,8 +10,14 @@ you need to have two things:
 ## Save a join meeting URL in the string resources XML file
 
 This sample sample requires that you update the strings.xml file found in:  _[your local repository]\\HealthcareApp\app\src\main\res\values\strings.xml_. Replace the 
-bracketed values in the following string.    ``` <string name="meeting_url">https://meet.lync.com/[yourdomain]/[youralias]/[somevalue]</string> ``` with 
-the join meeting URL of the meeting to join.  
+bracketed values in the following string with the join meeting URL of the meeting to join..
+
+>Note: the URL resource for a Skype Online meeting is different than the URL for an on premise meeting. Be sure that you choose the URL that is appropriate for your topology.
+
+* Skype server hosted on premise    ``` <string name="meeting_url">https://meet.[yourdomain]/[youralias]/[somevalue]</string> ``` 
+* Skype Online server ``` <string name="meeting_url">https://meet.lync.com/[yourdomain]/[youralias]/[somevalue]</string> ```
+
+  
 
 >Note: The join meeting URL in the strings.xml file is only for use in development. If you use any code from the Healthcare App sample, you need to get 
 a meeting URL at runtime. Read [Get a Skype for Business meeting URL](https://msdn.microsoft.com/en-us/skype/appsdk/getmeetingurl) to learn about getting a meeting URL in a production app.

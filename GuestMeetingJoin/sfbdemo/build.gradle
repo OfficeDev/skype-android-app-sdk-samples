@@ -3,24 +3,20 @@ apply plugin: 'com.android.application'
 def ROOTDIR     = file("..").absolutePath
 
 android {
-
     compileSdkVersion Integer.parseInt(COMPILE_SDK_VERSION)
     buildToolsVersion BUILD_TOOLS_VERSION
-
     defaultConfig {
         applicationId "com.microsoft.office.sfb.sfbdemo"
-        minSdkVersion Integer.parseInt(MIN_SDK_VERSION)
+        minSdkVersion 17
         targetSdkVersion Integer.parseInt(TARGET_SDK_VERSION)
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
     buildTypes {
         debug {
             minifyEnabled false
@@ -31,7 +27,6 @@ android {
             debuggable true
         }
     }
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE.txt'
@@ -43,19 +38,19 @@ android {
         exclude 'META-INF/BCKEY.SF'
         exclude 'META-INF/MSFTSIG.SF'
     }
-
     dexOptions {
-        preDexLibraries=false
+        preDexLibraries = false
         jumboMode = true
         javaMaxHeapSize "4g"
+    }
+    productFlavors {
     }
 }
 
 dependencies {
-    compile "com.android.support:multidex:1.0.1"
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:multidex:1.0.1'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-
     compile(name: "libucmp", ext: 'aar')
     compile(name: "platform", ext: 'aar')
     compile(name: "injector", ext: 'aar')
@@ -63,7 +58,6 @@ dependencies {
     compile(name: "ucmp-enums", ext: 'aar')
     compile(name: "TelemetryClient2", ext: 'aar')
     compile(name: "TelemetryService", ext: 'aar')
-
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'

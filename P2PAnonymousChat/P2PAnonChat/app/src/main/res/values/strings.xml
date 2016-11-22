@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Anonymous Helpdesk client</string>
+    <string name="action_settings">Settings</string>
+    <string name="ucwa_url">sip:helpdesk@metio.onmicrosoft.com</string>
+    <string name="web_token">Token</string>
+    <string name="helpdesk_uri">UCWA URL</string>
+    <string name="your_name">Your name</string>
+    <string name="signinTitle">Lamna Healthcare Company</string>
+    <string name="prompt_email">Enter your email or user id</string>
+    <string name="prompt_password">Enter your password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ok">Ok</string>
+    <string name="ucwaURL">https://webpooldm20r02.infra.lync.com/ucwa/psanon/v1/applications</string>
+    <string name="ucwaTOKEN">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1QTDdVZVZRUV9nb1lBbm1WdFFLQmVoOWp5YyJ9.eyJuYmYiOjE0NzMyNjMxMzIsImV4cCI6MTQ3MzI5MTkzMiwicnV1Ijoic2lwOkRNMjBSMDJtZWV0Mjk4NkBub2FtbWVldGluZ3MubHluYy5jb20iLCJhc2kiOiJ0ZXN0IiwiYWV1Ijoic2lwOm1ldGlvYmFua0BtZXRpby5vbm1pY3Jvc29mdC5jb20iLCJhbyI6Imh0dHA6Ly9zZGtzYW1wbGVzdWNhcC5henVyZXdlYnNpdGVzLm5ldCJ9.gFBhPhJpPqYd8CdUzOZVpNbBgUu_x5kKAVoxQEWq5w1tP6gb1XjIoaHd3o6uHGI80zvE4Sq023Y9pbkA1KeKJO4wrhsIdPOAO2jFaY6CKweIh6GekJFWkPJIKVoTeZHXhzZKxrn84Trr0PTRJ3HYNd9hVM9SmTLlaB_SeU8lTIiqKLFcsuzAqqwAeNaZdXnplVS3Ya1cQcWMPL8hmZQiPAur8SZGDSN72xKydZ781moO1tHlYggxf_vHNT59M9rGk8ZWSw2tY7C_wr1q0Ax7R9cXJF006FsbhY8gsr2Q-J9vVBN-TqI6OimhhbsliCtZOQCXyQltLE_pISgs733SYg</string>
+    <string name="name"></string>
+    <string name="startConversationSnackText">Starting conversation</string>
+    <string name="fragmentCloseAction">closing</string>
+    <string name="fragmentInteractionOk">okPressed</string>
+    <string name="companyName">Contoso Helpdesk</string>
+    <string name="userNameStateKey">userName</string>
+    <string name="tokenKey">SaaSToken</string>
+    <string name="getTokenRequestBody"><![CDATA[ApplicationSessionId=test&AllowedOrigins=https%3A%2F%2Fsdksamplesucap.azurewebsites.net%2F]]></string>
+    <string name="incomingMessageBridgeBody"><![CDATA[InviteTargetUri=sip%3Aliben%40metio.onmicrosoft.com&WelcomeMessage=Welcome!&IsStart=true&Subject=HelpDesk&InvitedTargetDisplayName=Agent]]></string>
+    <string name="cloudAppBaseurl">https://metiobank.cloudapp.net/GetAnonTokenJob/</string>
+    <string name="baseDicoveryUrl">https://noammeetings.resources.lync.com/platformService/discover</string>
+    <string name="firstChatString">May I have some assistance?</string>
+</resources>

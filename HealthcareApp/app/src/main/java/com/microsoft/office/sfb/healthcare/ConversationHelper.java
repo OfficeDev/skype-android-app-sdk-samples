@@ -293,7 +293,7 @@ public class ConversationHelper {
 
         /**
          * This method is called when the view is available. We immediately register is with the
-         * {@link VideoService#displayPreview(SurfaceTexture)} in the callback handler.
+         * {@link VideoService#showPreview(SurfaceTexture)} in the callback handler.
          * @param surface
          * @param width
          * @param height
@@ -351,7 +351,7 @@ public class ConversationHelper {
     private void surfaceTextureCreatedCallback(SurfaceTexture texture) {
         try {
             // Tie the video stream to the texture view control
-            videoService.displayPreview(texture);
+            videoService.showPreview(texture);
 
             // Check state of video service.
             // If not started, start it.
