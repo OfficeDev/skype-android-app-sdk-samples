@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         // Note that the sample enable video over cellular network. This is not the default.
         this.configurationManager.setRequireWiFiForVideo(false);
 
+        // Max video channel count needs to be set to view video for more than one participant.
+        this.configurationManager.setMaxVideoChannelCount(5);
+
         // Get UI elements.
         this.conversationStateTextView = (TextView)findViewById(R.id.statusTextViewId);
         this.joinMeetingButton = (Button)findViewById(R.id.joinMeetingButtonId);
