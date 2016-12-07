@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_tint_default.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_tint_default.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_color_highlight_material.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_tint_edittext.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_tint_edittext.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_tint_switch_track.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_tint_seek_thumb.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_tint_seek_thumb.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_btn_colored_borderless_text_material.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_btn_colored_borderless_text_material.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_tint_switch_thumb.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_tint_switch_thumb.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_tint_spinner.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_tint_spinner.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\res\\merged\\debug\\color-v23\\abc_tint_btn_checkable.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\p2pAnonymousChat2\\P2PAnonymousChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color-v23\\abc_tint_btn_checkable.xml"
+    }
+]

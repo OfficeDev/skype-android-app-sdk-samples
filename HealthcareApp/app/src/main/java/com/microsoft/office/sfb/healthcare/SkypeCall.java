@@ -138,6 +138,8 @@ public class SkypeCall extends AppCompatActivity
             conversation = anonymousSession.getConversation();
         } catch (SFBException e) {
             e.printStackTrace();
+            Log.e("SkypeCall", "exception on start to join meeting");
+
         }
         return conversation;
     }

@@ -1,0 +1,49 @@
+-injars 'C:\android\skype-android-app-sdk-samples\P2PAnonymousChat\P2PAnonChat\app\build\intermediates\transforms\jarMerging\debug\jars\1\1f\combined.jar'
+-outjars 'C:\android\skype-android-app-sdk-samples\P2PAnonymousChat\P2PAnonChat\app\build\intermediates\multi-dex\debug\componentClasses.jar'
+
+-libraryjars 'C:\Users\johnau\AppData\Local\Android\sdk\build-tools\23.0.3\lib\shrinkedAndroid.jar'
+
+-forceprocessing
+-dontoptimize
+-dontobfuscate
+-dontusemixedcaseclassnames
+-dontpreverify
+-dontnote **,com.android.tools.fd.**,android.support.multidex.MultiDexExtractor
+-dontwarn **
+-printconfiguration 'C:\android\skype-android-app-sdk-samples\P2PAnonymousChat\P2PAnonChat\app\build\intermediates\multi-dex\debug\components.flags'
+
+
+-keep class com.microsoft.office.p2panonchat.P2PAnonChatApplication {
+    <init>();
+    void attachBaseContext(android.content.Context);
+}
+
+-keep class com.microsoft.office.p2panonchat.SignIn {
+    <init>();
+}
+
+-keep class com.microsoft.office.p2panonchat.MainActivity {
+    <init>();
+}
+
+-keep class com.microsoft.applications.telemetry.TelemetryService {
+    <init>();
+}
+
+-keep class com.microsoft.office.sfb.appsdk.EnterpriseAuthenticationService {
+    <init>();
+}
+
+-keep public class * extends android.app.backup.BackupAgent {
+    <init>();
+}
+
+-keep public class * extends java.lang.annotation.Annotation {
+    <fields>;
+    <methods>;
+}
+
+-keep class com.android.tools.fd.** {
+    <fields>;
+    <methods>;
+}

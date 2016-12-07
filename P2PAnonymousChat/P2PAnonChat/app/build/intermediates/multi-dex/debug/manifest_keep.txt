@@ -1,0 +1,18 @@
+-keep class com.microsoft.office.p2panonchat.P2PAnonChatApplication {
+    <init>();
+    void attachBaseContext(android.content.Context);
+}
+-keep class com.microsoft.office.p2panonchat.SignIn { <init>(); }
+-keep class com.microsoft.office.p2panonchat.MainActivity { <init>(); }
+-keep class com.microsoft.applications.telemetry.TelemetryService { <init>(); }
+-keep class com.microsoft.office.sfb.appsdk.EnterpriseAuthenticationService { <init>(); }
+-keep public class * extends android.app.backup.BackupAgent {
+    <init>();
+}
+-keep public class * extends java.lang.annotation.Annotation {
+    *;
+}
+-keep class com.android.tools.fd.** {
+    *;
+}
+-dontnote com.android.tools.fd.**,android.support.multidex.MultiDexExtractor
