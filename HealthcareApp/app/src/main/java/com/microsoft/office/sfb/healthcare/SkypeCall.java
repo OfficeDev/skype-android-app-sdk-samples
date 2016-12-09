@@ -177,6 +177,11 @@ public class SkypeCall extends AppCompatActivity
             if (propertyId == Conversation.STATE_PROPERTY_ID) {
                 if (conversation.getState() == Conversation.State.ESTABLISHED) {
 
+                    Log.e("SkypeCall", conversation
+                            .getMeetingInfo()
+                            .getMeetingDescription()
+                            + " is established");
+
                     try {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -190,7 +195,8 @@ public class SkypeCall extends AppCompatActivity
                             }
                         });
                     } catch (Exception e) {
-                        Log.e("SkypeCall", "exception on meeting started");
+                        Log.e("SkypeCall"
+                                , "exception on meeting started");
                     }
                 }
             }
