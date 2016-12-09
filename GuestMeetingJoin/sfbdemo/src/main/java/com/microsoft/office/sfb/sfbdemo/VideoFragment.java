@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import com.microsoft.media.MMVRSurfaceView;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.Observable;
+import com.microsoft.office.sfb.appsdk.ObservableList;
 import com.microsoft.office.sfb.appsdk.Participant;
+import com.microsoft.office.sfb.appsdk.ParticipantVideo;
 import com.microsoft.office.sfb.appsdk.SFBException;
 import com.microsoft.office.sfb.appsdk.VideoService;
 import com.microsoft.office.sfb.appsdk.DevicesManager;
@@ -62,6 +64,9 @@ public class VideoFragment extends Fragment{
     Camera frontCamera = null;
     Camera backCamera = null;
 
+    ObservableList<Participant> remoteParticipants = null;
+    Participant remoteParticipantLeader = null;
+
     Participant dominantSpeaker = null;
 
     MMVRSurfaceView mmvrSurfaceView = null;
@@ -98,6 +103,7 @@ public class VideoFragment extends Fragment{
             if (camera.getType() == Camera.Type.BACKFACING)
                 this.backCamera = camera;
         }
+        this.remoteParticipants = conversation.getRemoteParticipants();
     }
 
     // Listener class for TextureSurface
@@ -229,7 +235,7 @@ public class VideoFragment extends Fragment{
                 // On joining the meeting the Video service is started by default.
                 // Since the view is created later the video service is paused.
                 // Resume the service.
-                if (this.videoService.canSetPaused()) {
+                if (this.videoService.getPaused() && this.videoService.canSetPaused()) {
                     this.videoService.setPaused(false);
                 }
             }
@@ -247,7 +253,14 @@ public class VideoFragment extends Fragment{
         this.mmvrSurfaceView.setAutoFitMode(MMVRSurfaceView.MMVRAutoFitMode_Crop);
         this.mmvrSurfaceView.requestRender();
         try {
-            this.videoService.displayParticipantVideo(this.mmvrSurfaceView);
+            for (Participant participant : this.remoteParticipants) {
+                if (participant.getRole() == Participant.Role.LEADER) {
+                    this.remoteParticipantLeader = participant;
+                    ParticipantVideo participantVideo = this.remoteParticipantLeader.getParticipantVideo();
+                    participantVideo.subscribe(this.mmvrSurfaceView);
+                    break;
+                }
+            }
         } catch (SFBException e) {
             e.printStackTrace();
         }
