@@ -44,7 +44,7 @@ public class SkypeCall extends AppCompatActivity
     Application mApplication;
     private static final String VIDEO_FRAGMENT_STACK_STATE = "videoFragment";
     Conversation mConversation;
-    AnonymousSession anonymousSession = null;
+    AnonymousSession mAnonymousSession = null;
     private ConversationPropertyChangeListener mConversationPropertyChangeListener;
 
 
@@ -129,13 +129,17 @@ public class SkypeCall extends AppCompatActivity
         }
         try {
 
-            mApplication = Application.getInstance(this);
+            mApplication = com.microsoft.office.sfb.appsdk.Application.getInstance(this.getBaseContext());
             mApplication.getConfigurationManager().enablePreviewFeatures(true);
-            anonymousSession = mApplication
+            mApplication.getConfigurationManager().setRequireWiFiForAudio(true);
+            mApplication.getConfigurationManager().setRequireWiFiForVideo(true);
+            mApplication.getConfigurationManager().setMaxVideoChannelCount(2);
+
+            mAnonymousSession = mApplication
                     .joinMeetingAnonymously(
                             getString(
                                     R.string.userDisplayName), meetingURI);
-            conversation = anonymousSession.getConversation();
+            conversation = mAnonymousSession.getConversation();
         } catch (SFBException e) {
             e.printStackTrace();
             Log.e("SkypeCall", "exception on start to join meeting");
