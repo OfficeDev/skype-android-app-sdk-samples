@@ -127,6 +127,14 @@ public class MainActivity extends AppCompatActivity {
                 // Set the default device to Speaker
                 //this.devicesManager.setActiveEndpoint(DevicesManager.Endpoint.LOUDSPEAKER);
 
+                // To join an Online meeting use the discover URL method. Please refer the documentation for
+                // the overall procedure of getting the discover URL and authorization token for a meeting.
+                //
+                // final URL discoverUrl = new URL("https://meetings.lync.com/platformService/discover?...");
+                // final String authToken = "psat=...";
+                // this.anonymousSession = this.application.joinMeetingAnonymously(
+                //         displayNameTextView.getText().toString(), discoverUrl, authToken);
+
                 this.anonymousSession = this.application.joinMeetingAnonymously(
                         displayNameTextView.getText().toString(), meetingUri);
 
