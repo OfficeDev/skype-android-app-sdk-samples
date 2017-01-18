@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.microsoft.media.MMVRSurfaceView;
+import com.microsoft.office.sfb.appsdk.AudioService;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.DevicesManager;
 import com.microsoft.office.sfb.appsdk.MessageActivityItem;
@@ -108,6 +109,8 @@ public class SkypeCallFragment extends Fragment
                 , getActivity()
                         .getString(
                                 R.string.callFragmentInflated));
+        mParticipantVideoSurfaceView.setActivated(true);
+        mPreviewVideoTextureView.setActivated(true);
         tryStartVideo();
 
 
@@ -223,31 +226,31 @@ public class SkypeCallFragment extends Fragment
     }
 
     @Override
-    public void onSelfAudioStateChanged(ParticipantService.State state) {
-
-        Log.i(
-                "SkypeCallFragment",
-                "onSelfAudioStateChanged "
-                        + String.valueOf(state));
-    }
-
-    @Override
-    public void onSelfAudioMuteChanged(final boolean isMuted) {
+    public void onSelfAudioMuteChanged(final AudioService.MuteState muteState) {
 
         Log.i(
                 "SkypeCallFragment",
                 "onSelfAudioMuteChanged "
-                        + String.valueOf(isMuted));
+                        + String.valueOf(muteState));
 
         try {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (isMuted == true) {
-                        mMuteAudioButton.setText("Unmute");
-                    } else {
-                        mMuteAudioButton.setText("Mute");
+                    String muteText = "";
+                    switch (muteState) {
+                        case MUTED:
+                            muteText = "Unmute";
+                            break;
+                        case UNMUTED:
+                            muteText = "Mute";
+                            break;
+                        case UNMUTING:
+                            muteText = "Unmuting";
+                            break;
+                        default:
                     }
+                    mMuteAudioButton.setText(muteText);
                 }
             });
         } catch (Exception e) {
