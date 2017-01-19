@@ -39,7 +39,7 @@ public class SkypeCallFragment extends Fragment
     private static DevicesManager mDevicesManager;
 
     //// TODO: 1/13/2017 give hint re: location of the source file
-	private ConversationHelper mConversationHelper;
+	protected ConversationHelper mConversationHelper;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewVideoTextureView;
     private boolean mTryStartVideo = false;
@@ -161,7 +161,7 @@ public class SkypeCallFragment extends Fragment
      * Used to interact with parent activity
      */
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(View rootView, String newMeetingURI);
+        void onFragmentInteraction(View rootView, String fragmentAction);
     }
 
     @Override
@@ -288,9 +288,9 @@ public class SkypeCallFragment extends Fragment
                 "SkypeCallFragment",
                 "onCanSetActiveCameraChanged "
                         + String.valueOf(canSetActiveCamera));
-
-        if (canSetActiveCamera == true) {
-            mConversationHelper.changeActiveCamera();
+        if (mListener != null){
+            mListener.onFragmentInteraction(mRootView, getString(R.string.canToggleCamera));
         }
+
     }
 }

@@ -11,10 +11,15 @@
         android:id="@+id/pauseVideoMenuItem"
         android:orderInCategory="100"
         android:title="@string/resume_video"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/muteAudioMenuItem"
         android:orderInCategory="100"
         android:title="@string/mute_audio"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/changeCamera"
+        android:orderInCategory="100"
+        android:title="@string/toggle_camera"
+        android:enabled="false" />
 </menu>
