@@ -22,6 +22,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="userDisplayName">David Trudeau</string>
     <string name="leaveCall">leaveCall</string>
+    <string name="resume_video">Resume video</string>
+    <string name="mute_audio">Mute audio</string>
     <string name="callFragmentInflated">inflated</string>
     <string name="companyName">Lamna Healthcare Company</string>
     <string name="lamna_healthcare">Lamna Healthcare</string>
