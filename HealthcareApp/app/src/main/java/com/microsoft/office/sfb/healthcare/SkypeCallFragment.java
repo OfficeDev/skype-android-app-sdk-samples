@@ -23,7 +23,6 @@ import com.microsoft.office.sfb.appsdk.AudioService;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.DevicesManager;
 import com.microsoft.office.sfb.appsdk.MessageActivityItem;
-import com.microsoft.office.sfb.appsdk.ParticipantService;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
 
@@ -38,7 +37,9 @@ public class SkypeCallFragment extends Fragment
     private OnFragmentInteractionListener mListener;
     private static Conversation mConversation;
     private static DevicesManager mDevicesManager;
-    private ConversationHelper mConversationHelper;
+
+    //// TODO: 1/13/2017 give hint re: location of the source file
+	private ConversationHelper mConversationHelper;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewVideoTextureView;
     private boolean mTryStartVideo = false;
@@ -95,16 +96,14 @@ public class SkypeCallFragment extends Fragment
         return mRootView;
     }
 
-    @Override
+        @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPreviewVideoTextureView = (TextureView) mRootView.findViewById(
                 R.id.selfParticipantVideoView);
         RelativeLayout participantVideoLayout = (RelativeLayout) mRootView.findViewById(
                 R.id.participantVideoLayoutId);
-        mParticipantVideoSurfaceView = new MMVRSurfaceView(
-                participantVideoLayout.getContext());
-        participantVideoLayout.addView(this.mParticipantVideoSurfaceView);
+		mParticipantVideoSurfaceView = (MMVRSurfaceView) mRootView.findViewById(R.id.mmvrSurfaceViewId);
         mListener.onFragmentInteraction(mRootView
                 , getActivity()
                         .getString(
@@ -136,14 +135,13 @@ public class SkypeCallFragment extends Fragment
         if (mParticipantVideoSurfaceView.isActivated()){
             mTryStartVideo = false;
 
-            //Start up the incoming and outgoing video
-            mConversationHelper.startOutgoingVideo();
-            mConversationHelper.startIncomingVideo();
         } else {
             mParticipantVideoSurfaceView.setActivated(true);
             mPreviewVideoTextureView.setActivated(true);
             mTryStartVideo = true;
         }
+            mConversationHelper.startOutgoingVideo();
+            mConversationHelper.startIncomingVideo();
 
 
     }
@@ -232,36 +230,29 @@ public class SkypeCallFragment extends Fragment
                 "SkypeCallFragment",
                 "onSelfAudioMuteChanged "
                         + String.valueOf(muteState));
-
-        try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String muteText = "";
-                    switch (muteState) {
-                        case MUTED:
-                            muteText = "Unmute";
-                            break;
-                        case UNMUTED:
-                            muteText = "Mute";
-                            break;
-                        case UNMUTING:
-                            muteText = "Unmuting";
-                            break;
-                        default:
-                    }
-                    mMuteAudioButton.setText(muteText);
-                }
-            });
-        } catch (Exception e) {
-            Log.e("SkypeCall", "exception on meeting started");
+        String muteText = "";
+        switch (muteState) {
+            case MUTED:
+                muteText = "Unmute";
+                break;
+            case UNMUTED:
+                muteText = "Mute";
+                break;
+            case UNMUTING:
+                muteText = "Unmuting";
+                break;
+            default:
         }
+        mMuteAudioButton.setText(muteText);
     }
+
 
     /**
      * Called when the video service on the established conversation can be
      * started. Use the callback to start video.
      * @param canStartVideoService
+     *
+     * This seems to be called when the conversation is ended, not when it starts.
      */
     @Override
     public void onCanStartVideoServiceChanged(boolean canStartVideoService) {
@@ -283,6 +274,9 @@ public class SkypeCallFragment extends Fragment
      */
     @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
+
+        //HACK!!
+        mConversationHelper.startIncomingVideo();
 
         if (canSetPausedVideoService)
             mConversationHelper.ensureVideoIsStartedAndRunning();

@@ -20,7 +20,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/baby3"
+        android:src="@drawable/babyhands"
         android:scaleType="centerCrop"/>
     <ScrollView
         android:id="@+id/login_form"
