@@ -5,6 +5,7 @@
 
 package com.microsoft.office.sfb.healthcare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,8 +22,10 @@ import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.Observable;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import butterknife.ButterKnife;
 
@@ -47,7 +50,6 @@ public class SkypeCall extends AppCompatActivity
     AnonymousSession mAnonymousSession = null;
     private ConversationPropertyChangeListener mConversationPropertyChangeListener;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +63,17 @@ public class SkypeCall extends AppCompatActivity
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-        mConversation = startToJoinMeeting();
+        //Get the string parameters used to join the on premise or online meeting
+        Intent messageIntent = getIntent();
+
+        mConversation = startToJoinMeeting(
+                messageIntent.getExtras().getShort(getString(R.string.onlineMeetingFlag))
+                ,messageIntent.getExtras().getString(getString(R.string.discoveryUrl))
+                ,messageIntent.getExtras().getString(getString(R.string.authToken))
+                ,messageIntent.getExtras().getString(getString(R.string.onPremiseMeetingUrl)));
+
         mConversation.addOnPropertyChangedCallback(new ConversationPropertyChangeListener());
+
     }
 
     @Override
@@ -119,31 +130,46 @@ public class SkypeCall extends AppCompatActivity
      * Connect to an existing Skype for Business meeting with the URI you get
      * from a server-side UCWA-based web service.
      */
-    private Conversation startToJoinMeeting() {
-        URI meetingURI = null;
+    private Conversation startToJoinMeeting(
+            Short onlineMeetingFlag
+            , String discoveryUrl
+            , String authToken
+            , String meetingUrl) {
         Conversation conversation = null;
-        try {
-            meetingURI = new URI(getString(R.string.meeting_url));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
         try {
 
             mApplication = com.microsoft.office.sfb.appsdk.Application.getInstance(this.getBaseContext());
             mApplication.getConfigurationManager().enablePreviewFeatures(true);
+
             mApplication.getConfigurationManager().setRequireWiFiForAudio(true);
             mApplication.getConfigurationManager().setRequireWiFiForVideo(true);
-            mApplication.getConfigurationManager().setMaxVideoChannelCount(2);
+            mApplication.getConfigurationManager().setMaxVideoChannelCount(5);
 
-            mAnonymousSession = mApplication
-                    .joinMeetingAnonymously(
-                            getString(
-                                    R.string.userDisplayName), meetingURI);
+            if (onlineMeetingFlag == 0){
+                mAnonymousSession = mApplication
+						.joinMeetingAnonymously(
+								getString(R.string.userDisplayName)
+								, new URI(meetingUrl));
+
+            } else {
+                mAnonymousSession = mApplication
+						.joinMeetingAnonymously(
+								getString(R.string.userDisplayName)
+								, new URL(discoveryUrl)
+								, authToken);
+            }
             conversation = mAnonymousSession.getConversation();
+        } catch (URISyntaxException ex){
+            ex.printStackTrace();
+            Log.e("SkypeCall", "On premise meeting uri syntax error");
+
         } catch (SFBException e) {
             e.printStackTrace();
             Log.e("SkypeCall", "exception on start to join meeting");
 
+        } catch (MalformedURLException e) {
+            Log.e("SkypeCall", "Online meeting url syntax error");
+            e.printStackTrace();
         }
         return conversation;
     }

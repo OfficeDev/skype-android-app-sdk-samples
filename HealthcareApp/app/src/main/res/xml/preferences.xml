@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        android:key="pref_key_sms_delete_limit"
-        android:dependency="pref_key_auto_delete"
-        android:summary="@string/meeting_url_summary"
-        android:title="@string/meeting_url"/>
+    <CheckBoxPreference
+        android:key="@string/SfBOnlineFlag"
+        android:title="@string/serverTopology"
+        android:summary="Are you a Skype for Business Online (Office 365) user?"
+        android:defaultValue="false"/>
 
 </PreferenceScreen>
