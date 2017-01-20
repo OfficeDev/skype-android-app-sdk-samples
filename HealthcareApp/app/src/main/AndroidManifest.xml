@@ -68,7 +68,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".wellbabyreport" />
+                android:value="com.microsoft.office.sfb.healthcare.wellbabyreport" />
         </activity>
         <activity android:name=".SettingsActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->

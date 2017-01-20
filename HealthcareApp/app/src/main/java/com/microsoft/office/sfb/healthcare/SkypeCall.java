@@ -107,6 +107,13 @@ public class SkypeCall extends AppCompatActivity
             switch (item.getItemId()) {
 
                 case android.R.id.home:
+                    if (mConversation.canLeave())
+                        try {
+                            mConversation.leave();
+                        } catch (SFBException e) {
+                            e.printStackTrace();
+                        }
+
                     NavUtils.navigateUpFromSameTask(this);
                 case R.id.pauseVideoMenuItem:
 
