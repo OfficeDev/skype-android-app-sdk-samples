@@ -269,11 +269,17 @@ public class SkypeCallFragment extends Fragment
     @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
 
-        //HACK!!
-        mConversationHelper.startIncomingVideo();
 
-        if (canSetPausedVideoService)
+        if (canSetPausedVideoService) {
+
+            //This method is called here because the onCanStartVideoServiceChanged is not
+            //called until the user is leaving the conversation. Because of this, we cannot
+            //know that incoming video can be started. When the onCanSetPausedVideoServiceChanged
+            //callback is invoked, we know that the video service can be started.
+            mConversationHelper.startIncomingVideo();
+
             mConversationHelper.ensureVideoIsStartedAndRunning();
+        }
     }
 
     @Override
