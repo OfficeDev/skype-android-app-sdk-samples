@@ -3,7 +3,17 @@
     <CheckBoxPreference
         android:key="@string/SfBOnlineFlag"
         android:title="@string/serverTopology"
-        android:summary="Are you a Skype for Business Online (Office 365) user?"
+        android:summary="@string/skypeForBusinessOnlineSummary"
         android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="@string/enablePreviewFeatures"
+        android:title="@string/enablePreviewFeaturesTitle"
+        android:summary="@string/enablePreviewFeaturesSummary"
+        android:defaultValue="false" />
+    <EditTextPreference
+        android:key="@string/maxVideoChannels"
+        android:title="@string/maxVideoChannelsTitle"
+        android:summary="@string/maxVideoChannelsSummary"
+        android:defaultValue="5"/>
 
 </PreferenceScreen>

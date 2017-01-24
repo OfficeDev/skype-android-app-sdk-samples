@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.microsoft.office.sfb.appsdk.AnonymousSession;
@@ -167,7 +166,7 @@ public class wellbabyreport extends AppCompatActivity  {
         try {
 
             //Retrofit 2 object for making REST calls over https
-            RESTUtility rESTUtility = new RESTUtility(this);
+            RESTUtility rESTUtility = new RESTUtility(this,getString(R.string.cloudAppBaseurl));
 
             //Get the Middle Tier helpdesk app interface for making REST call
             final RESTUtility.SaasAPIInterface apiInterface = rESTUtility.getSaaSClient();

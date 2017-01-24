@@ -43,5 +43,12 @@
     <string name="toolbarSubtitle">Jonathan Trudeau</string>
     <string name="toggle_camera">Toggle camera</string>
     <string name="canToggleCamera">canToggleCamera</string>
+    <string name="enablePreviewFeatures">enablePreviewFeatures</string>
+    <string name="enablePreviewFeaturesTitle">Enable preview features</string>
+    <string name="enablePreviewFeaturesSummary">Enable Skype for Business server preview features</string>
+    <string name="skypeForBusinessOnlineSummary">Are you a Skype for Business Online (Office 365) user?</string>
+    <string name="maxVideoChannels">maxVideoChannels</string>
+    <string name="maxVideoChannelsTitle">Maximum video channels</string>
+    <string name="maxVideoChannelsSummary">The maximum video channels allowed in a conversation</string>
 
 </resources>

@@ -8,6 +8,7 @@ package com.microsoft.office.sfb.healthcare;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
@@ -208,10 +209,16 @@ public class SkypeCall extends AppCompatActivity
         try {
 
             mApplication = Application.getInstance(this.getBaseContext());
-            mApplication.getConfigurationManager().enablePreviewFeatures(true);
+            mApplication.getConfigurationManager().enablePreviewFeatures(
+                    PreferenceManager
+                            .getDefaultSharedPreferences(this)
+                            .getBoolean(getString(R.string.enablePreviewFeatures),false));
             mApplication.getConfigurationManager().setRequireWiFiForAudio(true);
             mApplication.getConfigurationManager().setRequireWiFiForVideo(true);
-            mApplication.getConfigurationManager().setMaxVideoChannelCount(5);
+            mApplication.getConfigurationManager().setMaxVideoChannelCount(
+                    Long.parseLong(PreferenceManager
+                            .getDefaultSharedPreferences(this)
+                            .getString(getString(R.string.maxVideoChannels),"5")));
 
             if (onlineMeetingFlag == 0) {
                 mAnonymousSession = mApplication
@@ -230,13 +237,14 @@ public class SkypeCall extends AppCompatActivity
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
             Log.e("SkypeCall", "On premise meeting uri syntax error");
-
         } catch (SFBException e) {
             e.printStackTrace();
             Log.e("SkypeCall", "exception on start to join meeting");
-
         } catch (MalformedURLException e) {
             Log.e("SkypeCall", "Online meeting url syntax error");
+            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e("SkypeCall", "Exception");
             e.printStackTrace();
         }
         return conversation;
@@ -260,7 +268,8 @@ public class SkypeCall extends AppCompatActivity
      */
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
-                .setName("SkypeCall Page") // TODO: Define a title for the content shown.
+                .setName("SkypeCall Page")
+                // TODO: Define a title for the content shown.
                 // TODO: Make sure this auto-generated URL is correct.
                 .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
                 .build();
