@@ -9,6 +9,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new SettingsFragment()).commit();
         PreferenceManager.setDefaultValues(SettingsActivity.this, R.xml.preferences, false);

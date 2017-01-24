@@ -24,13 +24,13 @@ import retrofit2.http.POST;
 public class RESTUtility {
 
     private  SaasAPIInterface saaSAPIInterface;
-    private  String baseUrl;
+    private  String mBaseUrl;
     private okhttp3.OkHttpClient mOkClient;
     private Context mContext;
 
-    public RESTUtility(Context context){
+    public RESTUtility(Context context, String baseUrl){
         mContext = context;
-        baseUrl = mContext.getString(R.string.cloudAppBaseurl) ;
+        mBaseUrl = baseUrl ;
     }
 
     @SuppressLint("LongLogTag")
@@ -62,7 +62,7 @@ public class RESTUtility {
                 }
 
                 Retrofit SaaSClient = new Retrofit.Builder()
-                        .baseUrl(baseUrl)
+                        .baseUrl(mBaseUrl)
                         .client(mOkClient)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
