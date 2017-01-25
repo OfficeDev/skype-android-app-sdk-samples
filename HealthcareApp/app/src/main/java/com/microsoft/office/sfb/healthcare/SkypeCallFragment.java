@@ -83,9 +83,6 @@ public class SkypeCallFragment extends Fragment
         mMuteAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTryStartVideo == true){
-                    tryStartVideo();
-                }
                 mConversationHelper.toggleMute();
             }
         });
@@ -111,16 +108,11 @@ public class SkypeCallFragment extends Fragment
                                 R.string.callFragmentInflated));
         mParticipantVideoSurfaceView.setActivated(true);
         mPreviewVideoTextureView.setActivated(true);
-        tryStartVideo();
 
-
-    }
-
-    private void tryStartVideo(){
-            //Initialize the conversation helper with the established conversation,
-            //the SfB App SDK devices manager, the outgoing video TextureView,
-            //The view container for the incoming video, and a conversation helper
-            //callback.
+        //Initialize the conversation helper with the established conversation,
+        //the SfB App SDK devices manager, the outgoing video TextureView,
+        //The view container for the incoming video, and a conversation helper
+        //callback.
         if (mConversationHelper == null){
             mConversationHelper = new ConversationHelper(
                     mConversation,
@@ -133,20 +125,8 @@ public class SkypeCallFragment extends Fragment
                     "onViewCreated");
 
         }
-        if (mParticipantVideoSurfaceView.isActivated()){
-            mTryStartVideo = false;
-
-            //Start up the incoming and outgoing video
-            mConversationHelper.startOutgoingVideo();
-            mConversationHelper.startIncomingVideo();
-        } else {
-            mParticipantVideoSurfaceView.setActivated(true);
-            mPreviewVideoTextureView.setActivated(true);
-            mTryStartVideo = true;
-        }
-
-
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
