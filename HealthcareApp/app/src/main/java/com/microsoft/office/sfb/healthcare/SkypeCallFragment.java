@@ -8,7 +8,6 @@ package com.microsoft.office.sfb.healthcare;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,18 +68,6 @@ public class SkypeCallFragment extends Fragment
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
 
 
-        if (mConversationHelper == null){
-            mConversationHelper = new ConversationHelper(
-                    mConversation,
-                    mDevicesManager,
-                    mPreviewVideoTextureView,
-                    mParticipantVideoSurfaceView,
-                    this);
-            Log.i(
-                    "SkypeCallFragment",
-                    "onViewCreated");
-
-        }
         mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +117,7 @@ public class SkypeCallFragment extends Fragment
                     "onViewCreated");
 
         }
+        return mRootView;
     }
 
     @Override
@@ -219,25 +207,20 @@ public class SkypeCallFragment extends Fragment
                         + String.valueOf(muteState));
 
         try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String muteText = "";
-                    switch (muteState) {
-                        case MUTED:
-                            muteText = "Unmute";
-                            break;
-                        case UNMUTED:
-                            muteText = "Mute";
-                            break;
-                        case UNMUTING:
-                            muteText = "Unmuting";
-                            break;
-                        default:
-                    }
-                    mMuteAudioButton.setText(muteText);
-                }
-            });
+            String muteText = "";
+            switch (muteState) {
+                case MUTED:
+                    muteText = "Unmute";
+                    break;
+                case UNMUTED:
+                    muteText = "Mute";
+                    break;
+                case UNMUTING:
+                    muteText = "Unmuting";
+                    break;
+                default:
+            }
+            mMuteAudioButton.setText(muteText);
         } catch (Exception e) {
             Log.e("SkypeCall", "exception on meeting started");
         }
@@ -259,9 +242,11 @@ public class SkypeCallFragment extends Fragment
                 "onCanStartVideoServiceChanged "
                         + String.valueOf(canStartVideoService));
 
+
         if (canStartVideoService == true) {
             mConversationHelper.startOutgoingVideo();
             mConversationHelper.startIncomingVideo();
+            mConversationHelper.ensureVideoIsStartedAndRunning();
         }
     }
 
@@ -273,11 +258,9 @@ public class SkypeCallFragment extends Fragment
     @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
 
+        //set the pause/resume text of the SkypeCall menu
+        mListener.onFragmentInteraction(mRootView,getString(R.string.toggleVideoPause));
 
-        if (canSetPausedVideoService) {
-
-            mConversationHelper.ensureVideoIsStartedAndRunning();
-        }
     }
 
     @Override

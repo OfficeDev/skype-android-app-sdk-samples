@@ -242,23 +242,8 @@ public class ConversationHelper {
         try {
             Camera activeCamera = this.videoService.getActiveCamera();
             List<Camera> availableCameras = devicesManager.getCameras();
-
-            //We iterate on the camera list instead of getting a camera from the list
-            //using List<>.IndexOf(Camera) because the videoService.getActiveCamera() method
-            //returns a new instance of Camera whereas devicesManager.getCameras() returns a
-            //set of camera objects representing the device cameras at the time the Skype
-            //Application object was instantiated.
-            for (int x = 0;  x < availableCameras.size(); x++){
-                if (availableCameras.get(x).getType() == activeCamera.getType()){
-
-                    //If the matching camera is the last camera in the list, set the
-                    //first camera in the list, otherwise set the next camera
-                    this.videoService.setActiveCamera(availableCameras.get(
-                            x == availableCameras.size()-1 ? 0 : x+1));
-                    break;
-                }
-            }
-
+            int newCameraIndex = (availableCameras.indexOf(activeCamera) + 1) % availableCameras.size();
+            this.videoService.setActiveCamera(availableCameras.get(newCameraIndex));
         } catch (SFBException e) {
             e.printStackTrace();
         }

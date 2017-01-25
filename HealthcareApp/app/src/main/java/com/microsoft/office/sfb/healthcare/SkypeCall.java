@@ -55,6 +55,7 @@ public class SkypeCall extends AppCompatActivity
     Conversation mConversation;
     AnonymousSession mAnonymousSession = null;
     public MenuItem mCameraToggleItem;
+    private MenuItem mVideoPauseToggleItem;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -98,6 +99,7 @@ public class SkypeCall extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_skype_call, menu);
         mCameraToggleItem = menu.findItem(R.id.changeCamera);
+        mVideoPauseToggleItem = menu.findItem(R.id.pauseVideoMenuItem);
         return true;
     }
 
@@ -116,14 +118,21 @@ public class SkypeCall extends AppCompatActivity
                         }
 
                     NavUtils.navigateUpFromSameTask(this);
+                    break;
                 case R.id.pauseVideoMenuItem:
+                    if (mConversation.getVideoService().canSetPaused() == true) {
+                        mCallFragment.mConversationHelper.toggleVideoPaused();
+                    }
 
+                    break;
                 case R.id.muteAudioMenuItem:
 
+                    break;
                 case R.id.changeCamera:
                     if (mConversation.getVideoService().canSetActiveCamera() == true) {
                         mCallFragment.mConversationHelper.changeActiveCamera();
                     }
+                    break;
                 default:
                     return super.onOptionsItemSelected(item);
             }
@@ -178,17 +187,22 @@ public class SkypeCall extends AppCompatActivity
                 finish();
             }
             if (fragmentAction.contentEquals(getString(R.string.canToggleCamera))) {
-                //enable menu item
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                //Toggle the enable state of the Change Camera
+                //menu option
+                if (mCameraToggleItem != null)
+                    mCameraToggleItem.setEnabled(!mCameraToggleItem.isEnabled());
+            }
+            if (fragmentAction.contentEquals(getString(R.string.toggleVideoPause))){
 
-                        //Toggle the enable state of the Change Camera
-                        //menu option
-                        if (mCameraToggleItem != null)
-                            mCameraToggleItem.setEnabled(!mCameraToggleItem.isEnabled());
+                if (mVideoPauseToggleItem != null)
+                    if (mVideoPauseToggleItem.getTitle() == getString(R.string.resume_video)){
+                        mVideoPauseToggleItem.setTitle(R.string.pauseVideo);
+                    } else {
+                        mVideoPauseToggleItem.setTitle(R.string.resume_video);
+
                     }
-                });
+
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
