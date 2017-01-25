@@ -37,7 +37,9 @@ public class SkypeCallFragment extends Fragment
     private OnFragmentInteractionListener mListener;
     private static Conversation mConversation;
     private static DevicesManager mDevicesManager;
-    private ConversationHelper mConversationHelper;
+
+    //// TODO: 1/13/2017 give hint re: location of the source file
+	protected ConversationHelper mConversationHelper;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewVideoTextureView;
     private boolean mTryStartVideo = false;
@@ -65,6 +67,20 @@ public class SkypeCallFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
+
+
+        if (mConversationHelper == null){
+            mConversationHelper = new ConversationHelper(
+                    mConversation,
+                    mDevicesManager,
+                    mPreviewVideoTextureView,
+                    mParticipantVideoSurfaceView,
+                    this);
+            Log.i(
+                    "SkypeCallFragment",
+                    "onViewCreated");
+
+        }
         mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,22 +101,12 @@ public class SkypeCallFragment extends Fragment
                 mConversationHelper.toggleMute();
             }
         });
-        Log.i(
-                "SkypeCallFragment",
-                "onCreateView ");
-        return mRootView;
-    }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         mPreviewVideoTextureView = (TextureView) mRootView.findViewById(
                 R.id.selfParticipantVideoView);
         RelativeLayout participantVideoLayout = (RelativeLayout) mRootView.findViewById(
                 R.id.participantVideoLayoutId);
-        mParticipantVideoSurfaceView = new MMVRSurfaceView(
-                participantVideoLayout.getContext());
-        participantVideoLayout.addView(this.mParticipantVideoSurfaceView);
+        mParticipantVideoSurfaceView = (MMVRSurfaceView) mRootView.findViewById(R.id.mmvrSurfaceViewId);
         mListener.onFragmentInteraction(mRootView
                 , getActivity()
                         .getString(
@@ -142,7 +148,7 @@ public class SkypeCallFragment extends Fragment
      * Used to interact with parent activity
      */
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(View rootView, String newMeetingURI);
+        void onFragmentInteraction(View rootView, String fragmentAction);
     }
 
     @Override
@@ -235,12 +241,16 @@ public class SkypeCallFragment extends Fragment
         } catch (Exception e) {
             Log.e("SkypeCall", "exception on meeting started");
         }
+
     }
+
 
     /**
      * Called when the video service on the established conversation can be
      * started. Use the callback to start video.
      * @param canStartVideoService
+     *
+     * This seems to be called when the conversation is ended, not when it starts.
      */
     @Override
     public void onCanStartVideoServiceChanged(boolean canStartVideoService) {
@@ -263,8 +273,11 @@ public class SkypeCallFragment extends Fragment
     @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
 
-        if (canSetPausedVideoService)
+
+        if (canSetPausedVideoService) {
+
             mConversationHelper.ensureVideoIsStartedAndRunning();
+        }
     }
 
     @Override
@@ -273,9 +286,9 @@ public class SkypeCallFragment extends Fragment
                 "SkypeCallFragment",
                 "onCanSetActiveCameraChanged "
                         + String.valueOf(canSetActiveCamera));
-
-        if (canSetActiveCamera == true) {
-            mConversationHelper.changeActiveCamera();
+        if (mListener != null){
+            mListener.onFragmentInteraction(mRootView, getString(R.string.canToggleCamera));
         }
+
     }
 }

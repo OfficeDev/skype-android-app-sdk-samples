@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="android-database-sqlcipher-">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/android-database-sqlcipher/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/android-database-sqlcipher/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

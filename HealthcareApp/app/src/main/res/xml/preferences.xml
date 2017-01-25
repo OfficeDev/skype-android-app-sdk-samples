@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        android:key="pref_key_sms_delete_limit"
-        android:dependency="pref_key_auto_delete"
-        android:summary="@string/meeting_url_summary"
-        android:title="@string/meeting_url"/>
+    <CheckBoxPreference
+        android:key="@string/SfBOnlineFlag"
+        android:title="@string/serverTopology"
+        android:summary="@string/skypeForBusinessOnlineSummary"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="@string/enablePreviewFeatures"
+        android:title="@string/enablePreviewFeaturesTitle"
+        android:summary="@string/enablePreviewFeaturesSummary"
+        android:defaultValue="false" />
+    <EditTextPreference
+        android:key="@string/maxVideoChannels"
+        android:title="@string/maxVideoChannelsTitle"
+        android:summary="@string/maxVideoChannelsSummary"
+        android:defaultValue="5"/>
 
 </PreferenceScreen>

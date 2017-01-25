@@ -24,6 +24,9 @@ build/
 #local .aar files
 /app/libs
 
+#App SDK helper file
+/app/src/main/java/com/microsoft/office/sfb/healthcare/ConversationHelper.java
+
 # Local configuration file (sdk path, etc)
 local.properties
 

@@ -11,42 +11,44 @@
     <string name="prompt_password">Enter your password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
     <string name="title_activity_wellbabyreport"></string>
     <string name="large_text">"<i>Prepared for the Trudeau family\n\n</i><b>Little Jonathan is doing very well!!</b>\n\nJonathan visited with Mom and Dad for his 6-month well child check. The family has no concerns stating the patient has been doing well overall since the last visit taking in a well-balanced diet consisting of formula transitioning to whole milk, fruits, vegetables, proteins and grains.\nNo concerns with hearing or vision.\n<u>Growth and development:</u> Denver II normal passing all developmental milestones per age in areas of fine motor, gross motor, personal and social interaction as well as speech and language development.\nSee <b>Denver II</b> form in the chart.\n\n<b>PAST MEDICAL HISTORY:</b>\n<u>Allergies:</u> None.\n<u>Medications:</u> Tylenol this morning in preparation for vaccines and a multivitamin daily. and use of imagery guide visual treatments. These elements do far more than please the eye. \n\n<b>FAMILY SOCIAL HISTORY:</b>\nUnchanged since last checkup. \n\n<b>REVIEW OF SYSTEMS:</b>\nAs per HPI; otherwise negative.\n\n<b>OBJECTIVE:</b>\nWeight 24 pounds 1 ounce. Height 30 inches. Head circumference 46.5 cm. Temperature afebrile. \n<u>General:</u> A well-developed, well-nourished, cooperative, alert and interactive 1-year-old white female smiling, happy and drooling.\n<u>Chest:</u> Clear to auscultation bilaterally. No wheeze. No crackles. Good air exchange.\n<u>Cardiovascular:</u> Regular rate and rhythm. No murmur. Good pulses bilaterally.\n<u>Abdomen:</u> Soft, nontender. Nondistended. Positive bowel sounds. No mass. No organomegaly.\n<u>Genitourinary:</u> Tanner I female genitalia. Femoral pulses equal bilaterally. No rash.\n<u>Extremities:</u> Full range of motion. No cyanosis, clubbing or edema. Negative Ortolani and Barlow maneuver.\n<u>Back:</u> Straight. No scoliosis.\n<u>Integument:</u> Warm, dry and pink without lesions.\n<u>Neurological:</u> Alert. Good muscle tone and strength. Cranial nerves II through XII are grossly intact.\n\n<b>ASSESSMENT AND PLAN:</b>\n1. Well 3-month-old white male.\n2. Follow up for the 12-month well child check or as needed for acute care."
     </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_skype_call">Live Chat</string>
-    <string name="live_chat_subtitle">Well-baby App</string>
-    <string name="localParticipantName">Michael Trudeau</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="meetingURIKey">meetingURI</string>
-    <string name="defaultMeetingURL"><![CDATA[https://meet.lync.com/<yourDomain>/<yourAlias>/<YourInstance>]]></string>
     <string name="userDisplayName">David Trudeau</string>
     <string name="leaveCall">leaveCall</string>
-    <string name="callFragmentInflated">inflated</string>
-    <string name="pauseCall">pauseCall</string>
-    <string name="muteAudio">muteAudio</string>
-    <string name="waitStopped">waitStopped</string>
     <string name="resume_video">Resume video</string>
     <string name="mute_audio">Mute audio</string>
+    <string name="callFragmentInflated">inflated</string>
     <string name="companyName">Lamna Healthcare Company</string>
     <string name="lamna_healthcare">Lamna Healthcare</string>
-    <string name="meeting_url">https://meet.lync.com/contoso/alexd/DTR1NGR7</string>
+    <string name="meeting_url">https://meet.lync.com/microsoft/johnau/6ZQHB8Q2</string>
     <string name="meeting_url_summary">Meeting URL</string>
     <string name="baby_Name">Jonathan Trudeau</string>
     <string name="signinTitle">Lamna Healthcare Company</string>
-    <string name="ucwaURL">ucwaURL</string>
-    <string name="webToken">myToken</string>
-    <string name="displayName">Alex Dunsmuir</string>
-    <string name="remoteEndpointURI">helpdesk@contoso.com</string>
+    <string name="serverTopology">Skype for Business Online</string>
+    <string name="title_activity_preference">PreferenceActivity</string>
+    <string name="cloudAppBaseurl">https://imbridge.cloudapp.net/GetAnonTokenJob/</string>
+    <string name="SaasHostName">imbridge.cloudapp.net</string>
+    <string name="SfBOnlineFlag">SkypeForBusinessOnline</string>
+    <string name="onlineMeetingFlag">onlineMeeting</string>
+    <string name="discoveryUrl">discoveryUrl</string>
+    <string name="authToken">authToken</string>
+    <string name="onPremiseMeetingUrl">onPremMeetingUrl</string>
+    <string name="toolbarSubtitle">Jonathan Trudeau</string>
+    <string name="toggle_camera">Toggle camera</string>
+    <string name="canToggleCamera">canToggleCamera</string>
+    <string name="enablePreviewFeatures">enablePreviewFeatures</string>
+    <string name="enablePreviewFeaturesTitle">Enable preview features</string>
+    <string name="enablePreviewFeaturesSummary">Enable Skype for Business server preview features</string>
+    <string name="skypeForBusinessOnlineSummary">Are you a Skype for Business Online (Office 365) user?</string>
+    <string name="maxVideoChannels">maxVideoChannels</string>
+    <string name="maxVideoChannelsTitle">Maximum video channels</string>
+    <string name="maxVideoChannelsSummary">The maximum video channels allowed in a conversation</string>
 
 </resources>
