@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ENTERPRISE_AUTHENTICATOR_ACCOUNT_TYPE" translatable="false">"com.microsoft.android.enterprise15.appsdk"</string>
+    <string name="ENTERPRISE_AUTHONTICATOR_LABEL" translatable="false">"app_name_dev"</string>
+    <string name="app_name" translatable="false">"app_name_dev"</string>
+</resources>

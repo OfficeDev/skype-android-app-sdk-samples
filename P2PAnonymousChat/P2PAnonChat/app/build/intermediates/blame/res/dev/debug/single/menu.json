@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\P2PAnonymousChat\\P2PAnonChat\\app\\build\\intermediates\\res\\merged\\dev\\debug\\menu\\main.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\P2PAnonymousChat\\P2PAnonChat\\app\\build\\intermediates\\exploded-aar\\TelemetryService\\res\\menu\\main.xml"
+    },
+    {
+        "merged": "C:\\android\\skype-android-app-sdk-samples\\P2PAnonymousChat\\P2PAnonChat\\app\\build\\intermediates\\res\\merged\\dev\\debug\\menu\\menu_main.xml",
+        "source": "C:\\android\\skype-android-app-sdk-samples\\P2PAnonymousChat\\P2PAnonChat\\app\\src\\main\\res\\menu\\menu_main.xml"
+    }
+]

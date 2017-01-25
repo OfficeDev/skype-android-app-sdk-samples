@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ENTERPRISE_AUTHENTICATOR_ACCOUNT_TYPE">com.microsoft.android.enterprise15.appsdk</string>
+    <string name="app_language">English</string>
+    <string name="app_name">appsdk</string>
+</resources>
