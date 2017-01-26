@@ -41,7 +41,6 @@ public class SkypeCallFragment extends Fragment
 	protected ConversationHelper mConversationHelper;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewVideoTextureView;
-    private boolean mTryStartVideo = false;
     View mRootView;
 
     @SuppressLint("ValidFragment")
@@ -117,6 +116,8 @@ public class SkypeCallFragment extends Fragment
                     "onViewCreated");
 
         }
+
+        mConversationHelper.ensureVideoIsStartedAndRunning();
         return mRootView;
     }
 
@@ -279,7 +280,7 @@ public class SkypeCallFragment extends Fragment
      * @param canSetPausedVideoService
      */
     @Override
-    public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
+    public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService, boolean isPaused) {
         Log.i(
                 "SkypeCallFragment",
                 "onCanSetPausedVideoServiceChanged "
@@ -288,7 +289,7 @@ public class SkypeCallFragment extends Fragment
         if (this.isDetached())
             return;
 
-        if (canSetPausedVideoService){
+        if (!isPaused){
             //set the pause/resume text of the SkypeCall menu
             mListener.onFragmentInteraction(mRootView,getString(R.string.pauseVideo));
 

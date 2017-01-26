@@ -1,14 +1,12 @@
 package com.microsoft.office.sfb.healthcare;
 
-import java.net.URI;
-import java.util.List;
-
 import android.graphics.SurfaceTexture;
 import android.view.TextureView;
 
 import com.microsoft.media.MMVRSurfaceView;
 import com.microsoft.office.sfb.appsdk.Application;
 import com.microsoft.office.sfb.appsdk.AudioService;
+import com.microsoft.office.sfb.appsdk.Camera;
 import com.microsoft.office.sfb.appsdk.ChatService;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.ConversationActivityItem;
@@ -23,7 +21,9 @@ import com.microsoft.office.sfb.appsdk.ParticipantVideo;
 import com.microsoft.office.sfb.appsdk.SFBException;
 import com.microsoft.office.sfb.appsdk.Speaker;
 import com.microsoft.office.sfb.appsdk.VideoService;
-import com.microsoft.office.sfb.appsdk.Camera;
+
+import java.net.URI;
+import java.util.List;
 
 import static com.microsoft.office.sfb.appsdk.ParticipantVideo.PARTICIPANT_VIDEO_CANSUBSCRIBE_PROPERTY_ID;
 
@@ -84,7 +84,7 @@ public class ConversationHelper {
          * changes.
          * @param newCanSetPaused The new value retrieved by calling {@link VideoService#canSetPaused()}
          */
-        void onCanSetPausedVideoServiceChanged(boolean newCanSetPaused);
+        void onCanSetPausedVideoServiceChanged(boolean newCanSetPaused,  boolean isPaused);
 
 
         /**
@@ -481,7 +481,7 @@ public class ConversationHelper {
                         conversationCallback.onCanStartVideoServiceChanged(videoService.canStart());
                         break;
                     case VideoService.CAN_SET_PAUSED_PROPERTY_ID:
-                        conversationCallback.onCanSetPausedVideoServiceChanged(videoService.canSetPaused());
+                        conversationCallback.onCanSetPausedVideoServiceChanged(videoService.canSetPaused(), videoService.getPaused());
                         break;
                     case VideoService.CAN_SET_ACTIVE_CAMERA_PROPERTY_ID:
                         conversationCallback.onCanSetActiveCameraChanged(videoService.canSetActiveCamera());
