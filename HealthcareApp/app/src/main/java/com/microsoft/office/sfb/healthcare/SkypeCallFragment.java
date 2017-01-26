@@ -142,6 +142,10 @@ public class SkypeCallFragment extends Fragment
     @Override
     public void onStop() {
         super.onStop();
+
+        if (this.isDetached())
+            return;
+
         if (mListener != null) {
 
             //TODO stop the call and then leave
@@ -173,15 +177,34 @@ public class SkypeCallFragment extends Fragment
                 "SkypeCallFragment",
                 "onConversationStateChanged "
                         + String.valueOf(state));
+        if (this.isDetached())
+            return;
 
-        if (state == Conversation.State.IDLE) {
+        try{
+            String newState = "";
+            switch (state){
+                case IDLE:
+                    newState = getActivity().
+                            getString(R.string.leaveCall);
+                    break;
+                case ESTABLISHING:
+                    break;
+                case INLOBBY:
+                    break;
+                case ESTABLISHED:
+                    newState = getActivity().
+                            getString(R.string.callEstablished);
+                    break;
+            }
             if (mListener != null) {
                 mListener.onFragmentInteraction(
-                        mRootView,
-                        getActivity().
-                                getString(R.string.leaveCall));
+                        mRootView,newState);
                 mListener = null;
             }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+
         }
     }
 
@@ -257,9 +280,23 @@ public class SkypeCallFragment extends Fragment
      */
     @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
+        Log.i(
+                "SkypeCallFragment",
+                "onCanSetPausedVideoServiceChanged "
+                        + String.valueOf(canSetPausedVideoService));
 
-        //set the pause/resume text of the SkypeCall menu
-        mListener.onFragmentInteraction(mRootView,getString(R.string.toggleVideoPause));
+        if (this.isDetached())
+            return;
+
+        if (canSetPausedVideoService){
+            //set the pause/resume text of the SkypeCall menu
+            mListener.onFragmentInteraction(mRootView,getString(R.string.pauseVideo));
+
+        } else {
+            //set the pause/resume text of the SkypeCall menu
+            mListener.onFragmentInteraction(mRootView,getString(R.string.resume_video));
+
+        }
 
     }
 
@@ -269,6 +306,9 @@ public class SkypeCallFragment extends Fragment
                 "SkypeCallFragment",
                 "onCanSetActiveCameraChanged "
                         + String.valueOf(canSetActiveCamera));
+        if (this.isDetached())
+            return;
+
         if (mListener != null){
             mListener.onFragmentInteraction(mRootView, getString(R.string.canToggleCamera));
         }

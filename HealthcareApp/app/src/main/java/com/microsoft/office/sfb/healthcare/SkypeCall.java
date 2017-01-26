@@ -21,9 +21,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.microsoft.office.sfb.appsdk.AnonymousSession;
 import com.microsoft.office.sfb.appsdk.Application;
 import com.microsoft.office.sfb.appsdk.Conversation;
@@ -49,18 +47,13 @@ public class SkypeCall extends AppCompatActivity
         implements
         SkypeCallFragment.OnFragmentInteractionListener {
 
-    SkypeCallFragment mCallFragment = null;
-    Application mApplication;
+    private SkypeCallFragment mCallFragment = null;
+    private com.microsoft.office.sfb.appsdk.Application mApplication;
     private static final String VIDEO_FRAGMENT_STACK_STATE = "videoFragment";
-    Conversation mConversation;
-    AnonymousSession mAnonymousSession = null;
-    public MenuItem mCameraToggleItem;
+    private Conversation mConversation;
+    private AnonymousSession mAnonymousSession = null;
+    private MenuItem mCameraToggleItem;
     private MenuItem mVideoPauseToggleItem;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +70,9 @@ public class SkypeCall extends AppCompatActivity
         //Get the string parameters used to join the on premise or online meeting
         Intent messageIntent = getIntent();
 
+        //Meetings can be hosted in SfB Online or Sfb on premise. These
+        //intent extras communicate the necessary parameters for the
+        //Skype call to be placed to the correct endpoint.
         mConversation = startToJoinMeeting(
                 messageIntent.getExtras().getShort(getString(R.string.onlineMeetingFlag))
                 , messageIntent.getExtras().getString(getString(R.string.discoveryUrl))
@@ -84,9 +80,6 @@ public class SkypeCall extends AppCompatActivity
                 , messageIntent.getExtras().getString(getString(R.string.onPremiseMeetingUrl)));
 
         mConversation.addOnPropertyChangedCallback(new ConversationPropertyChangeListener());
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -112,6 +105,10 @@ public class SkypeCall extends AppCompatActivity
                 case android.R.id.home:
                     if (mConversation.canLeave())
                         try {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .detach(mCallFragment)
+                                    .commit();
                             mConversation.leave();
                         } catch (SFBException e) {
                             e.printStackTrace();
@@ -121,6 +118,11 @@ public class SkypeCall extends AppCompatActivity
                     break;
                 case R.id.pauseVideoMenuItem:
                     if (mConversation.getVideoService().canSetPaused() == true) {
+                        Log.i(
+                                "SkypeCall",
+                                "select pauseVideoMenuItem "
+                                        );
+
                         mCallFragment.mConversationHelper.toggleVideoPaused();
                     }
 
@@ -186,23 +188,22 @@ public class SkypeCall extends AppCompatActivity
                         FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 finish();
             }
+            if (fragmentAction.contentEquals(getString(R.string.callEstablished))) {
+
+            }
             if (fragmentAction.contentEquals(getString(R.string.canToggleCamera))) {
                 //Toggle the enable state of the Change Camera
                 //menu option
                 if (mCameraToggleItem != null)
                     mCameraToggleItem.setEnabled(!mCameraToggleItem.isEnabled());
             }
-            if (fragmentAction.contentEquals(getString(R.string.toggleVideoPause))){
-
+            if (fragmentAction.contentEquals(getString(R.string.pauseVideo))) {
                 if (mVideoPauseToggleItem != null)
-                    if (mVideoPauseToggleItem.getTitle() == getString(R.string.resume_video)){
-                        mVideoPauseToggleItem.setTitle(R.string.pauseVideo);
-                    } else {
-                        mVideoPauseToggleItem.setTitle(R.string.resume_video);
-
-                    }
-
-
+                    mVideoPauseToggleItem.setTitle(R.string.pauseVideo);
+            }
+            if (fragmentAction.contentEquals(getString(R.string.resume_video))) {
+                if (mVideoPauseToggleItem != null)
+                    mVideoPauseToggleItem.setTitle(R.string.resume_video);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -226,13 +227,13 @@ public class SkypeCall extends AppCompatActivity
             mApplication.getConfigurationManager().enablePreviewFeatures(
                     PreferenceManager
                             .getDefaultSharedPreferences(this)
-                            .getBoolean(getString(R.string.enablePreviewFeatures),false));
+                            .getBoolean(getString(R.string.enablePreviewFeatures), false));
             mApplication.getConfigurationManager().setRequireWiFiForAudio(true);
             mApplication.getConfigurationManager().setRequireWiFiForVideo(true);
             mApplication.getConfigurationManager().setMaxVideoChannelCount(
                     Long.parseLong(PreferenceManager
                             .getDefaultSharedPreferences(this)
-                            .getString(getString(R.string.maxVideoChannels),"5")));
+                            .getString(getString(R.string.maxVideoChannels), "5")));
 
             if (onlineMeetingFlag == 0) {
                 mAnonymousSession = mApplication
@@ -267,13 +268,8 @@ public class SkypeCall extends AppCompatActivity
 
     @Override
     protected void onStop() {
-        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
-// See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        super.onStop();
         finish();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.disconnect();
     }
 
     /**
@@ -297,10 +293,6 @@ public class SkypeCall extends AppCompatActivity
     public void onStart() {
         super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     /**
@@ -327,16 +319,23 @@ public class SkypeCall extends AppCompatActivity
                             .getMeetingDescription()
                             + " is established");
                     try {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadCallFragment();
-                                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                                if (progressBar != null) {
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                            }
-                        });
+                        loadCallFragment();
+
+                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                loadCallFragment();
+//                                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+//                                if (progressBar != null) {
+//                                    progressBar.setVisibility(View.GONE);
+//                                }
+//                            }
+//                        });
                     } catch (Exception e) {
                         Log.e("SkypeCall"
                                 , "exception on meeting started");
