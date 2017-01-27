@@ -279,30 +279,21 @@ public class SkypeCallFragment extends Fragment
         }
     }
 
+
     /**
      * This method is called when the state of {@link VideoService#CAN_SET_PAUSED_PROPERTY_ID}
      * changes.
      *
-     * @param newCanSetPaused The new value retrieved by calling {@link VideoService#canSetPaused()}
+     * @param canSetPausedVideoService The new value retrieved by calling {@link VideoService#canSetPaused()}
      */
-    @Override
-    public void onCanSetPausedVideoServiceChanged(boolean newCanSetPaused) {
-
-    }
-
-
-    /**
-     * Called when the video service pause state changes
-     * @param canSetPausedVideoService
-     */
-    public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService, boolean isPaused) {
+    public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
         Log.i(
                 "SkypeCallFragment",
                 "onCanSetPausedVideoServiceChanged "
                         + String.valueOf(canSetPausedVideoService));
         if (this.isDetached())
             return;
-        if (!isPaused){
+        if (!canSetPausedVideoService){
             //set the pause/resume text of the SkypeCall menu
             mListener.onFragmentInteraction(mRootView,getString(R.string.pauseVideo));
         } else {

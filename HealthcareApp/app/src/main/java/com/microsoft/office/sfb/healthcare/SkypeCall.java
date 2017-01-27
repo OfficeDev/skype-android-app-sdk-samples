@@ -326,16 +326,6 @@ public class SkypeCall extends AppCompatActivity
                             progressBar.setVisibility(View.GONE);
                         }
 
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                loadCallFragment();
-//                                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-//                                if (progressBar != null) {
-//                                    progressBar.setVisibility(View.GONE);
-//                                }
-//                            }
-//                        });
                     } catch (Exception e) {
                         Log.e("SkypeCall"
                                 , "exception on meeting started");
