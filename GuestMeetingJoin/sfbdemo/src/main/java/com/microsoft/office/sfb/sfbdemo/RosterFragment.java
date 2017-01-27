@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.microsoft.office.sfb.appsdk.AudioService;
 import com.microsoft.office.sfb.appsdk.Conversation;
+import com.microsoft.office.sfb.appsdk.Observable;
 import com.microsoft.office.sfb.appsdk.Participant;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
@@ -43,6 +45,8 @@ public class RosterFragment extends Fragment implements RosterAdapter.RosterAdap
 
     private Button selfHoldButton = null;
     private Button selfMuteButton = null;
+
+    private AudioService audioService = null;
 
     public RosterFragment() {
     }
@@ -80,6 +84,20 @@ public class RosterFragment extends Fragment implements RosterAdapter.RosterAdap
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.participants_fragment_layout, container, false);
+
+        this.audioService = conversation.getAudioService();
+        this.audioService.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                if (AudioService.class.isInstance(observable)) {
+                    switch (i) {
+                        case AudioService.MUTE_STATE_PROPERTY_ID:
+                            updateSelfParticipantMuteButtonText(audioService.getMuteState());
+                            break;
+                    }
+                }
+            }
+        });
 
         this.updateSelfParticipantView(rootView);
 
@@ -120,7 +138,7 @@ public class RosterFragment extends Fragment implements RosterAdapter.RosterAdap
                 onSelfParticipantHoldButtonClicked(v);
             }
         });
-        boolean isOnHold = conversation.getAudioService().isOnHold();
+        boolean isOnHold = this.audioService.isOnHold();
         this.updateSelfParticipantHoldButtonText(isOnHold);
 
         this.selfMuteButton = (Button)rootView.findViewById(R.id.selfParticipantMuteId);
@@ -130,16 +148,14 @@ public class RosterFragment extends Fragment implements RosterAdapter.RosterAdap
                 onSelfParticipantMuteButtonClicked(v);
             }
         });
-        boolean isMuted = conversation.getSelfParticipant().getParticipantAudio().isMuted();
-        this.updateSelfParticipantMuteButtonText(isMuted);
+        this.updateSelfParticipantMuteButtonText(this.audioService.getMuteState());
     }
 
     public void onSelfParticipantHoldButtonClicked(android.view.View view) {
         try {
-            boolean isOnHold = conversation.getAudioService().isOnHold();
-            if (conversation.getAudioService().canSetHold()) {
-                conversation.getAudioService().setHold(!isOnHold);
-                this.updateSelfParticipantHoldButtonText(!isOnHold);
+            boolean isOnHold = this.audioService.isOnHold();
+            if (this.audioService.canSetHold()) {
+                this.audioService.setHold(isOnHold);
             }
         } catch (SFBException e) {
             e.printStackTrace();
@@ -147,11 +163,9 @@ public class RosterFragment extends Fragment implements RosterAdapter.RosterAdap
     }
 
     public void onSelfParticipantMuteButtonClicked(android.view.View view) {
-        boolean isMuted = conversation.getSelfParticipant().getParticipantAudio().isMuted();
-        if (conversation.getSelfParticipant().getParticipantAudio().canSetMuted()) {
+       if (this.audioService.canToggleMute()) {
             try {
-                conversation.getSelfParticipant().getParticipantAudio().setMuted(!isMuted);
-                this.updateSelfParticipantMuteButtonText(!isMuted);
+                this.audioService.toggleMute();
             } catch (SFBException e) {
                 e.printStackTrace();
             }
@@ -166,11 +180,18 @@ public class RosterFragment extends Fragment implements RosterAdapter.RosterAdap
         }
     }
 
-    private void updateSelfParticipantMuteButtonText(boolean isMuted) {
-        if (isMuted) {
-            this.selfMuteButton.setText("Unmute");
-        } else {
-            this.selfMuteButton.setText("Mute");
+    private void updateSelfParticipantMuteButtonText(AudioService.MuteState muteState) {
+        switch (muteState) {
+            case MUTED:
+                this.selfMuteButton.setText("Unmute");
+                break;
+            case UNMUTING:
+                this.selfMuteButton.setText("Unmuting");
+                break;
+            case UNMUTED:
+                this.selfMuteButton.setText("Mute");
+                break;
+            default:
         }
     }
 

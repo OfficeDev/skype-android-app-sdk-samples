@@ -322,6 +322,20 @@ public class VideoFragment extends Fragment{
     private void updateState() {
         this.cameraButton.setEnabled(this.videoService.canSetActiveCamera());
 
+        String cameraText = "";
+        try {
+            if (this.videoService.getActiveCamera().getType() == Camera.Type.BACKFACING) {
+                cameraText = "Front";
+            } else {
+                cameraText = "Back";
+            }
+        }
+        catch (SFBException e) {
+                e.printStackTrace();
+        }
+
+        this.cameraButton.setText(cameraText);
+
         this.videoPaused = this.videoService.getPaused();
         this.pauseButton.setEnabled(this.videoService.canSetPaused());
         String text = this.videoPaused ? "Resume" : "Pause";
