@@ -279,12 +279,22 @@ public class SkypeCallFragment extends Fragment
         }
     }
 
+    /**
+     * This method is called when the state of {@link VideoService#CAN_SET_PAUSED_PROPERTY_ID}
+     * changes.
+     *
+     * @param newCanSetPaused The new value retrieved by calling {@link VideoService#canSetPaused()}
+     */
+    @Override
+    public void onCanSetPausedVideoServiceChanged(boolean newCanSetPaused) {
+
+    }
+
 
     /**
      * Called when the video service pause state changes
      * @param canSetPausedVideoService
      */
-    @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService, boolean isPaused) {
         Log.i(
                 "SkypeCallFragment",
