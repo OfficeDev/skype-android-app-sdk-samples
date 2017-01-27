@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 dependencies {
-    testCompile 'junit:junit:4.12'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile(name: "libucmp", ext: 'aar')
-    compile(name: "platform", ext: 'aar')
+    compile(name: "SkypeForBusinessNative", ext: 'aar')
+    compile(name: "SkypeForBusinessPlatform", ext: 'aar')
     compile(name: "SkypeForBusiness", ext: 'aar')
-    compile(name: "TelemetryService", ext: 'aar')
-    compile(name: "ucmp-enums", ext: 'aar')
-    compile(name: "TelemetryClient2", ext: 'aar')
-    compile(name: "injector", ext: 'aar')
+    compile(name: "SkypeForBusinessTelemetryService", ext: 'aar')
+    compile(name: "SkypeForBusinessNativeEnums", ext: 'aar')
+    compile(name: "SkypeForBusinessTelemetryClient", ext: 'aar')
+    compile(name: "SkypeForBusinessInjector", ext: 'aar')
     compile(name: "android-database-sqlcipher", ext: 'aar')
     // Dagger compiler for DI annotation support
     provided('com.squareup.dagger:dagger-compiler:1.2.2') {
@@ -16,11 +15,22 @@ dependencies {
     }
     //Retrofit
     // Butterknife
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile('com.squareup.retrofit2:retrofit:2.0.0-beta4') {
+        exclude module: 'okhttp'
+    }
+    compile('com.squareup.retrofit2:converter-gson:2.0.0-beta4') {
+        exclude module: 'okhttp'
+    }
+    compile('com.squareup.okhttp3:logging-interceptor:3.3.0') {
+        exclude module: 'okhttp'
+    }
+
+    compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:support-v4:23.2.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
 android {
     compileSdkVersion 22
@@ -58,7 +68,7 @@ android {
     }
 
     dexOptions {
-        preDexLibraries=false
+        preDexLibraries = false
         jumboMode = true
         javaMaxHeapSize "4g"
     }

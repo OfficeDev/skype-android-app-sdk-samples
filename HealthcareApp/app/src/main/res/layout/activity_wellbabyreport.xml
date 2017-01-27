@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
+        android:layout_marginBottom="20dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:touchscreenBlocksFocus="false"
         android:transitionGroup="false">
@@ -31,12 +32,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
                 android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="381dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/baby_Name"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:layout_marginBottom="2dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    >
+
                     <ImageView
                         android:id="@+id/main.backdrop"
                         android:layout_width="wrap_content"
@@ -46,13 +61,15 @@
                         android:src="@drawable/baby"
                         app:layout_collapseMode="parallax"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp" />
+                        android:layout_marginTop="2dp" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="106dp"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:layout_gravity="right"
                         android:layout_marginLeft="50dp">
+
                         <TextView
                             android:layout_width="174dp"
                             android:layout_height="wrap_content"
@@ -61,6 +78,7 @@
                             android:textSize="12sp"
                             android:layout_gravity="right"
                             android:gravity="end|top" />
+
                         <ImageView
                             android:layout_width="79dp"
                             android:layout_height="69dp"
@@ -70,15 +88,6 @@
                             android:layout_gravity="right" />
                     </LinearLayout>
                 </LinearLayout>
-                <TextView
-                    android:layout_width="381dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/baby_Name"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="10dp"
-                    android:textStyle="bold"
-                    android:textSize="24sp"
-                    android:layout_marginBottom="10dp" />
             </LinearLayout>
 
 
@@ -91,7 +100,7 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 android:clickable="true"
-                app:subtitle="Jonathan Trudeau" />
+                app:subtitle="@string/toolbarSubtitle" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -104,11 +113,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/callprovider"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
+        app:layout_anchorGravity="top|center_horizontal"
         android:scaleType="centerCrop"
         android:background="#eb4785"
         app:backgroundTint="#eb4785"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:layout_gravity="bottom|right" />
 
 </android.support.design.widget.CoordinatorLayout>

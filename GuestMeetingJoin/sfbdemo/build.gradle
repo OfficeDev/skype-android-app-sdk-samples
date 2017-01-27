@@ -56,13 +56,14 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
 
-    compile(name: "libucmp", ext: 'aar')
-    compile(name: "platform", ext: 'aar')
-    compile(name: "injector", ext: 'aar')
+    compile(name: "SkypeForBusinessNative", ext: 'aar')
+    compile(name: "SkypeForBusinessPlatform", ext: 'aar')
+    compile(name: "SkypeForBusinessInjector", ext: 'aar')
     compile(name: "SkypeForBusiness", ext: 'aar')
-    compile(name: "ucmp-enums", ext: 'aar')
-    compile(name: "TelemetryClient2", ext: 'aar')
-    compile(name: "TelemetryService", ext: 'aar')
+    compile(name: "SkypeForBusinessNativeEnums", ext: 'aar')
+    compile(name: "SkypeForBusinessTelemetryClient", ext: 'aar')
+    compile(name: "SkypeForBusinessTelemetryService", ext: 'aar')
+    compile(name: "android-database-sqlcipher", ext: 'aar')
 
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'

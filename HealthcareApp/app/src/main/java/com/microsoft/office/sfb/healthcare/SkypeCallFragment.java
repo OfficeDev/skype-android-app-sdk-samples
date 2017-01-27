@@ -19,10 +19,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.microsoft.media.MMVRSurfaceView;
+import com.microsoft.office.sfb.appsdk.AudioService;
 import com.microsoft.office.sfb.appsdk.Conversation;
 import com.microsoft.office.sfb.appsdk.DevicesManager;
 import com.microsoft.office.sfb.appsdk.MessageActivityItem;
-import com.microsoft.office.sfb.appsdk.ParticipantService;
 import com.microsoft.office.sfb.appsdk.SFBException;
 
 
@@ -37,10 +37,11 @@ public class SkypeCallFragment extends Fragment
     private OnFragmentInteractionListener mListener;
     private static Conversation mConversation;
     private static DevicesManager mDevicesManager;
-    private ConversationHelper mConversationHelper;
+
+    //// TODO: 1/13/2017 give hint re: location of the source file
+	protected ConversationHelper mConversationHelper;
     private MMVRSurfaceView mParticipantVideoSurfaceView;
     private TextureView mPreviewVideoTextureView;
-    private boolean mTryStartVideo = false;
     View mRootView;
 
     @SuppressLint("ValidFragment")
@@ -65,6 +66,8 @@ public class SkypeCallFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_skype_call, container, false);
+
+
         mEndCallButton = (Button) mRootView.findViewById(R.id.endCallButton);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,42 +85,26 @@ public class SkypeCallFragment extends Fragment
         mMuteAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTryStartVideo == true){
-                    tryStartVideo();
-                }
                 mConversationHelper.toggleMute();
             }
         });
-        Log.i(
-                "SkypeCallFragment",
-                "onCreateView ");
-        return mRootView;
-    }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         mPreviewVideoTextureView = (TextureView) mRootView.findViewById(
                 R.id.selfParticipantVideoView);
         RelativeLayout participantVideoLayout = (RelativeLayout) mRootView.findViewById(
                 R.id.participantVideoLayoutId);
-        mParticipantVideoSurfaceView = new MMVRSurfaceView(
-                participantVideoLayout.getContext());
-        participantVideoLayout.addView(this.mParticipantVideoSurfaceView);
+        mParticipantVideoSurfaceView = (MMVRSurfaceView) mRootView.findViewById(R.id.mmvrSurfaceViewId);
         mListener.onFragmentInteraction(mRootView
                 , getActivity()
                         .getString(
                                 R.string.callFragmentInflated));
-        tryStartVideo();
+        mParticipantVideoSurfaceView.setActivated(true);
+        mPreviewVideoTextureView.setActivated(true);
 
-
-    }
-
-    private void tryStartVideo(){
-            //Initialize the conversation helper with the established conversation,
-            //the SfB App SDK devices manager, the outgoing video TextureView,
-            //The view container for the incoming video, and a conversation helper
-            //callback.
+        //Initialize the conversation helper with the established conversation,
+        //the SfB App SDK devices manager, the outgoing video TextureView,
+        //The view container for the incoming video, and a conversation helper
+        //callback.
         if (mConversationHelper == null){
             mConversationHelper = new ConversationHelper(
                     mConversation,
@@ -130,20 +117,21 @@ public class SkypeCallFragment extends Fragment
                     "onViewCreated");
 
         }
-        if (mParticipantVideoSurfaceView.isActivated()){
-            mTryStartVideo = false;
 
-            //Start up the incoming and outgoing video
-            mConversationHelper.startOutgoingVideo();
-            mConversationHelper.startIncomingVideo();
-        } else {
-            mParticipantVideoSurfaceView.setActivated(true);
-            mPreviewVideoTextureView.setActivated(true);
-            mTryStartVideo = true;
-        }
+        Log.i(
+                "SkypeCallFragment",
+                "onCreateView ");
 
-
+        mConversationHelper.ensureVideoIsStartedAndRunning();
+        return mRootView;
     }
+
+        @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -160,12 +148,16 @@ public class SkypeCallFragment extends Fragment
      * Used to interact with parent activity
      */
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(View rootView, String newMeetingURI);
+        void onFragmentInteraction(View rootView, String fragmentAction);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
+        if (this.isDetached())
+            return;
+
         if (mListener != null) {
 
             //TODO stop the call and then leave
@@ -197,15 +189,34 @@ public class SkypeCallFragment extends Fragment
                 "SkypeCallFragment",
                 "onConversationStateChanged "
                         + String.valueOf(state));
+        if (this.isDetached())
+            return;
 
-        if (state == Conversation.State.IDLE) {
+        try{
+            String newState = "";
+            switch (state){
+                case IDLE:
+                    newState = getActivity().
+                            getString(R.string.leaveCall);
+                    break;
+                case ESTABLISHING:
+                    break;
+                case INLOBBY:
+                    break;
+                case ESTABLISHED:
+                    newState = getActivity().
+                            getString(R.string.callEstablished);
+                    break;
+            }
             if (mListener != null) {
                 mListener.onFragmentInteraction(
-                        mRootView,
-                        getActivity().
-                                getString(R.string.leaveCall));
+                        mRootView,newState);
                 mListener = null;
             }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+
         }
     }
 
@@ -223,42 +234,35 @@ public class SkypeCallFragment extends Fragment
     }
 
     @Override
-    public void onSelfAudioStateChanged(ParticipantService.State state) {
-
-        Log.i(
-                "SkypeCallFragment",
-                "onSelfAudioStateChanged "
-                        + String.valueOf(state));
-    }
-
-    @Override
-    public void onSelfAudioMuteChanged(final boolean isMuted) {
+    public void onSelfAudioMuteChanged(final AudioService.MuteState muteState) {
 
         Log.i(
                 "SkypeCallFragment",
                 "onSelfAudioMuteChanged "
-                        + String.valueOf(isMuted));
-
-        try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (isMuted == true) {
-                        mMuteAudioButton.setText("Unmute");
-                    } else {
-                        mMuteAudioButton.setText("Mute");
-                    }
-                }
-            });
-        } catch (Exception e) {
-            Log.e("SkypeCall", "exception on meeting started");
+                        + String.valueOf(muteState));
+        String muteText = "";
+        switch (muteState) {
+            case MUTED:
+                muteText = "Unmute";
+                break;
+            case UNMUTED:
+                muteText = "Mute";
+                break;
+            case UNMUTING:
+                muteText = "Unmuting";
+                break;
+            default:
         }
+        mMuteAudioButton.setText(muteText);
     }
+
 
     /**
      * Called when the video service on the established conversation can be
      * started. Use the callback to start video.
      * @param canStartVideoService
+     *
+     * This seems to be called when the conversation is ended, not when it starts.
      */
     @Override
     public void onCanStartVideoServiceChanged(boolean canStartVideoService) {
@@ -267,22 +271,35 @@ public class SkypeCallFragment extends Fragment
                 "onCanStartVideoServiceChanged "
                         + String.valueOf(canStartVideoService));
 
+
         if (canStartVideoService == true) {
             mConversationHelper.startOutgoingVideo();
             mConversationHelper.startIncomingVideo();
+            mConversationHelper.ensureVideoIsStartedAndRunning();
         }
     }
 
 
     /**
-     * Called when the video service pause state changes
-     * @param canSetPausedVideoService
+     * This method is called when the state of {@link VideoService#CAN_SET_PAUSED_PROPERTY_ID}
+     * changes.
+     *
+     * @param canSetPausedVideoService The new value retrieved by calling {@link VideoService#canSetPaused()}
      */
-    @Override
     public void onCanSetPausedVideoServiceChanged(boolean canSetPausedVideoService) {
-
-        if (canSetPausedVideoService)
-            mConversationHelper.ensureVideoIsStartedAndRunning();
+        Log.i(
+                "SkypeCallFragment",
+                "onCanSetPausedVideoServiceChanged "
+                        + String.valueOf(canSetPausedVideoService));
+        if (this.isDetached())
+            return;
+        if (!canSetPausedVideoService){
+            //set the pause/resume text of the SkypeCall menu
+            mListener.onFragmentInteraction(mRootView,getString(R.string.pauseVideo));
+        } else {
+            //set the pause/resume text of the SkypeCall menu
+            mListener.onFragmentInteraction(mRootView,getString(R.string.resume_video));
+        }
     }
 
     @Override
@@ -291,9 +308,12 @@ public class SkypeCallFragment extends Fragment
                 "SkypeCallFragment",
                 "onCanSetActiveCameraChanged "
                         + String.valueOf(canSetActiveCamera));
+        if (this.isDetached())
+            return;
 
-        if (canSetActiveCamera == true) {
-            mConversationHelper.changeActiveCamera();
+        if (mListener != null){
+            mListener.onFragmentInteraction(mRootView, getString(R.string.canToggleCamera));
         }
+
     }
 }
