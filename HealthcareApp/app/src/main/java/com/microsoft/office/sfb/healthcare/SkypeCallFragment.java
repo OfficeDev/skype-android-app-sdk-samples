@@ -293,7 +293,7 @@ public class SkypeCallFragment extends Fragment
                         + String.valueOf(canSetPausedVideoService));
         if (this.isDetached())
             return;
-        if (!canSetPausedVideoService){
+        if (canSetPausedVideoService){
             //set the pause/resume text of the SkypeCall menu
             mListener.onFragmentInteraction(mRootView,getString(R.string.pauseVideo));
         } else {
