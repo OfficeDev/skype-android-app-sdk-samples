@@ -6,6 +6,7 @@ package com.microsoft.office.sfb.sfbdemo;
 
 import java.net.URI;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
     boolean meetingJoined = false;
 
     /**
+     * Application must show the end user video license.
+     */
+    private boolean videoLicenseAccepted = false;
+
+    /**
      * Creating the activity initializes the SDK Application instance.
      * @param savedInstanceState saved instance.
      */
@@ -68,6 +74,26 @@ public class MainActivity extends AppCompatActivity {
         this.conversationsIntent = new Intent(this,ConversationsActivity.class);
 
         this.updateUiState();
+
+        if (!videoLicenseAccepted) {
+            AlertDialog.Builder alertDialogBuidler = new AlertDialog.Builder(this);
+            alertDialogBuidler.setTitle("Video License");
+            alertDialogBuidler.setMessage("You must accept the terms of this license to use Video");
+            alertDialogBuidler.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                   configurationManager.setEndUserAcceptedVideoLicense();
+                    videoLicenseAccepted = true;
+                }
+            });
+            alertDialogBuidler.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    videoLicenseAccepted = false;
+                }
+                });
+            alertDialogBuidler.show();
+        }
     }
 
     @Override
@@ -162,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
             this.joinMeetingButton.setText(R.string.leave_meeting);
         } else {
             this.joinMeetingButton.setText(R.string.join_meeting);
-            //conversationStateTextView.setText("");
         }
     }
 

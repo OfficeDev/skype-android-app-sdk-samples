@@ -42,6 +42,7 @@ android {
         versionCode 2
         versionName "2.1"
         multiDexEnabled true
+        resValue "string", "ENTERPRISE_AUTHENTICATOR_ACCOUNT_TYPE", "\"${applicationId}\""
     }
     buildTypes {
 
