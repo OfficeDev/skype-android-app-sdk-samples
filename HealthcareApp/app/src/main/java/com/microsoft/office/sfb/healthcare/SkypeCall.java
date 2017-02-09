@@ -8,6 +8,7 @@ package com.microsoft.office.sfb.healthcare;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -56,7 +57,6 @@ public class SkypeCall extends AppCompatActivity
     private AnonymousSession mAnonymousSession = null;
     private MenuItem mCameraToggleItem;
     private MenuItem mVideoPauseToggleItem;
-    private boolean mVideoLicenseAccepted = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +82,8 @@ public class SkypeCall extends AppCompatActivity
                 , messageIntent.getExtras().getString(getString(R.string.onPremiseMeetingUrl)));
 
         mConversation.addOnPropertyChangedCallback(new ConversationPropertyChangeListener());
+
+
     }
 
     @Override
@@ -237,24 +239,28 @@ public class SkypeCall extends AppCompatActivity
                             .getDefaultSharedPreferences(this)
                             .getString(getString(R.string.maxVideoChannels), "5")));
 
-            if (!mVideoLicenseAccepted) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+            if (!sharedPreferences.getBoolean(getString(R.string.acceptedVideoLicense),false)) {
                 AlertDialog.Builder alertDialogBuidler = new AlertDialog.Builder(this);
                 alertDialogBuidler.setTitle("Video License");
-                alertDialogBuidler.setMessage("You must accept the terms of this license to use Video");
+                alertDialogBuidler.setMessage(getString(R.string.videoCodecTerms));
                 alertDialogBuidler.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mApplication.getConfigurationManager().setEndUserAcceptedVideoLicense();
-                        mVideoLicenseAccepted = true;
+                        setLicenseAcceptance(true);
                     }
                 });
                 alertDialogBuidler.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mVideoLicenseAccepted = false;
+                        setLicenseAcceptance(false);
+
                     }
                 });
                 alertDialogBuidler.show();
+
             }
 
             if (onlineMeetingFlag == 0) {
@@ -288,6 +294,21 @@ public class SkypeCall extends AppCompatActivity
     }
 
 
+    /**
+     * Writes the user's acceptance or rejection of the video license
+     * presented in the alert dialog
+     * @param userChoice  Boolean, the user's license acceptance choice
+     */
+    private void setLicenseAcceptance(Boolean userChoice){
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        sharedPreferences.edit()
+                .putBoolean(
+                        getString(
+                                R.string.acceptedVideoLicense)
+                        ,userChoice).apply();
+
+    }
     @Override
     protected void onStop() {
         super.onStop();
