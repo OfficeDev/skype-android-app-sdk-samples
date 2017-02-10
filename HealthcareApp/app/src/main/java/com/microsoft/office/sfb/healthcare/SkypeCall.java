@@ -57,6 +57,7 @@ public class SkypeCall extends AppCompatActivity
     private AnonymousSession mAnonymousSession = null;
     private MenuItem mCameraToggleItem;
     private MenuItem mVideoPauseToggleItem;
+    private Boolean mVideoCodecAcceptance = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,13 +76,13 @@ public class SkypeCall extends AppCompatActivity
         //Meetings can be hosted in SfB Online or Sfb on premise. These
         //intent extras communicate the necessary parameters for the
         //Skype call to be placed to the correct endpoint.
-        mConversation = startToJoinMeeting(
+        if (checkVideoLicenseAcceptance(
                 messageIntent.getExtras().getShort(getString(R.string.onlineMeetingFlag))
                 , messageIntent.getExtras().getString(getString(R.string.discoveryUrl))
                 , messageIntent.getExtras().getString(getString(R.string.authToken))
-                , messageIntent.getExtras().getString(getString(R.string.onPremiseMeetingUrl)));
+                , messageIntent.getExtras().getString(getString(R.string.onPremiseMeetingUrl)))) {
+        }
 
-        mConversation.addOnPropertyChangedCallback(new ConversationPropertyChangeListener());
 
 
     }
@@ -107,16 +108,19 @@ public class SkypeCall extends AppCompatActivity
             switch (item.getItemId()) {
 
                 case android.R.id.home:
-                    if (mConversation.canLeave())
+                    if (mConversation != null && mConversation.canLeave()){
                         try {
-                            getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .detach(mCallFragment)
-                                    .commit();
                             mConversation.leave();
                         } catch (SFBException e) {
                             e.printStackTrace();
                         }
+                    }
+                    if ( mCallFragment != null) {
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .detach(mCallFragment)
+                                .commit();
+                    }
 
                     NavUtils.navigateUpFromSameTask(this);
                     break;
@@ -216,52 +220,94 @@ public class SkypeCall extends AppCompatActivity
 
 
     /**
+     * Shows a video license acceptance dialog if user has not been prompted before. If user
+     * accepts license, call is started. Else, SkypeCallActivity is finished.
+     * @param onlineMeetingFlag
+     * @param discoveryUrl
+     * @param authToken
+     * @param meetingUrl
+     * @return
+     */
+    private boolean checkVideoLicenseAcceptance(
+        final Short onlineMeetingFlag
+        , final String discoveryUrl
+        , final String authToken
+        , final String meetingUrl) {
+        mApplication = Application.getInstance(this.getBaseContext());
+
+
+        final Boolean canJoinCall = true;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (!sharedPreferences.getBoolean(getString(R.string.acceptedVideoLicense),false)) {
+            AlertDialog.Builder alertDialogBuidler = new AlertDialog.Builder(this);
+            alertDialogBuidler.setTitle("Video License");
+            alertDialogBuidler.setMessage(getString(R.string.videoCodecTerms));
+            alertDialogBuidler.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mApplication.getConfigurationManager().setEndUserAcceptedVideoLicense();
+                    setLicenseAcceptance(true);
+                    mVideoCodecAcceptance = true;
+                    joinTheCall(onlineMeetingFlag,meetingUrl,discoveryUrl,authToken);
+
+                }
+            });
+            alertDialogBuidler.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    setLicenseAcceptance(false);
+                    mVideoCodecAcceptance = false;
+                    finish();
+
+                }
+            });
+            alertDialogBuidler.show();
+
+        } else {
+            joinTheCall(onlineMeetingFlag,meetingUrl,discoveryUrl,authToken);
+        }
+
+        return canJoinCall;
+    }
+
+    /**
+     * Set up AV call configuration parameters from user preferences
+     */
+    private void setMeetingConfiguration(){
+        mApplication.getConfigurationManager().enablePreviewFeatures(
+                PreferenceManager
+                        .getDefaultSharedPreferences(this)
+                        .getBoolean(getString(R.string.enablePreviewFeatures), false));
+
+        mApplication.getConfigurationManager().setRequireWiFiForAudio(
+                PreferenceManager
+                        .getDefaultSharedPreferences(this)
+                        .getBoolean(getString(R.string.requireWifiForAudio), false));
+
+        mApplication.getConfigurationManager().setRequireWiFiForVideo(
+                PreferenceManager
+                        .getDefaultSharedPreferences(this)
+                        .getBoolean(getString(R.string.requireWifiForVideo), false));
+
+        mApplication.getConfigurationManager().setMaxVideoChannelCount(
+                Long.parseLong(PreferenceManager
+                        .getDefaultSharedPreferences(this)
+                        .getString(getString(R.string.maxVideoChannels), "5")));
+
+    }
+
+    /**
      * Connect to an existing Skype for Business meeting with the URI you get
      * from a server-side UCWA-based web service.
      */
-    private Conversation startToJoinMeeting(
+    private void joinTheCall(
             Short onlineMeetingFlag
+            , String meetingUrl
             , String discoveryUrl
-            , String authToken
-            , String meetingUrl) {
-        Conversation conversation = null;
+            , String authToken){
         try {
-
-            mApplication = Application.getInstance(this.getBaseContext());
-            mApplication.getConfigurationManager().enablePreviewFeatures(
-                    PreferenceManager
-                            .getDefaultSharedPreferences(this)
-                            .getBoolean(getString(R.string.enablePreviewFeatures), false));
-            mApplication.getConfigurationManager().setRequireWiFiForAudio(true);
-            mApplication.getConfigurationManager().setRequireWiFiForVideo(true);
-            mApplication.getConfigurationManager().setMaxVideoChannelCount(
-                    Long.parseLong(PreferenceManager
-                            .getDefaultSharedPreferences(this)
-                            .getString(getString(R.string.maxVideoChannels), "5")));
-
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-            if (!sharedPreferences.getBoolean(getString(R.string.acceptedVideoLicense),false)) {
-                AlertDialog.Builder alertDialogBuidler = new AlertDialog.Builder(this);
-                alertDialogBuidler.setTitle("Video License");
-                alertDialogBuidler.setMessage(getString(R.string.videoCodecTerms));
-                alertDialogBuidler.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mApplication.getConfigurationManager().setEndUserAcceptedVideoLicense();
-                        setLicenseAcceptance(true);
-                    }
-                });
-                alertDialogBuidler.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setLicenseAcceptance(false);
-
-                    }
-                });
-                alertDialogBuidler.show();
-
-            }
+            setMeetingConfiguration();
 
             if (onlineMeetingFlag == 0) {
                 mAnonymousSession = mApplication
@@ -276,7 +322,11 @@ public class SkypeCall extends AppCompatActivity
                                 , new URL(discoveryUrl)
                                 , authToken);
             }
-            conversation = mAnonymousSession.getConversation();
+            mConversation = mAnonymousSession.getConversation();
+            if (mConversation != null)
+                mConversation.addOnPropertyChangedCallback(new ConversationPropertyChangeListener());
+
+
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
             Log.e("SkypeCall", "On premise meeting uri syntax error");
@@ -290,9 +340,8 @@ public class SkypeCall extends AppCompatActivity
             Log.e("SkypeCall", "Exception");
             e.printStackTrace();
         }
-        return conversation;
-    }
 
+    }
 
     /**
      * Writes the user's acceptance or rejection of the video license
@@ -307,6 +356,12 @@ public class SkypeCall extends AppCompatActivity
                         getString(
                                 R.string.acceptedVideoLicense)
                         ,userChoice).apply();
+        sharedPreferences.edit()
+                .putBoolean(
+                        getString(
+                                R.string.promptedForLicense)
+                        ,true).apply();
+
 
     }
     @Override
@@ -362,7 +417,9 @@ public class SkypeCall extends AppCompatActivity
                             .getMeetingDescription()
                             + " is established");
                     try {
-                        loadCallFragment();
+                        if (mVideoCodecAcceptance == true)
+                            loadCallFragment();
+
 
                         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
                         if (progressBar != null) {

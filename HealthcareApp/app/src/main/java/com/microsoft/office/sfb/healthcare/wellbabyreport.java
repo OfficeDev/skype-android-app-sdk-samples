@@ -6,6 +6,8 @@
 package com.microsoft.office.sfb.healthcare;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -98,28 +100,54 @@ public class wellbabyreport extends AppCompatActivity  {
 					.setAction("Action", null).show();
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            if (sharedPreferences.getBoolean(getString(R.string.SfBOnlineFlag),false) == false) {
-                Intent callIntent = new Intent(this, SkypeCall.class);
-                Bundle meetingParameters = new Bundle();
-                meetingParameters.putShort(getString(R.string.onlineMeetingFlag), (short) 0);
-                meetingParameters.putString(getString(R.string.discoveryUrl), "");
-                meetingParameters.putString(getString(R.string.authToken), "");
-                meetingParameters.putString(getString(R.string.onPremiseMeetingUrl)
-                        ,getString(R.string.meeting_url));
-                callIntent.putExtras(meetingParameters);
+            Boolean promptedFlag = sharedPreferences.getBoolean(getString(R.string.promptedForLicense),false);
+            Boolean acceptedFlag = sharedPreferences.getBoolean(getString(R.string.acceptedVideoLicense),false);
 
-                startActivity(callIntent);
-
+            //If user has never been prompted for the video license or User has been prompted and has
+            // accepted the license, start the call. User is prompted for
+            //license in the call activity
+            if (!promptedFlag || acceptedFlag == true){
+                //run the call
+                startCallActivity(sharedPreferences);
+            //User has been prompted and declined the license
             } else {
-				mfloatyButton.hide();
-                //Start SfB Online flow
-                startToJoinOnlineMeeting();
+                AlertDialog.Builder alertDialogBuidler = new AlertDialog.Builder(this);
+                alertDialogBuidler.setTitle("Video License");
+                alertDialogBuidler.setMessage("Video codec license was rejected. The call cannot start.");
+                alertDialogBuidler.setNeutralButton("Ok",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                alertDialogBuidler.show();
+
             }
+
         } catch(RuntimeException e){
             e.printStackTrace();
         }
 
 
+    }
+
+    private void startCallActivity(SharedPreferences sharedPreferences){
+        if (sharedPreferences.getBoolean(getString(R.string.SfBOnlineFlag), false) == false) {
+            Intent callIntent = new Intent(this, SkypeCall.class);
+            Bundle meetingParameters = new Bundle();
+            meetingParameters.putShort(getString(R.string.onlineMeetingFlag), (short) 0);
+            meetingParameters.putString(getString(R.string.discoveryUrl), "");
+            meetingParameters.putString(getString(R.string.authToken), "");
+            meetingParameters.putString(getString(R.string.onPremiseMeetingUrl)
+                    , getString(R.string.meeting_url));
+            callIntent.putExtras(meetingParameters);
+
+            startActivity(callIntent);
+
+        } else {
+            mfloatyButton.hide();
+            //Start SfB Online flow
+            startToJoinOnlineMeeting();
+        }
     }
 
     @Override

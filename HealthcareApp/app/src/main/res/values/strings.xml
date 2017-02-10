@@ -54,5 +54,8 @@
     <string name="toggleVideoPause">ToggleVideoPause</string>
     <string name="pauseVideo">Pause video</string>
     <string name="acceptedVideoLicense">acceptedVideoLicense</string>
+    <string name="promptedForLicense">promptedForLicense</string>
+    <string name="requireWifiForVideo">requireWifiForVideo</string>
+    <string name="requireWifiForAudio">requireWifiForAudio</string>
 
 </resources>

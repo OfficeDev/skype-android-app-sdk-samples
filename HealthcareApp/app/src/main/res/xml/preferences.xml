@@ -20,6 +20,16 @@
         android:title="Accept the video codec license"
         android:summary="Accepted the SfB video codec license terms?"
         android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="@string/requireWifiForVideo"
+        android:title="Require Wifi for Video"
+        android:summary="Require Wifi connection for call video"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
+        android:key="@string/requireWifiForAudio"
+        android:title="Require Wifi For Audio"
+        android:summary="Require Wifi connection for call audio"
+        android:defaultValue="true"/>
 
 
 </PreferenceScreen>
