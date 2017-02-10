@@ -248,7 +248,6 @@ public class SkypeCall extends AppCompatActivity
                 public void onClick(DialogInterface dialog, int which) {
                     mApplication.getConfigurationManager().setEndUserAcceptedVideoLicense();
                     setLicenseAcceptance(true);
-                    mVideoCodecAcceptance = true;
                     joinTheCall(onlineMeetingFlag,meetingUrl,discoveryUrl,authToken);
 
                 }
@@ -417,10 +416,7 @@ public class SkypeCall extends AppCompatActivity
                             .getMeetingDescription()
                             + " is established");
                     try {
-                        if (mVideoCodecAcceptance == true)
-                            loadCallFragment();
-
-
+                        loadCallFragment();
                         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);

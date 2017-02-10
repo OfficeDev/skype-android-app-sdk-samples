@@ -15,11 +15,7 @@
         android:title="@string/maxVideoChannelsTitle"
         android:summary="@string/maxVideoChannelsSummary"
         android:defaultValue="5"/>
-    <CheckBoxPreference
-        android:key="@string/acceptedVideoLicense"
-        android:title="Accept the video codec license"
-        android:summary="Accepted the SfB video codec license terms?"
-        android:defaultValue="false"/>
+
     <CheckBoxPreference
         android:key="@string/requireWifiForVideo"
         android:title="Require Wifi for Video"
