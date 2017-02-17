@@ -15,7 +15,7 @@ Provided for Informational Purposes Only
 \-----Start of
 ThirdPartyNotices-------------------------------------------------------
 
-Retrofit Copyright 2013 Square, Inc.
+- [Retrofit](https://github.com/square/retrofit), which is Copyright (c) Square, Inc. and is available under the Apache License, Version 2.0 (the "License").
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the ""Software""), to deal in
