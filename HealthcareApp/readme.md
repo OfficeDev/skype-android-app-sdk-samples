@@ -63,6 +63,8 @@ Update the string values as in the following example:
 
  ```
   
+The sample defines the **GetTokenResult** and **GetMeetingURIResult** classes to encapsulate the JSON responses from a service application. Be sure to update these classes to reflect the structure of JSON that
+your service application returns. 
 
 ## Copy the Skype for Business App SDK libraries into the project
 
