@@ -57,7 +57,6 @@ public class SkypeCall extends AppCompatActivity
     private AnonymousSession mAnonymousSession = null;
     private MenuItem mCameraToggleItem;
     private MenuItem mVideoPauseToggleItem;
-    private Boolean mVideoCodecAcceptance = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,7 +255,6 @@ public class SkypeCall extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     setLicenseAcceptance(false);
-                    mVideoCodecAcceptance = false;
                     finish();
 
                 }
@@ -363,6 +361,7 @@ public class SkypeCall extends AppCompatActivity
 
 
     }
+
     @Override
     protected void onStop() {
         super.onStop();

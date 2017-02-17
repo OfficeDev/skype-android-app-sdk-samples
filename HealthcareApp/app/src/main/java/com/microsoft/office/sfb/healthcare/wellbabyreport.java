@@ -55,7 +55,7 @@ public class wellbabyreport extends AppCompatActivity  {
     protected Toolbar mToolBar;
 
 	@InjectView(fab)
-	protected FloatingActionButton mfloatyButton;
+	protected FloatingActionButton mCallDoctorButton;
     android.support.v4.app.DialogFragment mSettingsFragment;
     protected TextView mResponseBody;
     LinearLayout mAlertLayout = null;
@@ -88,40 +88,21 @@ public class wellbabyreport extends AppCompatActivity  {
 	@Override
 	protected void onPostResume() {
 		super.onPostResume();
-		mfloatyButton.show();
+		mCallDoctorButton.show();
 		onResumeFragments();
 	}
 
     @OnClick(fab)
-    public void onClick() {
+    public void onClickFloatingButton() {
         try {
 
 			Snackbar.make(mRootView, "Calling your doctor... stand by", Snackbar.LENGTH_LONG)
 					.setAction("Action", null).show();
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            Boolean promptedFlag = sharedPreferences.getBoolean(getString(R.string.promptedForLicense),false);
-            Boolean acceptedFlag = sharedPreferences.getBoolean(getString(R.string.acceptedVideoLicense),false);
 
-            //If user has never been prompted for the video license or User has been prompted and has
-            // accepted the license, start the call. User is prompted for
-            //license in the call activity
-            if (!promptedFlag || acceptedFlag == true){
-                //run the call
-                startCallActivity(sharedPreferences);
-            //User has been prompted and declined the license
-            } else {
-                AlertDialog.Builder alertDialogBuidler = new AlertDialog.Builder(this);
-                alertDialogBuidler.setTitle("Video License");
-                alertDialogBuidler.setMessage("Video codec license was rejected. The call cannot start.");
-                alertDialogBuidler.setNeutralButton("Ok",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                alertDialogBuidler.show();
-
-            }
+            //run the call
+            startCallActivity(sharedPreferences);
 
         } catch(RuntimeException e){
             e.printStackTrace();
@@ -144,7 +125,7 @@ public class wellbabyreport extends AppCompatActivity  {
             startActivity(callIntent);
 
         } else {
-            mfloatyButton.hide();
+            mCallDoctorButton.hide();
             //Start SfB Online flow
             startToJoinOnlineMeeting();
         }
@@ -184,10 +165,7 @@ public class wellbabyreport extends AppCompatActivity  {
     @SuppressLint("LongLogTag")
     private  void startToJoinOnlineMeeting() {
 
-		mfloatyButton.hide();
-        // startMethodTracing("startMeeting");
-
-
+		mCallDoctorButton.hide();
 
         final URI meetingURI = null;
         AnonymousSession conversation = null;
@@ -239,7 +217,7 @@ public class wellbabyreport extends AppCompatActivity  {
                     Log.i("Failed to get meeting url", t.getLocalizedMessage().toString());
 					Snackbar.make(mRootView, "Failed: Could not get a meeting url", Snackbar.LENGTH_LONG)
 							.setAction("Action", null).show();
-					mfloatyButton.show();
+					mCallDoctorButton.show();
 
 
 				}
