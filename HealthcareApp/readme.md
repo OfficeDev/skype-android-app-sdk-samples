@@ -5,7 +5,11 @@ Before you can run the Android samples in the [skype-android-app-sdk-samples](ht
 you need to have two things:
 
 1. The **Skype for Business App SDK** libraries which you can download from [Skype for Business App SDK download](http://aka.ms/sfbappsdkdownload_android). 
-2. The join meeting URL for an established **Skype for Business** meeting.
+2. The join meeting Url for an established **Skype for Business** meeting.
+
+>NOTE: If you have access to a service application that uses the Skype for Business Online [Trusted Application API](https://msdn.microsoft.com/en-us/skype/trusted-application-api/docs/overview), you
+can get a discovery Url and anonymous meeting token and use those instead of a join meeting Url. Read about **Trusted Application API** [anonymous meeting scheduling](https://msdn.microsoft.com/en-us/skype/trusted-application-api/docs/anonymousmeetingschedule) to learn how
+to create an adhoc meeting at runtime. 
 
 ## Save a join meeting URL in the string resources XML file
 
@@ -17,10 +21,48 @@ bracketed values in the following string with the join meeting URL of the meetin
 * Skype server hosted on premise    ``` <string name="meeting_url">https://meet.[yourdomain]/[youralias]/[somevalue]</string> ``` 
 * Skype Online server ``` <string name="meeting_url">https://meet.lync.com/[yourdomain]/[youralias]/[somevalue]</string> ```
 
-  
-
 >Note: The join meeting URL in the strings.xml file is only for use in development. If you use any code from the Healthcare App sample, you need to get 
 a meeting URL at runtime. Read [Get a Skype for Business meeting URL](https://msdn.microsoft.com/en-us/skype/appsdk/getmeetingurl) to learn about getting a meeting URL in a production app.
+
+
+## Trusted Application API-based service application usage
+If you are using a **Trusted Application API**-enabled service application to provide a discovery url and token at runtime, the sample can call RESTful methods on that service application.
+
+The string values in the sample when you clone it are as follows:
+
+```xml
+    <string name="cloudAppBaseurl">PUT YOUR SAAS APP BASE URL HERE</string>
+    <string name="SaasHostName">PUT YOUR SAAS HOST NAME HERE</string>
+```
+
+Update the string values as in the following example:
+
+```xml
+   <string name="cloudAppBaseurl">https://imbridge.cloudapp.net</string>
+   <string name="SaasHostName">imbridge.cloudapp.net</>
+```
+ 
+ The sample **RESTUtility** class declares an interface for RESTful methods exposed by a sample service application. Replace the method names in the following code snippet from RESTUtility with method names
+ from your service application.
+
+ ```java
+    public interface SaasAPIInterface {
+
+
+
+        @POST("/GetAnonTokenJob")
+        Call<GetTokenResult> getAnonymousToken(
+                @Body RequestBody body
+        );
+
+        @POST("/GetAdhocMeetingJob")
+        Call<GetMeetingURIResult> getAdhocMeeting(
+                @Body RequestBody body);
+
+    }
+
+ ```
+  
 
 ## Copy the Skype for Business App SDK libraries into the project
 
