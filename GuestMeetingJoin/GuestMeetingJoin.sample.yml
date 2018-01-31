@@ -1,0 +1,19 @@
+### YamlMime:Sample
+sample:
+- name: 'Skype for Business: Guest Meeting Join sample'
+  path: GuestMeetingJoin
+  description: This sample uses the core Skype for Business App SDK API to join meetings, chat, and share video. It prompts you for a join meeting URL at runtime. The sample has local references to the SDK libraries that you download to your development computer.
+  readme: ''
+  generateZip: FALSE
+  isLive: TRUE
+  technologies:
+  - Office Add-in
+  azureDeploy: ''
+  author: JohnAustin-MSFT
+  platforms: []
+  languages:
+  - Java
+  extensions:
+    products:
+    - Skype for Business
+    scenarios: []
