@@ -1,0 +1,19 @@
+### YamlMime:Sample
+sample:
+- name: 'Skype for Business: Healthcare app'
+  path: HealthcareApp
+  description: Skype for Android Healthcare app sample.
+  readme: ''
+  generateZip: FALSE
+  isLive: TRUE
+  technologies:
+  - Office Add-in
+  azureDeploy: ''
+  author: JohnAustin-MSFT
+  platforms: []
+  languages:
+  - Java
+  extensions:
+    products:
+    - Skype for Business
+    scenarios: []
