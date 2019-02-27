@@ -1,3 +1,18 @@
+---
+topic: sample
+products:
+- Skype
+- Office 365
+languages:
+- Java
+extensions:
+  contentType: samples
+  platforms:
+  - Android
+  createdDate: 4/21/2016 10:28:02 AM
+  scenarios:
+  - Mobile
+---
 # skype-android-app-sdk-samples
 
 
