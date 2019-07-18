@@ -1,10 +1,10 @@
 ---
 topic: sample
 products:
-- Skype
-- Office 365
+- skype
+- office-365
 languages:
-- Java
+- java
 extensions:
   contentType: samples
   platforms:
