@@ -1,5 +1,5 @@
 ---
-topic: sample
+page_type: sample
 products:
 - skype
 - office-365
