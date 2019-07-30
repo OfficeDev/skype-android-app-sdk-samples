@@ -1,3 +1,18 @@
+---
+page_type: sample
+products:
+- skype
+- office-365
+languages:
+- java
+extensions:
+  contentType: samples
+  platforms:
+  - Android
+  createdDate: 4/21/2016 10:28:02 AM
+  scenarios:
+  - Mobile
+---
 # skype-android-app-sdk- Healthcare app sample
 
 
