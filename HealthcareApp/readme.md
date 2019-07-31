@@ -1,3 +1,19 @@
+---
+page_type: sample
+products:
+- skype
+- office-365
+languages:
+- java
+description: The Healthcare app sample shows the SDK being used in a real-world scenario. It uses the ConversationHelper class to assist with the mainline scenario of guest meeting join.
+extensions:
+  contentType: samples
+  platforms:
+  - Android
+  createdDate: 4/21/2016 10:28:02 AM
+  scenarios:
+  - Mobile
+---
 # skype-android-app-sdk- Healthcare app sample
 
 
